@@ -97,7 +97,7 @@ class LaunchRobotTests {
         assertNotNull(duplicate.get("result"));
         assertEquals("ERROR", duplicate.get("result").asText());
 
-        // And the message "Unsupported command"
+        // And the message "Too many of you in this world"
         assertNotNull(duplicate.get("data"));
         assertNotNull(duplicate.get("data").get("message"));
         assertTrue(duplicate.get("data").get("message").asText().contains("Too many of you in this world"));
