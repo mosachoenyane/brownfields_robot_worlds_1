@@ -1,6 +1,8 @@
 package za.co.wethinkcode.protocol;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
@@ -8,7 +10,18 @@ import za.co.wethinkcode.client.RobotWorldJsonClient;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LookCommandTest {
+    private final static String ipAddress = "localhost";
+    private final static int portNumber = 5000;
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+
+    @BeforeEach void ConnetToServer(){
+        serverClient.connect(ipAddress, portNumber);
+    }
+
+    @AfterEach void disconnectTheServer(){
+        serverClient.disconnect();
+    }
+
     @Test void lookEmptyWorld(){
         assertTrue(serverClient.isConnected());
 
