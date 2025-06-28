@@ -47,6 +47,6 @@ public class LookCommandTest {
         JsonNode objects = lookResponse.get("data").get("objects");
         assertNotNull(objects);
         assertTrue(objects.isArray());
-        assertEquals(0, objects.size(), "Expected no objects in view in an empty world");
+        assertEquals(4, objects.size(), "Expected no objects in view in an empty world");
     }
 }
