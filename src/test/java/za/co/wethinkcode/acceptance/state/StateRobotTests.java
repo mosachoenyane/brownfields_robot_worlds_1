@@ -1,0 +1,79 @@
+package za.co.wethinkcode.acceptance.state;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import za.co.wethinkcode.client.RobotWorldClient;
+import za.co.wethinkcode.client.RobotWorldJsonClient;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class StateRobotTests {
+    private final static int DEFAULT_PORT = 5000;
+    private final static String DEFAULT_IP = "localhost";
+    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+
+    @BeforeEach
+    void connectToServer() {
+        serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+    }
+
+    @AfterEach
+    void disconnectFromServer() {
+        serverClient.disconnect();
+    }
+
+    @Test
+    void validStateRequestShouldSucceed() {
+        // Given that I am connected to a running Robot Worlds server
+        assertTrue(serverClient.isConnected());
+
+        // And the robot exists in the world (assuming a prior launch)
+        String launchRequest = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"launch\"," +
+                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode launchResponse = serverClient.sendRequest(launchRequest);
+        //System.out.println("Launch Response: " + launchResponse.toString());
+        assertNotNull(launchResponse.get("result"), "Launch response result is null");
+        assertEquals("OK", launchResponse.get("result").asText(), "Launch failed");
+
+        // When I send a valid STATE request to the server
+        String stateRequest = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"state\"," +
+                "\"arguments\": []" +
+                "}";
+        JsonNode response = serverClient.sendRequest(stateRequest);
+        //System.out.println("State Response: " + response.toString());
+
+        // Then I should get a valid response from the server
+        assertNotNull(response.get("result"), "Response result is null");
+        assertEquals("OK", response.get("result").asText(), "State request failed");
+
+        // And I should get the robot's Position
+        assertNotNull(response.get("state"), "Response state is null");
+        assertTrue(response.get("state").has("position"), "Position field missing in response state");
+        assertTrue(response.get("state").get("position").isArray(), "Position is not an array");
+        assertEquals(2, response.get("state").get("position").size(), "Position array does not have 2 elements");
+
+        // And I should get the robot's Direction
+        assertTrue(response.get("state").has("direction"), "Direction field missing in response state");
+        assertTrue(response.get("state").get("direction").isTextual(), "Direction is not a string");
+
+        // And I should get the robot's Shields
+        assertTrue(response.get("state").has("shields"), "Shields field missing in response state");
+        assertTrue(response.get("state").get("shields").isNumber(), "Shields is not a number");
+
+        // And I should get the robot's Shots
+        assertTrue(response.get("state").has("shots"), "Shots field missing in response state");
+        assertTrue(response.get("state").get("shots").isNumber(), "Shots is not a number");
+
+        // And I should get the robot's Status
+        assertTrue(response.get("state").has("status"), "Status field missing in response");
+        assertTrue(response.get("state").get("status").isTextual(), "Status is not a string");
+    }
+
+}

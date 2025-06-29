@@ -1,4 +1,4 @@
-package za.co.wethinkcode.server;
+package za.co.wethinkcode.acceptance.launch;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;

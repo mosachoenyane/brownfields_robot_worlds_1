@@ -1,4 +1,4 @@
-package za.co.wethinkcode.protocol;
+package za.co.wethinkcode.acceptance.Look;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
