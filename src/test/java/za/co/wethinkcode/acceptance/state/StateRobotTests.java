@@ -86,6 +86,9 @@ class StateRobotTests {
                 "\"arguments\": []" +
                 "}";
         JsonNode response = serverClient.sendRequest(stateRequest);
+        // Then I should get an error response
+        assertNotNull(response.get("result"));
+        assertEquals("ERROR", response.get("result").asText());
     }
 
 }
