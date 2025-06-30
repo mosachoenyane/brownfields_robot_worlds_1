@@ -75,5 +75,9 @@ class StateRobotTests {
         assertTrue(response.get("state").has("status"), "Status field missing in response");
         assertTrue(response.get("state").get("status").isTextual(), "Status is not a string");
     }
+    @Test
+    void invalidStateRequestShouldFail(){
+
+    }
 
 }
