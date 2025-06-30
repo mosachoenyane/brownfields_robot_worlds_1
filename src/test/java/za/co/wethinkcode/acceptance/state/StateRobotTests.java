@@ -89,6 +89,10 @@ class StateRobotTests {
         // Then I should get an error response
         assertNotNull(response.get("result"));
         assertEquals("ERROR", response.get("result").asText());
+        // And the message "Unsupported command"
+        assertNotNull(response.get("data"));
+        assertNotNull(response.get("data").get("message"));
+        assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
 
 }
