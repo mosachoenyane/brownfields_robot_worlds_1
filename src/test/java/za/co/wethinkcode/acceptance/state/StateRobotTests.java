@@ -77,7 +77,8 @@ class StateRobotTests {
     }
     @Test
     void invalidStateRequestShouldFail(){
-
+        // Given that I am connected to a running Robot Worlds server
+        assertTrue(serverClient.isConnected());
     }
 
 }
