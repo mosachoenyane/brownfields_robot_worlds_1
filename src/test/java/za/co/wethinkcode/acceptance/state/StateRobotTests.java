@@ -79,6 +79,13 @@ class StateRobotTests {
     void invalidStateRequestShouldFail(){
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
+        // When I send an invalid state request with incorrect command
+        String stateRequest = "{" +
+                "\"robot\": \"HAL\"," +
+                "\"command\": \"staet\"," +
+                "\"arguments\": []" +
+                "}";
+        JsonNode response = serverClient.sendRequest(stateRequest);
     }
 
 }
