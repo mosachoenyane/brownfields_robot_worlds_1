@@ -82,7 +82,7 @@ public class ServerCommandProcessor {
             case "fire" -> processFireCommand(robotName);
             case "reload" -> processReloadCommand(robotName);
             case "repair" -> processRepairCommand(robotName);
-            default -> createErrorResponse("Unknown command: " + command);
+            default -> createErrorResponse("Unsupported command: " + command);
         };
     }
 
@@ -270,8 +270,10 @@ public class ServerCommandProcessor {
 
     private String createErrorResponse(String message) {
         JsonObject response = new JsonObject();
+        JsonObject data = new JsonObject();
         response.addProperty("result", "ERROR");
-        response.addProperty("message", message);
+        data.addProperty("message",message);
+        response.add("data",data);
         return gson.toJson(response);
     }
 }

@@ -181,7 +181,7 @@ public class Play {
 
     private void processCommand(String input) {
         String json = commandProcessor.convertToJsonCommand(input);
-
+        System.out.println(json.toString());
         if (json == null || json.contains("\"result\":\"ERROR\"")) {
             System.out.println(RED + " Invalid command format." + RESET);
             return;
@@ -201,6 +201,7 @@ public class Play {
     private void displayJsonResponse(String jsonResponse) {
         try {
             JsonObject response = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            //System.out.println(response.toString());
             String result = response.get("result").getAsString();
             String resultColor = result.equalsIgnoreCase("OK") ? GREEN : RED;
 

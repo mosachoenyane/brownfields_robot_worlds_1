@@ -63,7 +63,7 @@ public class CommandProcessor {
             case "fire" -> processFireCommand(parts);
             case "reload" -> processReloadCommand(parts);
             case "repair" -> processRepairCommand(parts);
-            default -> createErrorResponse("Unknown command");
+            default -> createErrorResponse("Unsupported command");
         };
     }
 
@@ -271,9 +271,13 @@ public class CommandProcessor {
     }
 
     private String createErrorResponse(String message) {
+        System.out.println("here");
         JsonObject response = new JsonObject();
+        JsonObject data = new JsonObject();
         response.addProperty("result", "ERROR");
-        response.addProperty("message", message);
+        data.addProperty("message", message);
+        response.add("data",data);
+
         return gson.toJson(response);
     }
 }
