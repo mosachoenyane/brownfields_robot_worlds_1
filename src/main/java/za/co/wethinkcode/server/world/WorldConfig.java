@@ -68,11 +68,11 @@ public class WorldConfig {
     }
 
     private void setDefaults() {
-        properties.setProperty("WORLD_WIDTH","100");
-        properties.setProperty("WORLD_HEIGHT","100");
-        properties.setProperty("NUM_PITS","3");
-        properties.setProperty("NUM_LAKES","3");
-        properties.setProperty("NUM_MOUNTAINS","3");
+        properties.setProperty("WORLD_WIDTH","1");
+        properties.setProperty("WORLD_HEIGHT","1");
+        properties.setProperty("NUM_PITS","0");
+        properties.setProperty("NUM_LAKES","0");
+        properties.setProperty("NUM_MOUNTAINS","0");
         properties.setProperty("VISIBILITY_RANGE","10");
         properties.setProperty("MAX_SHIELD_STRENGTH","5");
         properties.setProperty("REPAIR_TIME","5");
