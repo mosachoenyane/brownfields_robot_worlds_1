@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
+import org.json.JSONObject;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
+import com.google.gson.JsonObject;
 import za.co.wethinkcode.protocol.server.ServerCommandProcessor;
 import za.co.wethinkcode.server.world.World;
 
@@ -51,10 +53,16 @@ public class ClientHandler extends Thread {
 
     private void processClientCommands(BufferedReader in, PrintWriter out) throws IOException {
         String inputLine;
-        while ((inputLine = in.readLine()) != null) {
+        String robotName = null;
+        while ((inputLine = in.readLine()) != null && clientSocket.isConnected()) {
+            robotName = new JSONObject(inputLine).getString("robot");
             String response = commandProcessor.processMessage(inputLine);
             out.println(response);
         }
+        world.removeRobot(world.getRobotByName(robotName));
+        System.out.println(robotName +" removed");
+
+
     }
 
     private void closeClientSocket() {
