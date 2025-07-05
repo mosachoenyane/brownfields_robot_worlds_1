@@ -94,40 +94,30 @@ public class CommandProcessor {
         return gson.toJson(command);
     }
 
-    private String processLookCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Look requires robot name");
-        }
-
+    private String processCommand(String[] parts){
         String name = parts[1];
+        String commandType = parts[0];
+
+        if (parts.length < 2) {
+            return createErrorResponse(commandType + "requires robot name");
+        }
         if (!name.equalsIgnoreCase(robotName)) {
             return createErrorResponse("Invalid robot name. You must use: " + robotName);
         }
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("command",commandType);
+        jsonObject.addProperty("robot",name);
+        jsonObject.add("arguments", new JsonArray());
 
-        JsonObject jsonCommand = new JsonObject();
-        jsonCommand.addProperty("command", "look");
-        jsonCommand.addProperty("robot", name);
-        jsonCommand.add("arguments", new JsonArray());
+        return gson.toJson(jsonObject);
+    }
+    private String processLookCommand(String[] parts) {
+        return processCommand(parts);
 
-        return gson.toJson(jsonCommand);
     }
 
     private String processStateCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("State requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject jsonCommand = new JsonObject();
-        jsonCommand.addProperty("command", "state");
-        jsonCommand.addProperty("robot", name);
-        jsonCommand.add("arguments", new JsonArray());
-
-        return gson.toJson(jsonCommand);
+        return processCommand(parts);
     }
 
     private String processForwardCommand(String[] parts) {
@@ -217,57 +207,15 @@ public class CommandProcessor {
     }
 
     private String processFireCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Fire requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "fire");
-        command.addProperty("robot", name);
-        command.add("arguments", new JsonArray());
-
-        return gson.toJson(command);
+        return processCommand(parts);
     }
 
     private String processReloadCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Reload requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "reload");
-        command.addProperty("robot", name);
-        command.add("arguments", new JsonArray());
-
-        return gson.toJson(command);
+        return processCommand(parts);
     }
 
     private String processRepairCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Repair requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "repair");
-        command.addProperty("robot", name);
-        command.add("arguments", new JsonArray());
-
-        return gson.toJson(command);
+        return processCommand(parts);
     }
 
     private String createErrorResponse(String message) {
