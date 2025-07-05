@@ -50,21 +50,13 @@ public class CommandProcessor {
         if (parts.length < 1) {
             return createErrorResponse("Invalid command format");
         }
-
         String command = parts[0].toLowerCase();
-
         return switch (command) {
             case "launch" -> processLaunchCommand(parts);
-            case "look" -> processLookCommand(parts);
-            case "state" -> processStateCommand(parts);
-            case "forward" -> processForwardCommand(parts);
-            case "back" -> processBackCommand(parts);
-            case "turn" -> processTurnCommand(parts);
-            case "fire" -> processFireCommand(parts);
-            case "reload" -> processReloadCommand(parts);
-            case "repair" -> processRepairCommand(parts);
-            default -> createErrorResponse("Unsupported command");
+            default -> processCommand(parts);
+
         };
+
     }
 
     private String processLaunchCommand(String[] parts) {
@@ -107,115 +99,13 @@ public class CommandProcessor {
         JsonObject jsonObject= new JsonObject();
         jsonObject.addProperty("command",commandType);
         jsonObject.addProperty("robot",name);
-        jsonObject.add("arguments", new JsonArray());
+        JsonArray arguments = new JsonArray();
+        jsonObject.add("arguments", arguments);
+        if (parts.length > 2){
+            arguments.add(parts[2]);
+        }
 
         return gson.toJson(jsonObject);
-    }
-    private String processLookCommand(String[] parts) {
-        return processCommand(parts);
-
-    }
-
-    private String processStateCommand(String[] parts) {
-        return processCommand(parts);
-    }
-
-    private String processForwardCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Forward requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "forward");
-        command.addProperty("robot", name);
-
-        JsonArray args = new JsonArray();
-        if (parts.length > 2) {
-            try {
-                int steps = Integer.parseInt(parts[2]);
-                args.add(steps);
-            } catch (NumberFormatException e) {
-                return createErrorResponse("Steps must be a number");
-            }
-        } else {
-            args.add(1);
-        }
-        command.add("arguments", args);
-
-        return gson.toJson(command);
-    }
-
-    private String processBackCommand(String[] parts) {
-        if (parts.length < 2) {
-            return createErrorResponse("Back requires robot name");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "back");
-        command.addProperty("robot", name);
-
-        JsonArray args = new JsonArray();
-        if (parts.length > 2) {
-            try {
-                int steps = Integer.parseInt(parts[2]);
-                args.add(steps);
-            } catch (NumberFormatException e) {
-                return createErrorResponse("Steps must be a number");
-            }
-        } else {
-            args.add(1);
-        }
-        command.add("arguments", args);
-
-        return gson.toJson(command);
-    }
-
-    private String processTurnCommand(String[] parts) {
-        if (parts.length < 3) {
-            return createErrorResponse("Turn requires robot name and direction");
-        }
-
-        String name = parts[1];
-        if (!name.equalsIgnoreCase(robotName)) {
-            return createErrorResponse("Invalid robot name. You must use: " + robotName);
-        }
-
-        String direction = parts[2].toLowerCase();
-        if (!direction.equals("left") && !direction.equals("right")) {
-            return createErrorResponse("Direction must be 'left' or 'right'");
-        }
-
-        JsonObject command = new JsonObject();
-        command.addProperty("command", "turn");
-        command.addProperty("robot", name);
-
-        JsonArray args = new JsonArray();
-        args.add(direction);
-        command.add("arguments", args);
-
-        return gson.toJson(command);
-    }
-
-    private String processFireCommand(String[] parts) {
-        return processCommand(parts);
-    }
-
-    private String processReloadCommand(String[] parts) {
-        return processCommand(parts);
-    }
-
-    private String processRepairCommand(String[] parts) {
-        return processCommand(parts);
     }
 
     private String createErrorResponse(String message) {
