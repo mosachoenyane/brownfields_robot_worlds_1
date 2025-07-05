@@ -10,7 +10,7 @@ import za.co.wethinkcode.client.RobotWorldJsonClient;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * As a player
+ * As a player,
  * I want to launch my robot in the online robot world
  * So that I can break the record for the most robot kills
  */
@@ -29,7 +29,7 @@ class LaunchRobotTests {
         serverClient.disconnect();
     }
     @Test
-    void validLaunchShouldSucceed(){
+    void validLaunchShouldSucceed() {
         // Given that I am connected to a running Robot Worlds server
         // And the world is of size 1x1 (The world is configured or hardcoded to this size)
         assertTrue(serverClient.isConnected());
@@ -56,11 +56,11 @@ class LaunchRobotTests {
         assertNotNull(response.get("state"));
     }
     @Test
-    void invalidLaunchShouldFail(){
-        // Given that I am connected to a running Robot Worlds server
+      void invalidLaunchShouldFail(){
+        // Given that, I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
-        // When I send a invalid launch request with the command "luanch" instead of "launch"
+        // When I send an invalid launch request with the command "luanch" instead of "launch"
         String request = "{" +
                 "\"robot\": \"HAL\"," +
                 "\"command\": \"luanch\"," +
@@ -136,7 +136,7 @@ class LaunchRobotTests {
     }
     @Test
     void LaunchRobotWithSameNameShouldFail() {
-        // Given that I am connected to a running Robot Worlds server
+        // Given that, I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
         // When I send a valid launch request to the server

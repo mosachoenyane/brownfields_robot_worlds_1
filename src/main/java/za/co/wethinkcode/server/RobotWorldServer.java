@@ -41,7 +41,7 @@ public class RobotWorldServer {
             });
             serverThread.start();
 
-            // Start console if not running in "both" mode
+            // Start console if not running in "both" modes
             if (args.length == 0 || !args[0].equals("nogui")) {
                 new ServerConsole(new Scanner(System.in), world).start();
             }
