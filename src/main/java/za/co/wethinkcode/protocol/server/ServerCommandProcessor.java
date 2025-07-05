@@ -62,16 +62,35 @@ public class ServerCommandProcessor {
     }
 
     private String processRobotCommand(JsonObject request) {
-        Robot robot = world.getRobotByName(request.get("robot").getAsString());
+        Robot robot = getRobotFromRequest(request);
 
-
-        if (robot != null && robot.getStatus() == Robot.Status.DEAD) {
+        if (isRobotDead(robot)) {
             return createErrorResponse("Robot is DEAD and cannot execute commands");
         }
 
-        String command = request.get("command").getAsString();
-        String robotName = request.get("robot").getAsString();
+        String command = getCommandFromRequest(request);
+        String robotName = getRobotNameFromRequest(request);
 
+        return handleCommand(command, robotName, request);
+    }
+
+    private Robot getRobotFromRequest(JsonObject request) {
+        return world.getRobotByName(request.get("robot").getAsString());
+    }
+
+    private boolean isRobotDead(Robot robot) {
+        return robot != null && robot.getStatus() == Robot.Status.DEAD;
+    }
+
+    private String getCommandFromRequest(JsonObject request) {
+        return request.get("command").getAsString();
+    }
+
+    private String getRobotNameFromRequest(JsonObject request) {
+        return request.get("robot").getAsString();
+    }
+
+    private String handleCommand(String command, String robotName, JsonObject request) {
         return switch (command) {
             case "launch" -> processLaunchCommand(robotName, request);
             case "look" -> processLookCommand(robotName);
