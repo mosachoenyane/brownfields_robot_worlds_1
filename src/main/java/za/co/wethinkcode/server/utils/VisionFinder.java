@@ -68,37 +68,71 @@ public class VisionFinder {
             current = getNextPosition(current, direction);
             distance++;
 
-            // Check if position is valid
-            if (!world.isPositionValid(current)) {
-                if (!reportedDirections.contains(directionName)) {
-                    addObject(objects, directionName, "EDGE", distance);
-                    reportedDirections.add(directionName);
-                }
+            if (isDirectionBlocked(objects, reportedDirections, directionName, current, distance)) {
                 break;
             }
+        }
+    }
 
-            // Check obstacles
-            for (Obstacle obstacle : world.getObstacles()) {
-                if (obstacle.blocksPosition(current.getX(), current.getY())) {
-                    if (!reportedDirections.contains(directionName)) {
-                        addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
-                        reportedDirections.add(directionName);
-                    }
-                    return;
-                }
-            }
+    private boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
+                                         Position current, int distance) {
+        if (!world.isPositionValid(current)) {
+            return handleInvalidPosition(objects, reportedDirections, directionName, distance);
+        }
 
-            // Check other robots
-            for (Robot other : world.getRobots()) {
-                if (!other.equals(robot) && other.getPosition().equals(current)) {
-                    if (!reportedDirections.contains(directionName)) {
-                        addObject(objects, directionName, "ROBOT", distance);
-                        reportedDirections.add(directionName);
-                    }
-                    return;
-                }
+        if (isBlockedByObstacle(objects, reportedDirections, directionName, current, distance)) {
+            return true;
+        }
+
+        if (isBlockedByOtherRobot(objects, reportedDirections, directionName, current, distance)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean isBlockedByObstacle(JsonArray objects, Set<String> reportedDirections, String directionName,
+                                          Position current, int distance) {
+        for (Obstacle obstacle : world.getObstacles()) {
+            if (obstacle.blocksPosition(current.getX(), current.getY())) {
+                return handleObstacle(objects, reportedDirections, directionName, obstacle, distance);
             }
         }
+        return false;
+    }
+
+    private boolean isBlockedByOtherRobot(JsonArray objects, Set<String> reportedDirections, String directionName,
+                                            Position current, int distance) {
+        for (Robot other : world.getRobots()) {
+            if (!other.equals(robot) && other.getPosition().equals(current)) {
+                return handleOtherRobot(objects, reportedDirections, directionName, distance);
+            }
+        }
+        return false;
+    }
+
+    private boolean handleInvalidPosition(JsonArray objects, Set<String> reportedDirections, String directionName, int distance) {
+        if (!reportedDirections.contains(directionName)) {
+            addObject(objects, directionName, "EDGE", distance);
+            reportedDirections.add(directionName);
+        }
+        return true;
+    }
+
+    private boolean handleObstacle(JsonArray objects, Set<String> reportedDirections, String directionName, Obstacle obstacle, int distance) {
+        if (!reportedDirections.contains(directionName)) {
+            addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
+            reportedDirections.add(directionName);
+        }
+        return true;
+    }
+
+    private boolean handleOtherRobot(JsonArray objects, Set<String> reportedDirections, String directionName, int distance) {
+        if (!reportedDirections.contains(directionName)) {
+            addObject(objects, directionName, "ROBOT", distance);
+            reportedDirections.add(directionName);
+        }
+        return true;
     }
 
     private void checkImmediateEdges(JsonArray objects, Set<String> reportedDirections, Position robotPos) {
