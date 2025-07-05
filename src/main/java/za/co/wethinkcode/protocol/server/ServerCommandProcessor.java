@@ -171,11 +171,10 @@ public class ServerCommandProcessor {
         response.add("state", new StateCommand(robot).toJson());
         return gson.toJson(response);
     }
+    private int checkArguments(Robot robot,JsonObject request){
 
-    private String processForwardCommand(String robotName, JsonObject request) {
-        Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
-            return createErrorResponse("Robot not found");
+            return 0;
         }
 
         int steps = 1; // Default step count
@@ -185,26 +184,21 @@ public class ServerCommandProcessor {
                 steps = args.get(0).getAsInt();
             }
         }
+        return  steps;
+    }
 
+    private String processForwardCommand(String robotName, JsonObject request) {
+        Robot robot = world.getRobotByName(robotName);
+        int steps = checkArguments(robot,request);
+        if (steps == 0){ createErrorResponse("Robot not found");}
         Command command = commandFactory.createForwardCommand(robot, steps);
         return command.execute();
     }
 
     private String processBackCommand(String robotName, JsonObject request) {
         Robot robot = world.getRobotByName(robotName);
-        if (robot == null) {
-            return createErrorResponse("Robot not found");
-        }
-
-        int steps = 1;
-
-        if (request.has("arguments")) {
-            JsonArray args = request.getAsJsonArray("arguments");
-            if (!args.isEmpty()) {
-                steps = args.get(0).getAsInt();
-            }
-        }
-
+        int steps = checkArguments(robot,request);
+        if (steps == 0){ createErrorResponse("Robot not found");}
         Command command = commandFactory.createBackCommand(robot, steps);
         return command.execute();
     }
