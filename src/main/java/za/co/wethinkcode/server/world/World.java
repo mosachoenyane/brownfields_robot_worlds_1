@@ -62,46 +62,21 @@ public class World {
     }
 
     private Obstacle createRandomObstacle(String type, Set<Position> occupied) {
-        int maxAttempts = 100;
-        int attempts = 0;
-
-        while (attempts < maxAttempts) {
-            attempts++;
+        final int maxAttempts = 100;
+        for (int attempt = 0; attempt < maxAttempts; attempt++) {
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int sizeX = 1 + random.nextInt(3);
             int sizeY = 1 + random.nextInt(3);
 
-            // Check if obstacle fits within bounds
-            if (x + sizeX > width || y + sizeY > height) continue;
+            if(!withinBounds(x, y, sizeX, sizeY)) continue;
 
-            // Check if positions are available
-            boolean available = true;
-            for (int dx = 0; dx < sizeX; dx++) {
-                for (int dy = 0; dy < sizeY; dy++) {
-                    if (occupied.contains(new Position(x + dx, y + dy))) {
-                        available = false;
-                        break;
-                    }
-                }
-                if (!available) break;
-            }
 
-            if (available) {
-                // Mark positions as occupied
-                for (int dx = 0; dx < sizeX; dx++) {
-                    for (int dy = 0; dy < sizeY; dy++) {
-                        occupied.add(new Position(x + dx, y + dy));
-                    }
-                }
-                switch (type) {
-                    case "mountain": return new Mountain(x, y, sizeX, sizeY);
-                    case "lake": return new Lake(x, y, sizeX, sizeY);
-                    case "pit": return new Pit(x, y, sizeX, sizeY);
-                }
-            }
         }
-        return null;
+    }
+
+    private boolean withinBounds(int x, int y, int sizeX, int sizeY){
+        return x + sizeX <= width && y + sizeY <= height;
     }
 
     /**
