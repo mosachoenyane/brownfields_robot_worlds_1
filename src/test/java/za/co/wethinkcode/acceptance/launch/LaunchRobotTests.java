@@ -56,7 +56,7 @@ class LaunchRobotTests {
         assertNotNull(response.get("state"));
     }
     @Test
-      void invalidLaunchShouldFail(){
+    void invalidLaunchShouldFail(){
         // Given that, I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
@@ -76,31 +76,6 @@ class LaunchRobotTests {
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
-    }
-    @Test
-    void LaunchRobotWithExistingNameShouldFail(){
-        // Given that I am connected to a running Robot Worlds server
-        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
-        assertTrue(serverClient.isConnected());
-
-        // When I send a valid launch request to the server
-        String request = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-        JsonNode response = serverClient.sendRequest(request);
-        // Launching a robot with a name that already exists in the world
-        JsonNode duplicate = serverClient.sendRequest(request);
-
-        // Then I should get an error response
-        assertNotNull(duplicate.get("result"));
-        assertEquals("ERROR", duplicate.get("result").asText());
-
-        // And the message "Too many of you in this world"
-        assertNotNull(duplicate.get("data"));
-        assertNotNull(duplicate.get("data").get("message"));
-        assertTrue(duplicate.get("data").get("message").asText().contains("Too many of you in this world"));
     }
     @Test
     void LaunchRobotInWorldWithNoSpaceShouldFail(){
@@ -157,6 +132,7 @@ class LaunchRobotTests {
         // And the message "Too many of you in this world"
         assertNotNull(duplicateResponse.get("data"));
         assertNotNull(duplicateResponse.get("data").get("message"));
-        assertTrue(duplicateResponse.get("data").get("message").asText().contains("Too many of you in this world"));
+        String message = duplicateResponse.get("data").get("message").asText();
+        assertTrue(message.contains("Too many of you in this world"));
     }
 }
