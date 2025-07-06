@@ -155,17 +155,21 @@ public class World {
         int dx = obstacle.getX() - robotPos.getX();
         int dy = obstacle.getY() - robotPos.getY();
 
-        // Calculate Manhattan distance
-        int distance = Math.abs(dx) + Math.abs(dy);
-        if (distance > visibilityRange) return false;
+        if (manhattanDistance(dx, dy) > visibilityRange) return false;
+        return isInFieldOfView(dx, dy, facing);
+    }
 
-        // Check if in field of view (simplified)
+    private int manhattanDistance(int dx, int dy) {
+        return Math.abs(dx) + Math.abs(dy);
+    }
+
+    private boolean isInFieldOfView(int dx, int dy, Direction facing) {
         switch (facing) {
             case NORTH: return dy >= 0 && Math.abs(dx) <= dy;
-            case EAST: return dx >= 0 && Math.abs(dy) <= dx;
+            case EAST:  return dx >= 0 && Math.abs(dy) <= dx;
             case SOUTH: return dy <= 0 && Math.abs(dx) <= -dy;
-            case WEST: return dx <= 0 && Math.abs(dy) <= -dx;
-            default: return false;
+            case WEST:  return dx <= 0 && Math.abs(dy) <= -dx;
+            default:    return false;
         }
     }
 
