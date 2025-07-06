@@ -69,14 +69,40 @@ public class World {
             int sizeX = 1 + random.nextInt(3);
             int sizeY = 1 + random.nextInt(3);
 
-            if(!withinBounds(x, y, sizeX, sizeY)) continue;
+            if (!withinBounds(x, y, sizeX, sizeY)) continue;
+            List<Position> positions = getObstaclePositions(x, y, sizeX, sizeY);
 
+            if (positions.stream().anyMatch(occupied::contains)) continue;
+            occupied.addAll(positions);
 
+            switch (type) {
+                case "mountain":
+                    return new Mountain(x, y, sizeX, sizeY);
+                case "lake":
+                    return new Lake(x, y, sizeX, sizeY);
+                case "pit":
+                    return new Pit(x, y, sizeX, sizeY);
+                default:
+                    return null;
+            }
         }
+        return null;
     }
+
 
     private boolean withinBounds(int x, int y, int sizeX, int sizeY){
         return x + sizeX <= width && y + sizeY <= height;
+    }
+
+    private List<Position> getObstaclePositions(int x, int y, int sizeX, int sizeY) {
+        List<Position> positions = new ArrayList<>(sizeX * sizeY);
+
+        for (int directionX = 0; directionX < sizeX; directionX++) {
+            for (int directionY = 0; directionY < sizeY; directionY++) {
+                positions.add(new Position(x + directionX, y + directionY));
+            }
+        }
+        return positions;
     }
 
     /**
