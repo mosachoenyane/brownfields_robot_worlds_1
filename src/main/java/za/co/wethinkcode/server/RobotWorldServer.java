@@ -1,5 +1,6 @@
 package za.co.wethinkcode.server;
 
+import za.co.wethinkcode.flow.Recorder;
 import za.co.wethinkcode.server.handler.ClientHandler;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldConfig;
@@ -65,5 +66,10 @@ public class RobotWorldServer {
                 }
             }
         }
+    }
+    // The following initialization is REQUIRED for flow monitoring.
+    // DO NOT REMOVE OR MODIFY THIS CODE.
+    static {
+        new Recorder().logRun();
     }
 }
