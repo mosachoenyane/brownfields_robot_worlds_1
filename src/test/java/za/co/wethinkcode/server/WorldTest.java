@@ -117,5 +117,3 @@ public class WorldTest {
         assertFalse(visible.contains(mountain));
     }
 }
-
-

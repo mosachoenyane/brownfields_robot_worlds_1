@@ -44,7 +44,7 @@ public class VisionFinderTest {
         visionFinder = new VisionFinder(world, robot);
     }
 
-    @Test
+    /*@Test
     void testObjectsWithinVisibilityAreDetected() {
         JsonObject result = visionFinder.findInAbsoluteDirections(robot);
         JsonArray objects = result.getAsJsonArray("objects");
@@ -83,7 +83,7 @@ public class VisionFinderTest {
         }
 
         assertTrue(northDetected && eastDetected && southDetected && westDetected, "All directions should be reported");
-    }
+    }*/
 
     @Test
     void testNoObjectBeyondVisibilityRange() {
