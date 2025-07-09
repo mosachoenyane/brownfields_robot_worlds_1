@@ -76,10 +76,10 @@ public class World {
             occupied.addAll(positions);
 
             return switch (type) {
-                case "mountain" -> return new Mountain(x, y, sizeX, sizeY);
-                case "lake" -> return new Lake(x, y, sizeX, sizeY);
-                case "pit" -> return new Pit(x, y, sizeX, sizeY)
-                default -> return null;
+                case "mountain" -> new Mountain(x, y, sizeX, sizeY);
+                case "lake" -> new Lake(x, y, sizeX, sizeY);
+                case "pit" -> new Pit(x, y, sizeX, sizeY);
+                default -> null ;
             };
         }
         return null;
@@ -166,6 +166,9 @@ public class World {
             case WEST:  return dx <= 0 && Math.abs(dy) <= -dx;
             default:    return false;
         }
+    }
+    private boolean isInTheNorth(int dx, int dy, Direction facing){
+        return dy >= 0 && Math.abs(dx) <= dy;
     }
 
     /**
