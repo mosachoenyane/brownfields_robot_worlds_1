@@ -160,15 +160,19 @@ public class World {
 
     private boolean isInFieldOfView(int dx, int dy, Direction facing) {
         switch (facing) {
-            case NORTH: return dy >= 0 && Math.abs(dx) <= dy;
-            case EAST:  return dx >= 0 && Math.abs(dy) <= dx;
+            case NORTH: return isFacingTheNorth(dx, dy);
+            case EAST:  return isFacingTheEast(dx, dy);
             case SOUTH: return dy <= 0 && Math.abs(dx) <= -dy;
             case WEST:  return dx <= 0 && Math.abs(dy) <= -dx;
             default:    return false;
         }
     }
-    private boolean isInTheNorth(int dx, int dy, Direction facing){
+    private boolean isFacingTheNorth(int dx, int dy){
         return dy >= 0 && Math.abs(dx) <= dy;
+    }
+
+    private  boolean isFacingTheEast(int dx, int dy){
+        return dx >= 0 && Math.abs(dy) <= dx;
     }
 
     /**
