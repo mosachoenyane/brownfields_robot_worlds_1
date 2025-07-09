@@ -76,11 +76,10 @@ public class World {
             occupied.addAll(positions);
 
             return switch (type) {
-                case "mountain":
-                case "lake":
-                case "pit":
-                default:
-                    return null;
+                case "mountain" -> return new Mountain(x, y, sizeX, sizeY);
+                case "lake" -> return new Lake(x, y, sizeX, sizeY);
+                case "pit" -> return new Pit(x, y, sizeX, sizeY)
+                default -> return null;
             };
         }
         return null;
