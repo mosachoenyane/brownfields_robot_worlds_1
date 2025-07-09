@@ -162,7 +162,7 @@ public class World {
         switch (facing) {
             case NORTH: return isFacingTheNorth(dx, dy);
             case EAST:  return isFacingTheEast(dx, dy);
-            case SOUTH: return dy <= 0 && Math.abs(dx) <= -dy;
+            case SOUTH: return isFacingSouth(dx, dy);
             case WEST:  return dx <= 0 && Math.abs(dy) <= -dx;
             default:    return false;
         }
@@ -173,6 +173,9 @@ public class World {
 
     private  boolean isFacingTheEast(int dx, int dy){
         return dx >= 0 && Math.abs(dy) <= dx;
+    }
+    private boolean isFacingSouth(int dx,int dy){
+        return dy <= 0 && Math.abs(dx) <= -dx;
     }
 
     /**
