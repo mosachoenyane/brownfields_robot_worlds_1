@@ -75,20 +75,16 @@ public class World {
             if (positions.stream().anyMatch(occupied::contains)) continue;
             occupied.addAll(positions);
 
-            switch (type) {
+            return switch (type) {
                 case "mountain":
-                    return new Mountain(x, y, sizeX, sizeY);
                 case "lake":
-                    return new Lake(x, y, sizeX, sizeY);
                 case "pit":
-                    return new Pit(x, y, sizeX, sizeY);
                 default:
                     return null;
-            }
+            };
         }
         return null;
     }
-
 
     private boolean withinBounds(int x, int y, int sizeX, int sizeY){
         return x + sizeX <= width && y + sizeY <= height;
