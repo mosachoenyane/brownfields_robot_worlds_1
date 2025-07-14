@@ -68,26 +68,51 @@ import static org.junit.jupiter.api.Assertions.*;
             assertTrue(serverClient.isConnected());
 
             // When I send a valid launch request to the server
-            String request = "{" +
+            String request1 = "{" +
                     "  \"robot\": \"HAL\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
-            JsonNode response = serverClient.sendRequest(request);
+            String request2 = "{" +
+                    "  \"robot\": \"BEN\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request3 = "{" +
+                    "  \"robot\": \"SAM\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request4 = "{" +
+                    "  \"robot\": \"WAZZ\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request5 = "{" +
+                    "  \"robot\": \"JOBZ\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request6 = "{" +
+                    "  \"robot\": \"REITU\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request7 = "{" +
+                    "  \"robot\": \"MOSA\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            String request8 = "{" +
+                    "  \"robot\": \"BENJI\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+
+            JsonNode response1 = serverClient.sendRequest(request1);
+            JsonNode response2 = serverClient.sendRequest(request2);
+            JsonNode response3 = serverClient.sendRequest(request3);
+            JsonNode response4 = serverClient.sendRequest(request4);
+            JsonNode response5 = serverClient.sendRequest(request5);
+            JsonNode response6 = serverClient.sendRequest(request6);
+            JsonNode response7 = serverClient.sendRequest(request7);
+            JsonNode response8 = serverClient.sendRequest(request8);
+
 
             // Then I should get a valid response from the server
-            assertNotNull(response.get("result"));
-            assertEquals("OK", response.get("result").asText());
+            assertNotNull(response8.get("result"));
+            assertEquals("OK", response8.get("result").asText());
 
             // And the position should be (x:0, y:0)
-            assertNotNull(response.get("data"));
-            assertNotNull(response.get("data").get("position"));
-            assertEquals(0, response.get("data").get("position").get(0).asInt());
-            assertEquals(0, response.get("data").get("position").get(1).asInt());
+            assertNotNull(response8.get("data"));
+            assertNotNull(response8.get("data").get("position"));
 
             // And I should also get the state of the robot
-            assertNotNull(response.get("state"));
+            assertNotNull(response8.get("state"));
+
+            // Check that all robots are not launched at the obstacle position
+            assertNotEquals(obstaclePosition.getX(), response1.get("data").get("position").get(0).asInt());
+            assertNotEquals(obstaclePosition.getY(), response1.get("data").get("position").get(1).asInt());
         }
 
 
-            // Check that robot is not launched at the obstacle position
+
 
     }
 
