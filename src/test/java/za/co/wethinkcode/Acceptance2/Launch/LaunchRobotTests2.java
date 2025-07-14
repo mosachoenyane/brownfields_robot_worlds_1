@@ -40,7 +40,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
             // When I send a valid launch request to the server
             String request = "{" +
-                    "  \"robot\": \"HAL\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+                    "  \"robot\": \"HAL\"," +
+                    "  \"command\": \"launch\"," +
+                    "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
             JsonNode response = serverClient.sendRequest(request);
 
             // Then I should get a valid response from the server
@@ -56,10 +59,35 @@ import static org.junit.jupiter.api.Assertions.*;
             // And I should also get the state of the robot
             assertNotNull(response.get("state"));
 
+        }
+        @Test
+        void launchEightRobotsWithObstacle() {
+            // Given that I am connected to a running Robot Worlds server and a world of size 2x2
+            // AND the world has an obstacle at coordinate [1,1]
+            // WHEN I launch 8 robots into the world each robot cannot be in position [1,1].
+            assertTrue(serverClient.isConnected());
 
+            // When I send a valid launch request to the server
+            String request = "{" +
+                    "  \"robot\": \"HAL\"," + "  \"command\": \"launch\"," + "  \"arguments\": [\"shooter\",\"5\",\"5\"]" + "}";
+            JsonNode response = serverClient.sendRequest(request);
+
+            // Then I should get a valid response from the server
+            assertNotNull(response.get("result"));
+            assertEquals("OK", response.get("result").asText());
+
+            // And the position should be (x:0, y:0)
+            assertNotNull(response.get("data"));
+            assertNotNull(response.get("data").get("position"));
+            assertEquals(0, response.get("data").get("position").get(0).asInt());
+            assertEquals(0, response.get("data").get("position").get(1).asInt());
+
+            // And I should also get the state of the robot
+            assertNotNull(response.get("state"));
         }
 
-        // Check that robot is not launched at the obstacle position
+
+            // Check that robot is not launched at the obstacle position
 
     }
 
