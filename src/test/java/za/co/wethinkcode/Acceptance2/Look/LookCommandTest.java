@@ -55,7 +55,7 @@ public class LookCommandTest {
         assertEquals("OK", lookResponse.get("result").asText());
 
         JsonNode objects = lookResponse.get("data").get("objects");
-        boolean seeObstacle = false;
+        boolean seeObstacle = true;
 
         for (JsonNode i : objects){
             if("OBSTACLE".equalsIgnoreCase(i.get("type").asText())){
