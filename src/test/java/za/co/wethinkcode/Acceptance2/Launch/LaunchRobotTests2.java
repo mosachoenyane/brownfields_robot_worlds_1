@@ -147,7 +147,19 @@ import static org.junit.jupiter.api.Assertions.*;
         }
         @Test
         void launchRobotInFullWorldWithObstaclesShouldFail(){
+            assertTrue(serverClient.isConnected(), "Should be connected to server");
 
+            // AND the world has an obstacle at coordinate [1,1]
+            //ANDI have successfully launched 3 robots into the world
+            for (int i = 1; i <= MAX_ROBOTS; i++) {
+                String request = createLaunchRequest("robot" + i);
+                JsonNode response = serverClient.sendRequest(request);
+                System.out.println(response.toString());
+
+                // check launch for each robot
+                assertEquals("OK", response.get("result").asText(),
+                        "Should successfully launch robot " + i);
+            }
         }
 
     }
