@@ -7,17 +7,16 @@ import org.junit.jupiter.api.Test;
 
 public class MoveForwardTest {
 
-        // Simple Robot class inside the test for demonstration
         class Robot {
             private int x = 0;
             private int y = 0;
             private String direction = "NORTH";
             private final int WORLD_MAX_Y = 0;
-
+// move robot forward by specifying number of steps
             public String moveForward(int steps) {
                 int newX = x;
                 int newY = y;
-
+// check if robot is facing North, then should increase Y coordinates
                 if ("NORTH".equals(direction)) {
                     newY = y + steps;
                     if (newY > WORLD_MAX_Y) {
@@ -27,12 +26,12 @@ public class MoveForwardTest {
                         return "OK - At the NORTH edge";
                     }
                 }
-
+// update position
                 x = newX;
                 y = newY;
                 return "OK - Moved forward";
             }
-
+// return the current position of the robot
             public int[] getPosition() {
                 return new int[] {x, y};
             }
