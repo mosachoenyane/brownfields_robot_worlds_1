@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
         private final static String DEFAULT_IP = "localhost";
         private final static int WORLD_SIZE = 2; // A 2x2 world
         private final static Position obstaclePosition = new Position(1, 1); // Obstacle at [1,1]
+        private static final int MAX_ROBOTS = 8;
         private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
         @BeforeEach
@@ -137,8 +138,40 @@ import static org.junit.jupiter.api.Assertions.*;
             // And I should also get the state of the robot
             assertNotNull(response.get("state"));
         }
+        private String createLaunchRequest(String robotName) {
+            return "{" +
+                    " \"robot\": \"" + robotName + "\"," +
+                    " \"command\": \"launch\"," +
+                    " \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
+        }
+        @Test
+        void launchRobotInFullWorldWithObstaclesShouldFail(){
+            assertTrue(serverClient.isConnected(), "Should be connected to server");
 
+            // AND the world has an obstacle at coordinate [1,1]
+            //ANDI have successfully launched 8 robots into the world
+            for (int i = 1; i <= MAX_ROBOTS; i++) {
+                String request = createLaunchRequest("robot" + i);
+                JsonNode response = serverClient.sendRequest(request);
+                System.out.println(response.toString());
 
+                // check launch for each robot
+                assertEquals("OK", response.get("result").asText(),
+                        "Should successfully launch robot " + i);
+            }
+            // WHEN I launch one more robot
+            String extraRequest = createLaunchRequest("extraRobot");
+            JsonNode failedResponse = serverClient.sendRequest(extraRequest);
+            System.out.println(failedResponse.toString());
+
+            //THEN I should get an error response back with the message "No more space in this world"
+            assertEquals("ERROR", failedResponse.get("result").asText());
+            assertNotNull(failedResponse.get("data"));
+            String message = failedResponse.get("data").get("message").asText();
+            assertTrue(message.contains("No more space in this world"));
+
+        }
 
     }
 
