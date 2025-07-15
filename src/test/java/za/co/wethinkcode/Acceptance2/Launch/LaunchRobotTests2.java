@@ -145,7 +145,10 @@ import static org.junit.jupiter.api.Assertions.*;
                     " \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                     "}";
         }
+        @Test
+        void launchRobotInFullWorldWithObstaclesShouldFail(){
 
+        }
 
     }
 
