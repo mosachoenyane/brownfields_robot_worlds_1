@@ -138,7 +138,13 @@ import static org.junit.jupiter.api.Assertions.*;
             // And I should also get the state of the robot
             assertNotNull(response.get("state"));
         }
-
+        private String createLaunchRequest(String robotName) {
+            return "{" +
+                    " \"robot\": \"" + robotName + "\"," +
+                    " \"command\": \"launch\"," +
+                    " \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                    "}";
+        }
 
 
     }
