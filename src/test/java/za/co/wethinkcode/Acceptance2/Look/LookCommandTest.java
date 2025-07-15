@@ -1,6 +1,7 @@
 package za.co.wethinkcode.Acceptance2.Look;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
@@ -13,7 +14,18 @@ public class LookCommandTest {
     private final static Position obstacle = new Position(2,1);
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
+    /**
+     * Before everything we connect to the server
+     */
     @BeforeEach void connectToServer(){
         serverClient.connect(defaultIP, defaultPort);
+    }
+
+    /**
+     * After running all the tests make sure we disconnect
+     * from the servers
+     */
+    @AfterEach void disconnectTheServer(){
+        serverClient.disconnect();
     }
 }
