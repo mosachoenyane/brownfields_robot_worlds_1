@@ -150,7 +150,7 @@ import static org.junit.jupiter.api.Assertions.*;
             assertTrue(serverClient.isConnected(), "Should be connected to server");
 
             // AND the world has an obstacle at coordinate [1,1]
-            //ANDI have successfully launched 3 robots into the world
+            //ANDI have successfully launched 8 robots into the world
             for (int i = 1; i <= MAX_ROBOTS; i++) {
                 String request = createLaunchRequest("robot" + i);
                 JsonNode response = serverClient.sendRequest(request);
@@ -160,6 +160,17 @@ import static org.junit.jupiter.api.Assertions.*;
                 assertEquals("OK", response.get("result").asText(),
                         "Should successfully launch robot " + i);
             }
+            // WHEN I launch one more robot
+            String extraRequest = createLaunchRequest("extraRobot");
+            JsonNode failedResponse = serverClient.sendRequest(extraRequest);
+            System.out.println(failedResponse.toString());
+
+            //THEN I should get an error response back with the message "No more space in this world"
+            assertEquals("ERROR", failedResponse.get("result").asText());
+            assertNotNull(failedResponse.get("data"));
+            String message = failedResponse.get("data").get("message").asText();
+            assertTrue(message.contains("No more space in this world"));
+
         }
 
     }
