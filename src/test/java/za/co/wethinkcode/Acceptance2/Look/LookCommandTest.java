@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
 import za.co.wethinkcode.server.model.Position;
+import za.co.wethinkcode.server.world.World;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,6 +23,8 @@ public class LookCommandTest {
      */
     @BeforeEach void connectToServer(){
         serverClient.connect(defaultIP, defaultPort);
+
+
     }
 
     /**
@@ -41,6 +44,31 @@ public class LookCommandTest {
                 "}";
         JsonNode launchResponse = serverClient.sendRequest(launchRequest);
         assertNotNull(launchResponse);
+        assertEquals("OK", launchResponse.get("result").asText());
+
+        String lookRequest = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"look\"" +
+                "}";
+        JsonNode lookResponse = serverClient.sendRequest(lookRequest);
+        assertNotNull(lookResponse);
+        assertEquals("OK", lookResponse.get("result").asText());
+
+        JsonNode objects = lookResponse.get("data").get("objects");
+        boolean seeObstacle = false;
+
+        for (JsonNode i : objects){
+            if("OBSTACLE".equalsIgnoreCase(i.get("type").asText())){
+                int x =i.get("position").get(0).asInt();
+                int y = i.get("position").get(1).asInt();
+
+                if (x == 2 && y== 1){
+                    seeObstacle = true;
+                    break;
+                }
+            }
+        }
+        assertTrue(seeObstacle, "Robot sees an obstacle at (2, 1)");
 
     }
 }
