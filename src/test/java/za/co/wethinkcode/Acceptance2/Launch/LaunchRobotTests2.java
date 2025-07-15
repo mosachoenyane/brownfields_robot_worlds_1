@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
         private final static String DEFAULT_IP = "localhost";
         private final static int WORLD_SIZE = 2; // A 2x2 world
         private final static Position obstaclePosition = new Position(1, 1); // Obstacle at [1,1]
+        private static final int MAX_ROBOTS = 8;
         private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
         @BeforeEach
