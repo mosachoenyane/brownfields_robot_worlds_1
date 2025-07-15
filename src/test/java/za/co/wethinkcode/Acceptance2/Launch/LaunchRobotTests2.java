@@ -154,7 +154,7 @@ import static org.junit.jupiter.api.Assertions.*;
             for (int i = 1; i <= MAX_ROBOTS; i++) {
                 String request = createLaunchRequest("robot" + i);
                 JsonNode response = serverClient.sendRequest(request);
-                System.out.println(response.toString());
+                //System.out.println(response.toString());
 
                 // check launch for each robot
                 assertEquals("OK", response.get("result").asText(),
@@ -163,7 +163,7 @@ import static org.junit.jupiter.api.Assertions.*;
             // WHEN I launch one more robot
             String extraRequest = createLaunchRequest("extraRobot");
             JsonNode failedResponse = serverClient.sendRequest(extraRequest);
-            System.out.println(failedResponse.toString());
+            //System.out.println(failedResponse.toString());
 
             //THEN I should get an error response back with the message "No more space in this world"
             assertEquals("ERROR", failedResponse.get("result").asText());
