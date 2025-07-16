@@ -81,8 +81,8 @@ public class MoveForwardTest {
         // Move backward 5 steps
         String backwardRequest = "{" +
                 "  \"robot\": \"BENJI\"," +
-                "  \"command\": \"back\"," +
-                "  \"arguments\": [\"2\"]" +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"5\"]" +
                 "}";
         JsonNode backwardResponse = serverClient.sendRequest(backwardRequest);
         assertNotNull(backwardResponse);
@@ -91,6 +91,6 @@ public class MoveForwardTest {
         JsonNode position = backwardResponse.get("state").get("position");
         System.out.println("New robot position: " + position);
         assertNotNull(position, "Robot position should change according to the steps");
-        assertEquals("North", backwardResponse.get("state").get("direction").asText(), "Direction should remain North after moving backward");
+        assertEquals("NORTH", backwardResponse.get("state").get("direction").asText(), "Direction should remain North after moving backward");
     }
 }
