@@ -1,57 +1,66 @@
 package za.co.wethinkcode.Acceptance2.Movement;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import za.co.wethinkcode.client.RobotWorldClient;
+import za.co.wethinkcode.client.RobotWorldJsonClient;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MoveForwardTest {
+    private final static int defaultPort = 5000;
+    private final static String defaultIP = "localhost";
+    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
-        class Robot {
-            private int x = 0;
-            private int y = 0;
-            private String direction = "NORTH";
-            private final int WORLD_MAX_Y = 0;
-// move robot forward by specifying number of steps
-            public String moveForward(int steps) {
-                int newX = x;
-                int newY = y;
-// check if robot is facing North, then should increase Y coordinates
-                if ("NORTH".equals(direction)) {
-                    newY = y + steps;
-                    if (newY > WORLD_MAX_Y) {
-                        newY = WORLD_MAX_Y;
-                        x = newX;
-                        y = newY;
-                        return "OK - At the NORTH edge";
-                    }
-                }
-// update position
-                x = newX;
-                y = newY;
-                return "OK - Moved forward";
-            }
-// return the current position of the robot
-            public int[] getPosition() {
-                return new int[] {x, y};
-            }
-        }
-
-        @Test
-        public void testMoveForwardAtEdge() {
-            Robot hal = new Robot();
-
-            String response = hal.moveForward(5);
-            int[] position = hal.getPosition();
-
-            assertEquals("OK - At the NORTH edge", response, "Response message should indicate edge");
-            assertEquals(0, position[0], "X coordinate should be 0");
-            assertEquals(0, position[1], "Y coordinate should be 0");
-        }
+    /**
+     * Connect to the robot server before each test.
+     */
+    @BeforeEach
+    void connectToServer() {
+        serverClient.connect(defaultIP, defaultPort);
     }
 
+    /**
+     * Disconnect from the server after each test.
+     */
+    @AfterEach
+    void disconnectFromServer() {
+        serverClient.disconnect();
+    }
 
+    /**
+     * Test moving the robot forward.
+     * Launch the robot and move it forward by 5 steps.
+     */
+    @Test
+    void testMoveForward() {
+        assertTrue(serverClient.isConnected(), "Client should be connected");
 
+        // Launch robot
+        String launchRequest = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode launchResponse = serverClient.sendRequest(launchRequest);
+        assertNotNull(launchResponse);
+        assertEquals("OK", launchResponse.get("result").asText(), "Launch should return OK");
 
+        // Move forward 5 steps
+        String forwardRequest = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"forward\"," +
+                "  \"arguments\": [\"5\"]" +
+                "}";
+        JsonNode forwardResponse = serverClient.sendRequest(forwardRequest);
+        assertNotNull(forwardResponse);
+        assertEquals("OK", forwardResponse.get("result").asText(), "Forward should return OK");
 
-
+        // Optional: Print or assert position
+        JsonNode position = forwardResponse.get("state").get("position");
+        System.out.println("New robot position: " + position);
+        assertNotNull(position, "Position should be present in state");
+    }
+}
