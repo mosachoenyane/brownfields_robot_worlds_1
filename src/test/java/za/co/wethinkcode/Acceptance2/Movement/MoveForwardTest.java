@@ -63,4 +63,34 @@ public class MoveForwardTest {
         System.out.println("New robot position: " + position);
         assertNotNull(position, "Position should be present in state");
     }
+
+    @Test
+    void testMoveBackward() {
+        assertTrue(serverClient.isConnected(), "Client should be connected");
+
+        // Launch robot
+        String launchRequest = "{" +
+                "  \"robot\": \"BENJI\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode launchResponse = serverClient.sendRequest(launchRequest);
+        assertNotNull(launchResponse);
+        assertEquals("OK", launchResponse.get("result").asText(), "Launch should return OK");
+
+        // Move backward 5 steps
+        String backwardRequest = "{" +
+                "  \"robot\": \"BENJI\"," +
+                "  \"command\": \"back\"," +
+                "  \"arguments\": [\"2\"]" +
+                "}";
+        JsonNode backwardResponse = serverClient.sendRequest(backwardRequest);
+        assertNotNull(backwardResponse);
+        assertEquals("OK", backwardResponse.get("result").asText(), "Backward should return OK");
+
+        JsonNode position = backwardResponse.get("state").get("position");
+        System.out.println("New robot position: " + position);
+        assertNotNull(position, "Robot position should change according to the steps");
+        assertEquals("North", backwardResponse.get("state").get("direction").asText(), "Direction should remain North after moving backward");
+    }
 }
