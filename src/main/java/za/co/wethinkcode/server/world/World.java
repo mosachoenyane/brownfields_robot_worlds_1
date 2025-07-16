@@ -109,8 +109,8 @@ public class World {
     public boolean isPositionValid(Position position) {
         int x = position.getX();
         int y = position.getY();
-        return x >= (width * -1) && x < width &&   //Also looks at negative x
-                y >= (height * -1) && y < height;  // Also looks at negative y
+        return x > (width * -1) && x < width &&   //Also looks at negative x
+                y > (height * -1) && y < height;  // Also looks at negative y
     }
 
     /**
