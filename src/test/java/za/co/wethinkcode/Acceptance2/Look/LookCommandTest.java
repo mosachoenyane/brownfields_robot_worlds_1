@@ -71,4 +71,8 @@ public class LookCommandTest {
         assertTrue(seeObstacle, "Robot sees an obstacle at (2, 1)");
 
     }
+
+    @Test void lookAnotherRobotTest(){
+
+    }
 }
