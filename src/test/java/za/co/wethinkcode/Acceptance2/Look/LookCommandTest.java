@@ -6,16 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
-import za.co.wethinkcode.server.model.Position;
-import za.co.wethinkcode.server.world.World;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LookCommandTest {
     private final static int defaultPort = 5000;
     private final static String defaultIP = "localhost";
-    private final static int worldSize = 2;
-    private final static Position obstacle = new Position(2,1);
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
     /**
@@ -35,6 +31,9 @@ public class LookCommandTest {
         serverClient.disconnect();
     }
 
+    /**
+     * TESTING robot looks at the world and sees an obstacle
+     */
     @Test void lookRobotWithObstacle(){
         assertTrue(serverClient.isConnected());
         String launchRequest = "{" +
@@ -63,16 +62,14 @@ public class LookCommandTest {
                 int y = i.get("position").get(1).asInt();
 
                 if (x == 2 && y== 1){
-                    seeObstacle = true;
                     break;
                 }
             }
         }
         assertTrue(seeObstacle, "Robot sees an obstacle at (2, 1)");
-
     }
 
     @Test void lookAnotherRobotTest(){
-
+        assertTrue(serverClient.isConnected());
     }
 }
