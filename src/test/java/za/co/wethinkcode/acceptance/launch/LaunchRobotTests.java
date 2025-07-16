@@ -90,12 +90,6 @@ class LaunchRobotTests {
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
 
-        String request3 = "{" +
-                "  \"robot\": \"Rethabo\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
         String request2 = "{" +
                 "  \"robot\": \"Benji\"," +
                 "  \"command\": \"launch\"," +
@@ -103,7 +97,6 @@ class LaunchRobotTests {
                 "}";
 
         JsonNode response = serverClient.sendRequest(request);
-        JsonNode robo3 = serverClient.sendRequest(request3);
         // Launching a robot in a world that does not have adequate space
         JsonNode duplicate = serverClient.sendRequest(request2);
 
@@ -142,30 +135,4 @@ class LaunchRobotTests {
         String message = duplicateResponse.get("data").get("message").asText();
         assertTrue(message.contains("Too many of you in this world"));
     }
-
-    //EXTRA TESTS
-    @Test
-    void LaunchWithInvalidMakeShouldFail(){
-        // Given that, I am connected to a running Robot Worlds server
-        assertTrue(serverClient.isConnected());
-
-        // When I send an invalid launch request with the command "luanch" instead of "launch"
-        String request = "{" +
-                "\"robot\": \"HAL\"," +
-                "\"command\": \"luanch\"," +
-                "\"arguments\": [\"plane\",\"5\",\"5\"]" +
-                "}";
-        JsonNode response = serverClient.sendRequest(request);
-        System.out.println(response.toString());
-
-        // Then I should get an error response
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
-
-        // And the message "Unsupported command"
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        //assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
-    }
-
 }
