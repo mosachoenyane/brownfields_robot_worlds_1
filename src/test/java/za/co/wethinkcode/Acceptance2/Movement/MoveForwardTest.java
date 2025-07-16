@@ -15,7 +15,7 @@ public class MoveForwardTest {
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
     /**
-     * Before everything we connect to the server.
+     * Before everything, we connect to the server.
      */
     @BeforeEach
     void connectToServer() {
@@ -23,7 +23,7 @@ public class MoveForwardTest {
     }
 
     /**
-     * Disconnect from the server after each test.
+     * after running all the tests, make sure we disconnect from the server.
      */
     @AfterEach
     void disconnectFromServer() {
