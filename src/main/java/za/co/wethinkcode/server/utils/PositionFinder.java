@@ -37,8 +37,8 @@ public class PositionFinder {
         int attempts = 100;
 
         for (int i = 0; i < attempts; i++) {
-            int x = random.nextInt(width);
-            int y = random.nextInt(height);
+            int x = random.nextInt(2 * width) - width;
+            int y = random.nextInt(2 * height) - height;
             Position pos = new Position(x, y);
 
             if (!isPositionOccupied(pos) && world.isPositionValid(pos)) {
