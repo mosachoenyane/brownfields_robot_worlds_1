@@ -53,20 +53,24 @@ public class LookCommandTest {
         assertNotNull(lookResponse);
         assertEquals("OK", lookResponse.get("result").asText());
 
+        JsonNode data = lookResponse.get("data");
+        assertNotNull(data, "Not Null");
         JsonNode objects = lookResponse.get("data").get("objects");
-        boolean seeObstacle = true;
+        assertNotNull(objects, "Objects not null");
+        boolean seeObstacle = false;
 
         for (JsonNode i : objects){
             if("OBSTACLE".equalsIgnoreCase(i.get("type").asText())){
-                int x =i.get("position").get(0).asInt();
+                int x = i.get("position").get(0).asInt();
                 int y = i.get("position").get(1).asInt();
 
-                if (x == 2 && y== 1){
+                if (x == 0 && y== 1){
+                    seeObstacle = true;
                     break;
                 }
             }
         }
-        assertTrue(seeObstacle, "Robot sees an obstacle at (2, 1)");
+        assertTrue(seeObstacle, "Robot sees an obstacle at (0, 1)");
     }
 
     @Test void lookAnotherRobotTest(){
