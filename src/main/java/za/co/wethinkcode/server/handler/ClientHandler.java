@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonObjectFormatVisitor;
 import com.google.gson.JsonObject;
 import za.co.wethinkcode.protocol.server.ServerCommandProcessor;
+import za.co.wethinkcode.server.model.Robot;
 import za.co.wethinkcode.server.world.World;
 
 /**
@@ -54,12 +58,16 @@ public class ClientHandler extends Thread {
     private void processClientCommands(BufferedReader in, PrintWriter out) throws IOException {
         String inputLine;
         String robotName = null;
+        List<String> launchedRobots = new ArrayList<>();
         while ((inputLine = in.readLine()) != null && clientSocket.isConnected()) {
             robotName = new JSONObject(inputLine).getString("robot");
+            launchedRobots.add(robotName);
             String response = commandProcessor.processMessage(inputLine);
             out.println(response);
         }
-        world.removeRobot(world.getRobotByName(robotName));
+        for (String robot : launchedRobots) {
+            world.removeRobot(world.getRobotByName(robot));
+        }
         System.out.println(robotName +" removed");
 
 
