@@ -279,6 +279,8 @@ public class World {
     }
 
     public void addObstacle(Mountain mountain) {
+        obstacles.add(mountain);
+
     }
 
     /**
