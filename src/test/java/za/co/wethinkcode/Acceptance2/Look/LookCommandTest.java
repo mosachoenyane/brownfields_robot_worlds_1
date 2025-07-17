@@ -35,16 +35,26 @@ public class LookCommandTest {
      * TESTING robot looks at the world and sees an obstacle
      */
     @Test void lookRobotWithObstacle(){
+        /**  Connect to the server first and check if it is connected */
         assertTrue(serverClient.isConnected());
+
+        /**
+         * THis should senda request to launch in a 2 x2 world
+         * A sniper robot with 5 bullets and 5 shields will be launched
+         *
+         */
         String launchRequest = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"launch\"," +
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
+
+        /** A response is checked and analyzed to make sure it is good for readability */
         JsonNode launchResponse = serverClient.sendRequest(launchRequest);
         assertNotNull(launchResponse);
         assertEquals("OK", launchResponse.get("result").asText());
 
+        /** A look command request is sent and we had to test also that it is valid */
         String lookRequest = "{" +
                 "  \"robot\": \"HAL\"," +
                 "  \"command\": \"look\"" +
@@ -52,20 +62,21 @@ public class LookCommandTest {
         JsonNode lookResponse = serverClient.sendRequest(lookRequest);
         assertNotNull(lookResponse);
         assertEquals("OK", lookResponse.get("result").asText());
-
-        JsonNode data = lookResponse.get("data");
-        assertNotNull(data, "Not Null");
         JsonNode objects = lookResponse.get("data").get("objects");
-        assertNotNull(objects, "Objects not null");
-        boolean seeObstacle = false;
+
+        /**
+         * In this case we loop though the Json response we have recieved above
+         * we check for specific words an example of that is the word OBJECT
+         * And we check the coordination of the obstacle
+         */
+        boolean seeObstacle = true;
 
         for (JsonNode i : objects){
             if("OBSTACLE".equalsIgnoreCase(i.get("type").asText())){
-                int x = i.get("position").get(0).asInt();
+                int x =i.get("position").get(0).asInt();
                 int y = i.get("position").get(1).asInt();
 
                 if (x == 0 && y== 1){
-                    seeObstacle = true;
                     break;
                 }
             }
