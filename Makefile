@@ -12,23 +12,18 @@ clean:
 
 build:
 	$(MVN) compile
-	@echo "starting ref server"
+	@echo "starting reference server"
 	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 1,1 & echo $$! > serve.pid
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Launch/LaunchRobotTests2.java
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Movement/MoveForwardTest.java
-	@echo "stoping reference server"
-
+	@echo "stopping reference server"
 	@if [ -f serve.pid ]; then kill -9 cat serve.pid || true; rm -f serve.pid; fi
 
-	@echo "starting ref server against look"
+	@echo "starting reference server with a different position"
 	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 0,1 & echo $$! > serve.pid
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Look/LookCommandTest.java
-	@echo "stoping ref server"
-
+	@echo "stopping reference server"
 	@if [ -f serve.pid ]; then kill -9 cat serve.pid || true; rm -f serve.pid; fi
-
-	@echo "Stopping local server..."
-	@if [ -f server.pid ]; then kill -9 cat server.pid || true; rm -f server.pid; fi
 
 package:
 	$(MVN) verify -DskipTests
