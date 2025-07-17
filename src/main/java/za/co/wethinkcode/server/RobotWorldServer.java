@@ -5,6 +5,11 @@ import za.co.wethinkcode.server.handler.ClientHandler;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldConfig;
 
+import picocli.CommandLine;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.Option;
+import za.co.wethinkcode.server.world.obstacles.Mountain;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -15,8 +20,26 @@ import java.util.Scanner;
  * and starts a server that listens for client connections.
  * It also optionally starts a console interface for server administration.
  */
+@Command(name = "Robot-Server", mixinStandardHelpOptions = true, version = "1.0",
+        description = "Starts the Robot World Server with specified parameters")
 public class RobotWorldServer {
-    private static final int PORT = 5000;
+
+    private static int PORT = 5000;
+
+    @Option(
+            names = {"-p", "--port"},
+            description = "Port number")
+    private static String newPORT;
+
+    @Option(
+            names = {"-s", "--size"},
+            description = "World size")
+    private static String SIZE;
+
+    @Option(
+            names = {"-o", "--obstacle"}, split = ",",
+            description = "Obstacle coordinates")
+    private static String[] OBSTACLE;
 
     /**
      * Entry point of the server application.
@@ -26,11 +49,28 @@ public class RobotWorldServer {
      * @param args Command-line arguments. If "nogui" is passed, the server console is not started.
      */
     public static void main(String[] args) {
+        RobotWorldServer app = new RobotWorldServer();
+        new CommandLine(app).parseArgs(args);
         try {
             WorldConfig config = new WorldConfig("config.properties");
+            if(newPORT != null ){
+                System.out.println("Overriding default Port number with port number: " + PORT);
+                PORT = Integer.parseInt(newPORT);
+            }
+            if(SIZE != null ){
+                System.out.println("Overriding default World Size with size: " + SIZE);
+                config.properties.setProperty("WORLD_WIDTH",SIZE);
+                config.properties.setProperty("WORLD_HEIGHT",SIZE);
+            }
 
             World world = new World(config);//
 
+            if(OBSTACLE != null ){
+                System.out.println("Placing obstacle at chosen coordinates:" + OBSTACLE[0] + "," + OBSTACLE[1]);
+
+                world.addObstacle(new Mountain(Integer.parseInt(OBSTACLE[0]), Integer.parseInt(OBSTACLE[1]),1,1));
+
+            }
 
             // Start server thread
             Thread serverThread = new Thread(() -> {
