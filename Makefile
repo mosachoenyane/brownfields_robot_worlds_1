@@ -3,7 +3,7 @@ JAVA = java
 VERSION = $(shell $(MVN) help:evaluate -Dexpression=project.version -q -DforceStdout)
 GIT = git
 
-.PHONY: all clean test build release package tag test-iteration-2 test-iteration-1
+.PHONY: all clean test build release package tag test-iteration-2 test-iteration-1 test-our-server
 
 all: clean build test
 
@@ -22,6 +22,15 @@ test-iteration-2:
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
+	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
+test-our-server:
+	@echo "target/robot-world-0.0.2.jar"
+	$(MVN) compile
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
+	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
+
 
 build:
 	$(MVN) compile

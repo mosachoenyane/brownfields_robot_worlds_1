@@ -27,7 +27,7 @@ public class LookCommandTest {
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
         String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
-        ProcessBuilder pb = new ProcessBuilder("java", "-jar", path);
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","0,1");
         pb.inheritIO(); // Inherit standard input/output/error streams
         process = pb.start();
         Thread.sleep(1000);
