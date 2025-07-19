@@ -19,7 +19,7 @@
         <version.mockito>5.6.0</version.mockito>
         <version.picocli>4.6.1</version.picocli>
         <version.slf4j>2.0.17</version.slf4j>
-        <version.surefire>2.22.1</version.surefire>
+        <version.surefire>3.2.5</version.surefire>
     </properties>
 
     <dependencies>

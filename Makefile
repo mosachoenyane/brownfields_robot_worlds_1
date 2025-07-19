@@ -3,24 +3,25 @@ JAVA = java
 VERSION = $(shell $(MVN) help:evaluate -Dexpression=project.version -q -DforceStdout)
 GIT = git
 
-.PHONY: all clean test build release package tag
+.PHONY: all clean test build release package tag test-iteration-2
 
 all: clean build test
 
 clean:
 	$(MVN) clean
+test-iteration-2:
+	@echo ".libs/reference-server-0.2.3.jar">"src/main/resources/serverName"
+	$(MVN) compile
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
+	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Movement/MoveForwardTest.java
 
 build:
 	$(MVN) compile
 	@echo "starting reference server"
 	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 1,1 & echo $$! > serve.pid
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Launch/LaunchRobotTests2.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Movement/MoveForwardTest.java
-	@echo "stopping reference server"
-	@if [ -f serve.pid ]; then kill -9 cat serve.pid || true; rm -f serve.pid; fi
-
-	@echo "starting reference server with a different position"
-	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 0,1 & echo $$! > serve.pid
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Look/LookCommandTest.java
 	@echo "stopping reference server"
 	@if [ -f serve.pid ]; then kill -9 cat serve.pid || true; rm -f serve.pid; fi

@@ -8,6 +8,10 @@ import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
 import za.co.wethinkcode.server.model.Position;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
     /**
@@ -15,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
      * I want to launch my robot in the online robot world
      * So that I can break the record for the most robot kills
      */
-    public class LaunchRobotTests2 {
+    public class LaunchRobotTests {
         private final static int DEFAULT_PORT = 5000;
         private final static String DEFAULT_IP = "localhost";
         private final static int WORLD_SIZE = 2; // A 2x2 world
@@ -23,14 +27,25 @@ import static org.junit.jupiter.api.Assertions.*;
         private static final int MAX_ROBOTS = 8;
         private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
+        Process process;
+
+
         @BeforeEach
-        void connectToServer(){
+        void connectToServer() throws IOException, InterruptedException {
+            String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
+            ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","1,1");
+            pb.inheritIO(); // Inherit standard input/output/error streams
+            process = pb.start();
+            Thread.sleep(1000);
             serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
         }
 
         @AfterEach
-        void disconnectFromServer(){
+        void disconnectFromServer() throws InterruptedException {
             serverClient.disconnect();
+            process.destroy();
+            Thread.sleep(1000);
+
         }
         @Test
         void launchOneRobotWithObstacle(){
