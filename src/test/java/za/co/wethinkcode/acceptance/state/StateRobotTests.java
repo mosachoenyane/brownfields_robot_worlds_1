@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class StateRobotTests {
@@ -14,14 +18,24 @@ class StateRobotTests {
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
 
+    Process process;
+
     @BeforeEach
-    void connectToServer() {
+    void connectToServer() throws IOException, InterruptedException {
+        String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", path);
+        pb.inheritIO(); // Inherit standard input/output/error streams
+        process = pb.start();
+        Thread.sleep(1000);
         serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
     }
 
     @AfterEach
-    void disconnectFromServer() {
+    void disconnectFromServer() throws InterruptedException {
         serverClient.disconnect();
+        process.destroy();
+        Thread.sleep(1000);
+
     }
 
     @Test

@@ -3,18 +3,25 @@ JAVA = java
 VERSION = $(shell $(MVN) help:evaluate -Dexpression=project.version -q -DforceStdout)
 GIT = git
 
-.PHONY: all clean test build release package tag test-iteration-2
+.PHONY: all clean test build release package tag test-iteration-2 test-iteration-1
 
 all: clean build test
 
 clean:
 	$(MVN) clean
+
+test-iteration-1:
+	@echo ".libs/reference-server-0.1.0.jar">"src/main/resources/serverName"
+	$(MVN) compile
+	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.launch.LaunchRobotTests.java
+	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.Look.LookCommandTest.java
+	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.state.StateRobotTests.java
 test-iteration-2:
 	@echo ".libs/reference-server-0.2.3.jar">"src/main/resources/serverName"
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Movement/MoveForwardTest.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
 
 build:
 	$(MVN) compile
