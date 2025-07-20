@@ -1,0 +1,95 @@
+variables:
+  MAVEN_CLI_OPTS: "-s .m2/pom.xml --batch-mode --errors"
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
+
+cache:
+  paths:
+    - .m2/repository
+    - target/
+
+stages:
+  - build-unit-test  # Compile and run unit tests
+  - acceptance-test  # Run acceptance tests
+  - package          # Create distributable JAR
+
+
+# ============================
+#       JOB: Compile & Unit Tests
+# ============================
+# Title: Run all unit tests when new commits are made to main branch
+# Done criteria:
+# . the step returns an exit code of 0 if all tests pass
+# . the step returns a non-zero exit code if one or more tests fail
+# . the step returns a non-zero exit code if a dependent preceding step fails
+# . the step produces a `tests.xml` file of the tests results in the `target` directory.
+
+unit_tests_job:
+  stage: build-unit-test
+  script:
+    - echo "Running Maven compile and unit tests..."
+    - mvn test
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/TEST-*.xml
+
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# ============================
+#       JOB: Acceptance Tests (Against Reference Server)
+# ============================
+
+acceptance_test_ref_server_job:
+  stage: acceptance-test
+  script:
+    - echo "Running acceptance tests against reference server (Iteration 1)..."
+    - make test-iteration-1
+    - echo "Running acceptance tests against reference server (Iteration 2)..."
+    - make test-iteration-2
+
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/TEST-*.xml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
+
+# ============================
+#       JOB: Acceptance Tests (Against Our Server)
+# ============================
+
+acceptance_test_our_server_job:
+  stage: acceptance-test
+  script:
+    - echo "Packaging our server JAR for execution..."
+    - mvn package -DskipTests
+
+    - echo "Starting our server..."
+    - make test-our-server
+  
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/TEST-*.xml
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success # Only run if previous stages (unit tests) passed
+
+# ============================
+#       JOB: Package (Create JAR)
+# ============================
+# The final executable JAR.
+package_job:
+  stage: package
+  script:
+    - echo "Packaging the application..."
+    - make package
+  artifacts:
+    paths:
+      - target/*.jar
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: on_success
