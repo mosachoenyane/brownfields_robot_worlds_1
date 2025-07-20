@@ -187,6 +187,23 @@ import static org.junit.jupiter.api.Assertions.*;
             assertTrue(message.contains("No more space in this world"));
 
         }
+        @Test
+        void testWorldFullLaunchFails() {
+            assertTrue(serverClient.isConnected());
+            for (int i = 1; i <= MAX_ROBOTS; i++) {
+                String requestJson = createLaunchRequest("robot" + i);
+                JsonNode response = serverClient.sendRequest(requestJson);
+
+                assertEquals("OK", response.get("result").asText(), "Launch for robot " + i + " should succeed");
+            }
+
+            // Now try launching the 10th robot (should fail)
+            String requestJson = createLaunchRequest("robot10");
+            JsonNode finalResponse = serverClient.sendRequest(requestJson);
+
+            assertEquals("ERROR", finalResponse.get("result").asText());
+            assertEquals("No more space in this world", finalResponse.get("data").get("message").asText());
+        }
 
     }
 
