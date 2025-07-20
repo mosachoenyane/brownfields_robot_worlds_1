@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
             ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","1,1");
             pb.inheritIO(); // Inherit standard input/output/error streams
             process = pb.start();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
         }
 
@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.*;
         void disconnectFromServer() throws InterruptedException {
             serverClient.disconnect();
             process.destroy();
-            Thread.sleep(1000);
+            Thread.sleep(2000);
 
         }
         @Test
