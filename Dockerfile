@@ -1,0 +1,27 @@
+# Use a base image with Java and Maven
+FROM maven:3.9-eclipse-temurin-21 AS build
+
+# Set the working directory
+WORKDIR /app
+
+# Copy the project files
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+# Create the runtime image
+FROM eclipse-temurin:17-jre-jammy
+
+RUN apt-get update && apt-get install -y git
+WORKDIR /app
+
+# Copy the built jar from the builder stage
+COPY --from=build /app/target/robot-world-0.0.2.jar ./app.jar
+COPY .git/ ./.git/
+RUN git config --global user.name "Reitumetse Marline Mosehla"
+RUN git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
+# Expose the port the server runs on
+EXPOSE 5000
+
+# Command to run the application
+CMD ["java", "-jar", "app.jar"]

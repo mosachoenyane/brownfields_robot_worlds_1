@@ -9,7 +9,9 @@
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
-
+  - docker
+variables:
+  DOCKER_IMAGE: robot-worlds-server:1.0.0
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -30,4 +32,19 @@ lint-test-job:   # This job also runs in the test stage.
     - echo "Linting code... This will take about 10 seconds."
     - sleep 10
     - echo "No lint issues found."
-
+docker-build:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker save $DOCKER_IMAGE > image.tar
+    - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
+    - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
+  artifacts:
+    paths:
+      - image.tar
+    expire_in: 1 week
+  only:
+    - main
