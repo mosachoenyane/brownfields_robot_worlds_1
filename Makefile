@@ -24,7 +24,7 @@ test-iteration-2:
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
 	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
 test-our-server:
-	@echo "target/robot-world-0.0.2.jar"
+	@echo "target/robot-world-0.0.2.jar">"src/main/resources/OurserverName"
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
