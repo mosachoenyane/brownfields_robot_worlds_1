@@ -39,6 +39,7 @@ docker-build:
   services:
     - docker:dind
   variables:
+    CI_REGISTRY: gitlab.wethinkco.de:5050
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
 
@@ -48,7 +49,7 @@ docker-build:
 
   script:
     - echo "Logging in to docker registry"
-    - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 --username "$REGISTRY_USER" --password-stdin
+    - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username "$CI_REGISTRY_USER" --password-stdin
     - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
     - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
     - echo "Application successfully deployed"
