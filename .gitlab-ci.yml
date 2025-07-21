@@ -34,7 +34,7 @@ unit-test-job:
 
 docker-build:
   stage: deploy
-  image: docker:latest
+  image: docker:stable
 
   services:
     - docker:dind
