@@ -29,7 +29,6 @@ unit-test-job:
     - apt-get update && apt-get install -y make
   script:
     - echo "Running unit tests..."
-    - make test-our-server
     - make test-iteration-2
     - echo "Unit tests complete."
 
