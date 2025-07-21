@@ -35,12 +35,12 @@ unit-test-job:
 docker-build:
   stage: docker
   image: docker:latest
+
   services:
     - docker:dind
-  before_script:
-    - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 -u "$REGISTRY_USER" --password-stdin
   script:
+    - echo "Logging in to docker registry"
+    - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 --username "$REGISTRY_USER" --password-stdin
     - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
     - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
-  only:
-    - main
+    - echo "Application successfully deployed"
