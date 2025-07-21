@@ -9,7 +9,7 @@
 stages:
   - build
   - test
-  - docker
+  - deploy
 
 build-job:
   stage: build
@@ -33,11 +33,19 @@ unit-test-job:
     - echo "Unit tests complete."
 
 docker-build:
-  stage: docker
+  stage: deploy
   image: docker:latest
 
   services:
     - docker:dind
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+
+  dependencies:
+    - build-job
+  environment: production
+
   script:
     - echo "Logging in to docker registry"
     - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 --username "$REGISTRY_USER" --password-stdin

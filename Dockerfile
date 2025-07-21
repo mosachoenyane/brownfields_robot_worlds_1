@@ -12,8 +12,6 @@ RUN mvn clean package -DskipTests
 # Create the runtime image
 FROM eclipse-temurin:17-jre-jammy
 
-RUN apt-get update && apt-get install -y git
-
 WORKDIR /app
 
 # Copy the built jar from the builder stage
