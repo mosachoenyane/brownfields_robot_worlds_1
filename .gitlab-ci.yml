@@ -12,7 +12,7 @@ stages:
   - docker
 
 variables:
-  DOCKER_IMAGE: gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1:1.0.0
+  DOCKER_IMAGE: gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
 
 build-job:
   stage: build
@@ -41,6 +41,8 @@ docker-build:
   services:
     - docker:dind
   before_script:
+    - echo "DEBUG: REGISTRY_USER=$REGISTRY_USER"
+    - echo "DEBUG: REGISTRY_TOKEN is set to (hidden for security)"
     - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 -u "$REGISTRY_USER" --password-stdin
   script:
     - docker build -t $DOCKER_IMAGE .
