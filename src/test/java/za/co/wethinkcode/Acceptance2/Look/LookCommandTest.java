@@ -94,8 +94,18 @@ public class LookCommandTest {
                 "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
                 "}";
 
-        JsonNode launchRessponse = serverClient.sendRequest(launchCommand);
-        assertNotNull(launchRessponse);
-        assertEquals("OK", launchRessponse.get("result").asText());
+        JsonNode launchResponse = serverClient.sendRequest(launchCommand);
+        assertNotNull(launchResponse);
+        assertEquals("OK", launchResponse.get("result").asText());
+
+        String launchSecondRobot = "{" +
+                "  \"robot\": \"MMELI\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode launchSecondResponse = serverClient.sendRequest(launchSecondRobot);
+        assertNotNull(launchSecondResponse);
+        assertEquals("OK", launchSecondResponse.get("result").asText());
     }
 }
