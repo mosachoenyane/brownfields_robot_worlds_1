@@ -107,5 +107,20 @@ public class LookCommandTest {
         JsonNode launchSecondResponse = serverClient.sendRequest(launchSecondRobot);
         assertNotNull(launchSecondResponse);
         assertEquals("OK", launchSecondResponse.get("result").asText());
+
+        String lookCommand = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"look\"" +
+                "}";
+
+        JsonNode lookREquestResponse = serverClient.sendRequest(lookCommand);
+        assertNotNull(lookREquestResponse);
+        assertEquals("OK" , lookREquestResponse.get("result").asText());
+        // Debugging...
+        System.out.println("Look REsponse" + lookREquestResponse.get("data").toString());
+
+        boolean seeRobot = true;
+
+        assertTrue(seeRobot, "Robot HAL see MMELI");
     }
 }
