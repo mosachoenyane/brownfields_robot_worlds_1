@@ -11,9 +11,6 @@ stages:
   - test
   - docker
 
-variables:
-  DOCKER_IMAGE: gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
-
 build-job:
   stage: build
   image: maven:3.9.6-eclipse-temurin-17
@@ -43,13 +40,7 @@ docker-build:
   before_script:
     - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 -u "$REGISTRY_USER" --password-stdin
   script:
-    - docker build -t $DOCKER_IMAGE .
-    - docker save $DOCKER_IMAGE > image.tar
-    - docker push $DOCKER_IMAGE
-
-  artifacts:
-    paths:
-      - image.tar
-    expire_in: 1 week
+    - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
+    - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
   only:
     - main
