@@ -32,6 +32,7 @@ unit-test-job:
   script:
     - echo "Running unit tests..."
     - make test-iteration-2
+    - make test-our-server
     - echo "Unit tests complete."
 
 docker-build:
@@ -40,6 +41,7 @@ docker-build:
   services:
     - docker:dind
   before_script:
+    - echo "REGISTRY_USER is: $REGISTRY_USER"
     - echo "$REGISTRY_TOKEN" | docker login gitlab.wethinkco.de:5050 -u "$REGISTRY_USER" --password-stdin
   script:
     - docker build -t $DOCKER_IMAGE .
