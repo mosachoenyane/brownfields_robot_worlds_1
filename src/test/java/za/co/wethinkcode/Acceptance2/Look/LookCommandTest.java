@@ -82,21 +82,20 @@ public class LookCommandTest {
          * And we check the coordination of the obstacle
          */
         boolean seeObstacle = true;
-
-//        for (JsonNode i : objects){
-//            if("OBSTACLE".equalsIgnoreCase(i.get("type").asText())){
-//                int x =i.get("position").get(0).asInt();
-//                int y = i.get("position").get(1).asInt();
-//
-//                if (x == 0 && y== 1){
-//                    break;
-//                }
-//            }
-//        }
         assertTrue(seeObstacle, "Robot sees an obstacle at (0, 1)");
     }
 
-    @Test void lookAnotherRobotTest(){
+    @Test void lookAnotherRobotTest() {
         assertTrue(serverClient.isConnected());
+
+        String launchCommand = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        JsonNode launchRessponse = serverClient.sendRequest(launchCommand);
+        assertNotNull(launchRessponse);
+        assertEquals("OK", launchRessponse.get("result").asText());
     }
 }
