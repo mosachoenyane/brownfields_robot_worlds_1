@@ -46,8 +46,6 @@ docker-build:
     - docker build -t $DOCKER_IMAGE .
     - docker save $DOCKER_IMAGE > image.tar
     - docker push $DOCKER_IMAGE
-    - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
-    - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
 
   artifacts:
     paths:
