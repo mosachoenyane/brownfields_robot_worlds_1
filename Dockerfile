@@ -23,6 +23,5 @@ RUN git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
 
 # Expose the port the server runs on
 EXPOSE 5050
-
 # Command to run the application
 CMD ["java", "-jar", "app.jar"]
