@@ -113,11 +113,11 @@ public class LookCommandTest {
                 "  \"command\": \"look\"" +
                 "}";
 
-        JsonNode lookREquestResponse = serverClient.sendRequest(lookCommand);
-        assertNotNull(lookREquestResponse);
-        assertEquals("OK" , lookREquestResponse.get("result").asText());
+        JsonNode lookRequestResponse = serverClient.sendRequest(lookCommand);
+        assertNotNull(lookRequestResponse);
+        assertEquals("OK" , lookRequestResponse.get("result").asText());
         // Debugging...
-        System.out.println("Look REsponse" + lookREquestResponse.get("data").toString());
+        System.out.println("Look REsponse" + lookRequestResponse.get("data").toString());
 
         boolean seeRobot = true;
 
