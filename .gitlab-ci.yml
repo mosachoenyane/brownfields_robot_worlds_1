@@ -31,7 +31,7 @@ test-iretation2-job:
     - make test-iteration-2
     - echo "Unit tests complete."
 
-test-our-job:
+test-our-server-job:
   stage: test
   image: maven:3.9.6-eclipse-temurin-17
   before_script:
