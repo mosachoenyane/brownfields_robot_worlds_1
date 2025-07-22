@@ -25,4 +25,4 @@ COPY --from=build /app/target/robot-world-0.0.2.jar ./app.jar
 # Expose the port the server runs on
 EXPOSE 5050
 # Command to run the application
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar","-p","5050"]
