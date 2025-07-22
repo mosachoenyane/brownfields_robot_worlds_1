@@ -17,19 +17,30 @@ test-iteration-1:
 	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.state.StateRobotTests.java
 test-iteration-2:
-	@echo ".libs/reference-server-0.2.3.jar">"src/main/resources/serverName"
+	@echo ".libs/reference-server-0.2.3.jar"> -s 2 -o 1,1"src/main/resources/refServer"
+	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 1,1 & echo $$! > serve.pid
+
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.state.StateRobotTest.java
+	@kill -9 $$(cat serve.pid) && rm -f serve.pid
+
 test-our-server:
 	@echo "target/robot-world-0.0.2.jar">"src/main/resources/OurserverName"
+	$(JAVA) -jar target/robot-world-0.0.2.jar -s 2 & echo $$! > server.pid
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.state.StateRobotTest.java
+	@kill -9 $$(cat server.pid) && rm -f server.pid
+
+all-tests:
+	$(MAKE) test-iteration-1
+	$(MAKE) test-iteration-2
+	$(MAKE) test-our-server
 
 
 build:

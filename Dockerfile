@@ -23,6 +23,7 @@ COPY --from=build /app/target/robot-world-0.0.2.jar ./app.jar
 #RUN git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
 
 # Expose the port the server runs on
-EXPOSE 5050
+EXPOSE 5000
 # Command to run the application
-CMD ["java", "-jar", "app.jar","-p","5050"]
+CMD ["java", "-jar", "app.jar"]
+
