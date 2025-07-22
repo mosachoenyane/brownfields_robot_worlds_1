@@ -42,7 +42,6 @@ docker-build:
     CI_REGISTRY: gitlab.wethinkco.de:5050
     DOCKER_HOST: tcp://docker:2375
     DOCKER_TLS_CERTDIR: ""
-
   dependencies:
     - build-job
   environment: production
