@@ -19,7 +19,7 @@ build-job:
     - mvn package -DskipTests
     - echo "Compile complete."
 
-unit-test-job:
+test-iretation2-job:
   stage: test
   image: maven:3.9.6-eclipse-temurin-17
   before_script:
@@ -29,6 +29,17 @@ unit-test-job:
   script:
     - echo "Running unit tests..."
     - make test-iteration-2
+    - echo "Unit tests complete."
+
+test-our-job:
+  stage: test
+  image: maven:3.9.6-eclipse-temurin-17
+  before_script:
+    - apt-get update && apt-get install -y make
+    - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
+    - git config --global user.name "Reitumetse Marline Mosehla"
+  script:
+    - echo "Running unit tests..."
     - make test-our-server
     - echo "Unit tests complete."
 

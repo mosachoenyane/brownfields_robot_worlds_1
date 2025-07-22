@@ -34,17 +34,9 @@ test-our-server:
 
 build:
 	$(MVN) compile
-	@echo "starting reference server"
-	$(JAVA) -jar .libs/reference-server-0.2.3.jar -s 2 -o 1,1 & echo $$! > serve.pid
-	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Movement/MoveForwardTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/Look/LookCommandTest.java
-	@echo "stopping reference server"
-	@if [ -f serve.pid ]; then kill -9 cat serve.pid || true; rm -f serve.pid; fi
-
-package:
 	$(MVN) verify -DskipTests
 	$(MVN) package -DskipTests
+	$(MAKE) test
 
 release:
 	@echo "Current version: $(VERSION)"
@@ -53,7 +45,6 @@ release:
 	exit 1; \
 	fi
 	$(MAKE) clean
-	$(MAKE) test
 	$(MAKE) package
 	$(MAKE) tag
 
