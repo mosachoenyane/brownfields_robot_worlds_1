@@ -94,7 +94,7 @@ public class RobotWorldServer {
     }
 
     private static void startServer(World world) throws IOException {
-        try (ServerSocket serverSocket = new ServerSocket(PORT, 50, InetAddress.getByName(("0.0.0.0")))) {
+        try (ServerSocket serverSocket = new ServerSocket(PORT,50, InetAddress.getByName("0.0.0.0"))) {
             System.out.println("Robot World Server running on port " + PORT);
 
             while (true) {

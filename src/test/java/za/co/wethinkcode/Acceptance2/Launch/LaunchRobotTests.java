@@ -32,19 +32,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
         @BeforeEach
         void connectToServer() throws IOException, InterruptedException {
-//            String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
-//            ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","1,1");
-//            pb.inheritIO(); // Inherit standard input/output/error streams
-//            process = pb.start();
-//            Thread.sleep(2000);
+            String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
+            ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","1,1");
+            pb.inheritIO(); // Inherit standard input/output/error streams
+            process = pb.start();
+            Thread.sleep(2000);
             serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
         }
 
         @AfterEach
         void disconnectFromServer() throws InterruptedException {
             serverClient.disconnect();
-//            process.destroy();
-//            Thread.sleep(2000);
+            process.destroy();
+            Thread.sleep(2000);
 
         }
         @Test

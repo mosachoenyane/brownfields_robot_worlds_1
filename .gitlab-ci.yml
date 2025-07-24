@@ -62,4 +62,4 @@ docker-build:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY --username "$CI_REGISTRY_USER" --password-stdin
     - docker build -t gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1 .
     - docker push gitlab.wethinkco.de:5050/mmntshajhb024/brownfields_robot_worlds_1
-    - echo "Application successfully deployed"
+    - echo "Application successfully deployed"0
