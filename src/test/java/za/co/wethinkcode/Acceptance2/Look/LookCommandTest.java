@@ -26,19 +26,19 @@ public class LookCommandTest {
 
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
-//        String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
-//        ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","0,1");
-//        pb.inheritIO(); // Inherit standard input/output/error streams
-//        process = pb.start();
-//        Thread.sleep(1000);
+        String path = Files.readString(Paths.get("src/main/resources/serverName")).trim();
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", path,"-s","2","-o","0,1");
+        pb.inheritIO(); // Inherit standard input/output/error streams
+        process = pb.start();
+        Thread.sleep(1000);
         serverClient.connect(defaultIP, defaultPort);
     }
 
     @AfterEach
     void disconnectFromServer() throws InterruptedException {
         serverClient.disconnect();
-//        process.destroy();
-//        Thread.sleep(1000);
+        process.destroy();
+        Thread.sleep(1000);
 
     }
 
