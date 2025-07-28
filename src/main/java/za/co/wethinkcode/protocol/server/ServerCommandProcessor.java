@@ -10,6 +10,9 @@ import za.co.wethinkcode.server.utils.PositionFinder;
 import za.co.wethinkcode.server.utils.VisionFinder;
 import za.co.wethinkcode.server.world.World;
 
+import java.sql.*;
+import java.sql.ResultSet;
+
 /**
  * The ServerCommandProcessor class handles all incoming commands on the server side.
  * It processes messages from clients, interprets robot and world-related commands, and
@@ -92,6 +95,7 @@ public class ServerCommandProcessor {
 
     private String handleCommand(String command, String robotName, JsonObject request) {
         return switch (command) {
+            case "save" -> processSaveWorldCommand();
             case "launch" -> processLaunchCommand(robotName, request);
             case "look" -> processLookCommand(robotName);
             case "state" -> processStateCommand(robotName);
@@ -103,6 +107,19 @@ public class ServerCommandProcessor {
             case "repair" -> processRepairCommand(robotName);
             default -> createErrorResponse("Unsupported command: " + command);
         };
+    }
+    private String processSaveWorldCommand(){
+        String url = "jdbc:sqlite:group.db";
+        try (Connection conn = DriverManager.getConnection(url)) {
+            System.out.println("SUCCESSFUL CONNECTION !");
+            Statement stmnt = conn.createStatement();
+            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER, name TEXT, height INTEGER, width INTEGER)");
+
+            return "World Table Created Successfully";
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private String processLaunchCommand(String robotName, JsonObject request) {
