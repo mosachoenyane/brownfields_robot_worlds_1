@@ -28,14 +28,23 @@ public class SaveCommand implements Command{
                 }
             }
             String insertQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
-            try (PreparedStatement pstmnt = conn.prepareStatement(insertQuery)){
+            try (PreparedStatement pstmntWorld = conn.prepareStatement(insertQuery)){
                 //pstmnt.setInt(1,1);
-                pstmnt.setString(1, world.getName());
-                pstmnt.setInt(2, world.getHeight());
-                pstmnt.setInt(3, world.getWidth());
-                pstmnt.executeUpdate();
+                pstmntWorld.setString(1, world.getName());
+                pstmntWorld.setInt(2, world.getHeight());
+                pstmntWorld.setInt(3, world.getWidth());
+                pstmntWorld.executeUpdate();
 
-                String selectQuery = "SELECT * FROM world";
+                String insertObstacleQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
+                try (PreparedStatement pstmntObj = conn.prepareStatement(insertObstacleQuery)){
+                    //pstmnt.setInt(1,1);
+                    pstmntObj.setString(1, world.getObstacles().get());
+                    pstmntObj.setInt(2, world.getHeight());
+                    pstmntObj.setInt(3, world.getWidth());
+                    pstmntO.executeUpdate();
+
+
+                    String selectQuery = "SELECT * FROM world";
                 try (Statement retrieveStmnt = conn.createStatement()){
                     ResultSet rs = retrieveStmnt.executeQuery(selectQuery);
                     while(rs.next()){
