@@ -15,14 +15,14 @@ public class SaveCommand implements Command{
         try (Connection conn = DriverManager.getConnection(url)) {
             System.out.println("SUCCESSFUL CONNECTION !");
             Statement stmnt = conn.createStatement();
-            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER, name TEXT, height INTEGER, width INTEGER)");
+            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
 
-            String insertQuery = "INSERT INTO world (id, name, height, width) VALUES (?, ?, ?, ?)";
+            String insertQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
             try (PreparedStatement pstmnt = conn.prepareStatement(insertQuery)){
-                pstmnt.setInt(1,1);
-                pstmnt.setString(2, world.getName());
-                pstmnt.setInt(3, world.getHeight());
-                pstmnt.setInt(4, world.getWidth());
+                //pstmnt.setInt(1,1);
+                pstmnt.setString(1, world.getName());
+                pstmnt.setInt(2, world.getHeight());
+                pstmnt.setInt(3, world.getWidth());
                 pstmnt.executeUpdate();
 
                 String selectQuery = "SELECT * FROM world";
