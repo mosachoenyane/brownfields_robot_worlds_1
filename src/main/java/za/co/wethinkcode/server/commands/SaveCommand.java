@@ -27,24 +27,23 @@ public class SaveCommand implements Command{
                     return "WARNING: World with name " + world.getName().toUpperCase() + " already exists";
                 }
             }
-            String insertQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
-            try (PreparedStatement pstmntWorld = conn.prepareStatement(insertQuery)){
-                //pstmnt.setInt(1,1);
+            String insertWorldQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
+            try (PreparedStatement pstmntWorld = conn.prepareStatement(insertWorldQuery)) {
                 pstmntWorld.setString(1, world.getName());
                 pstmntWorld.setInt(2, world.getHeight());
                 pstmntWorld.setInt(3, world.getWidth());
                 pstmntWorld.executeUpdate();
-
-                String insertObstacleQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
-                try (PreparedStatement pstmntObj = conn.prepareStatement(insertObstacleQuery)){
-                    //pstmnt.setInt(1,1);
-                    pstmntObj.setString(1, world.getObstacles().get());
+                    }
+                String insertObjQuery = "INSERT INTO obstacles (x, y, width, height) VALUES (?, ?, ?, ?)";
+                try (PreparedStatement pstmntObj = conn.prepareStatement(insertObjQuery)) {
+                    pstmntObj.setString(1, world.getName());
                     pstmntObj.setInt(2, world.getHeight());
                     pstmntObj.setInt(3, world.getWidth());
-                    pstmntO.executeUpdate();
+                    pstmntObj.executeUpdate();
+                    }
 
 
-                    String selectQuery = "SELECT * FROM world";
+                String selectQuery = "SELECT * FROM world";
                 try (Statement retrieveStmnt = conn.createStatement()){
                     ResultSet rs = retrieveStmnt.executeQuery(selectQuery);
                     while(rs.next()){
