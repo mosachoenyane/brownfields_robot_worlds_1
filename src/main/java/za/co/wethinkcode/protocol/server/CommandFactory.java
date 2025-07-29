@@ -110,4 +110,7 @@ public record CommandFactory(World world) {
         return new RepairCommand(world, robot);
     }
 
+    public Command createSaveCommand() {
+        return new SaveCommand(world);
+    }
 }

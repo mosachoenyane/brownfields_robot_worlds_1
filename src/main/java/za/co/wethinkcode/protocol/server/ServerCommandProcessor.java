@@ -10,6 +10,9 @@ import za.co.wethinkcode.server.utils.PositionFinder;
 import za.co.wethinkcode.server.utils.VisionFinder;
 import za.co.wethinkcode.server.world.World;
 
+import java.sql.*;
+import java.sql.ResultSet;
+
 /**
  * The ServerCommandProcessor class handles all incoming commands on the server side.
  * It processes messages from clients, interprets robot and world-related commands, and

@@ -68,6 +68,7 @@ public class WorldConfig {
     }
 
     private void setDefaults() {
+        properties.setProperty("WORLD_NAME", "Default World");
         properties.setProperty("WORLD_WIDTH","1");
         properties.setProperty("WORLD_HEIGHT","1");
         properties.setProperty("NUM_PITS","0");
@@ -85,6 +86,8 @@ public class WorldConfig {
      *
      * @return World configs as integers.
      */
+    public String getName() {return properties.getProperty("WORLD_NAME");
+    };
     public int getWidth() {
         return Integer.parseInt(properties.getProperty("WORLD_WIDTH"));
     }

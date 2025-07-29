@@ -66,6 +66,8 @@ public class ServerConsole {
                 break;
             case "robots":
                 System.out.println(commandFactory.createRobotsCommand().display());
+            case "save":
+                System.out.println(commandFactory.createSaveCommand().display());
                 break;
             default:
                 System.out.println(RED + " ❌ Unknown command. Type 'help' for available commands." + RESET);
