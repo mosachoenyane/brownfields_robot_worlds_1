@@ -19,11 +19,12 @@ public class SaveCommand implements Command{
 
             String insertQuery = "INSERT INTO world (id, name, height, width) VALUES (?, ?, ?, ?)";
             try (PreparedStatement pstmnt = conn.prepareStatement(insertQuery)){
-                pstmnt.setInt(1, 1);
-                pstmnt.setString(2, "Jungle");
-                pstmnt.setInt(3, 2);
-                pstmnt.setInt(4, 2);
+                pstmnt.setInt(1,1);
+                pstmnt.setString(2, world.getName());
+                pstmnt.setInt(3, world.getHeight());
+                pstmnt.setInt(4, world.getWidth());
                 pstmnt.executeUpdate();
+            return "World Data Successfully Saved";
             }  catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -37,11 +38,11 @@ public class SaveCommand implements Command{
 
     @Override
     public String getName() {
-        return "";
+        return "save";
     }
 
     @Override
     public String display() {
-        return "";
+        return execute();
     }
 }
