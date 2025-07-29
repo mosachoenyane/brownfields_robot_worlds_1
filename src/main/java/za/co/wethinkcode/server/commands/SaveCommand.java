@@ -24,6 +24,19 @@ public class SaveCommand implements Command{
                 pstmnt.setInt(3, world.getHeight());
                 pstmnt.setInt(4, world.getWidth());
                 pstmnt.executeUpdate();
+
+                String selectQuery = "SELECT * FROM world";
+                try (Statement retrieveStmnt = conn.createStatement()){
+                    ResultSet rs = retrieveStmnt.executeQuery(selectQuery);
+                    while(rs.next()){
+                        int id = rs.getInt("id");
+                        String name = rs.getString("name");
+                        int height = rs.getInt("height");
+                        int width = rs.getInt("width");
+                        System.out.println("ID: " + id + ", Name: " + name + ", Height: " + height + ", Width: " + width);
+                    }
+
+                }
             return "World Data Successfully Saved";
             }  catch (SQLException e) {
                 throw new RuntimeException(e);
