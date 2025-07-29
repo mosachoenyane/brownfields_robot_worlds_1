@@ -16,7 +16,7 @@ public class SaveCommand implements Command{
             System.out.println("SUCCESSFUL CONNECTION !");
             Statement stmnt = conn.createStatement();
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
-            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER)");
+            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, width INTEGER, height INTEGER)");
 
             // Check if the world NAME already exists in the WORLD TABLE
             String checkQuery = "SELECT COUNT(*) FROM world WHERE name = ?";
@@ -57,7 +57,7 @@ public class SaveCommand implements Command{
                         System.out.println("ID: " + id + ", Name: " + name + ", Height: " + height + ", Width: " + width);
                     }
 
-                    String selectQuery1 = "SELECT * FROM world";
+                    String selectQuery1 = "SELECT * FROM obstacles";
                     try (Statement retrieveStmnt1 = conn.createStatement()){
                         ResultSet rs1 = retrieveStmnt1.executeQuery(selectQuery);
                         while(rs.next()){
@@ -66,7 +66,7 @@ public class SaveCommand implements Command{
                             int y = rs1.getInt("y");
                             int height = rs1.getInt("height");
                             int width = rs1.getInt("width");
-                            System.out.println("ID: " + id + " Height: " + height + ", Width: " + width);
+                            System.out.println("ID: " + id + " x: " + x + ", y: " + y);
                         }
 
 
