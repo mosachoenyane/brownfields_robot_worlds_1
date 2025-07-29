@@ -17,6 +17,18 @@ public class SaveCommand implements Command{
             Statement stmnt = conn.createStatement();
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
 
+            // Check if the world NAME already exists in the WORLD TABLE
+            String checkQuery = "SELECT COUNT(*) FROM world WHERE name = ?";
+            try (PreparedStatement checkStmnt = conn.prepareStatement(checkQuery)) {
+                checkStmnt.setString(1, world.getName());
+                ResultSet rs = checkStmnt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return "WARNING: World with name '" + world.getName().toUpperCase() + "' already exists";
+                }
+            }
+
+
+
             String insertQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
             try (PreparedStatement pstmnt = conn.prepareStatement(insertQuery)){
                 //pstmnt.setInt(1,1);
