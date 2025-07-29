@@ -29,8 +29,6 @@ public class SaveCommand implements Command{
                 throw new RuntimeException(e);
             }
 
-            return "World Table Created Successfully";
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -16,6 +16,7 @@ import za.co.wethinkcode.server.world.obstacles.Pit;
  * Manages world boundaries, obstacle generation, robot tracking, and visibility.
  */
 public class World {
+    private final String name;
     private final int width;
     private final int height;
     private final int visibilityRange;
@@ -28,6 +29,7 @@ public class World {
     private final Random random = new Random();
 
     public World(WorldConfig worldConfig) {
+        this.name = worldConfig.getName();
         this.width = worldConfig.getWidth();
         this.height = worldConfig.getHeight();
         this.visibilityRange = worldConfig.getVisibilityRange();
@@ -223,6 +225,15 @@ public class World {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns the name of the world.
+     *
+     * @return Name of the world.
+     */
+    public String getName() {
+        return name;
     }
 
     /**
