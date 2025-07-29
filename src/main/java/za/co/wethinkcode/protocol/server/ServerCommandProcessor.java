@@ -91,19 +91,20 @@ public class ServerCommandProcessor {
     }
 
     private String handleCommand(String command, String robotName, JsonObject request) {
-        return switch (command) {
-            case "launch" -> processLaunchCommand(robotName, request);
-            case "look" -> processLookCommand(robotName);
-            case "state" -> processStateCommand(robotName);
-            case "forward" -> processForwardCommand(robotName, request);
-            case "back" -> processBackCommand(robotName, request);
-            case "turn" -> processTurnCommand(robotName, request);
-            case "fire" -> processFireCommand(robotName);
-            case "reload" -> processReloadCommand(robotName);
-            case "repair" -> processRepairCommand(robotName);
-            default -> createErrorResponse("Unsupported command: " + command);
+        return switch (command.toLowerCase()) {
+            case "launch"   -> processLaunchCommand(robotName, request);
+            case "look"     -> processLookCommand(robotName);
+            case "state"    -> processStateCommand(robotName);
+            case "forward"  -> processForwardCommand(robotName, request);
+            case "back"     -> processBackCommand(robotName, request);
+            case "turn"     -> processTurnCommand(robotName, request);
+            case "fire"     -> processFireCommand(robotName);
+            case "reload"   -> processReloadCommand(robotName);
+            case "repair"   -> processRepairCommand(robotName);
+            default         -> createErrorResponse("Unsupported command: " + command);
         };
     }
+
 
     private String processLaunchCommand(String robotName, JsonObject request) {
         try {
