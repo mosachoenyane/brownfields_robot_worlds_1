@@ -16,6 +16,7 @@ public class SaveCommand implements Command{
             System.out.println("SUCCESSFUL CONNECTION !");
             Statement stmnt = conn.createStatement();
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
+            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER)");
 
             // Check if the world NAME already exists in the WORLD TABLE
             String checkQuery = "SELECT COUNT(*) FROM world WHERE name = ?";
@@ -26,9 +27,6 @@ public class SaveCommand implements Command{
                     return "WARNING: World with name " + world.getName().toUpperCase() + " already exists";
                 }
             }
-
-
-
             String insertQuery = "INSERT INTO world (name, height, width) VALUES (?, ?, ?)";
             try (PreparedStatement pstmnt = conn.prepareStatement(insertQuery)){
                 //pstmnt.setInt(1,1);
