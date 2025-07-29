@@ -23,7 +23,7 @@ public class SaveCommand implements Command{
                 checkStmnt.setString(1, world.getName());
                 ResultSet rs = checkStmnt.executeQuery();
                 if (rs.next() && rs.getInt(1) > 0) {
-                    return "WARNING: World with name '" + world.getName().toUpperCase() + "' already exists";
+                    return "WARNING: World with name " + world.getName().toUpperCase() + " already exists";
                 }
             }
 
