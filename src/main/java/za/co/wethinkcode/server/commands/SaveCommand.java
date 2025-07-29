@@ -36,10 +36,13 @@ public class SaveCommand implements Command{
                     }
                 String insertObjQuery = "INSERT INTO obstacles (x, y, width, height) VALUES (?, ?, ?, ?)";
                 try (PreparedStatement pstmntObj = conn.prepareStatement(insertObjQuery)) {
-                    pstmntObj.setString(1, world.getName());
-                    pstmntObj.setInt(2, world.getHeight());
-                    pstmntObj.setInt(3, world.getWidth());
-                    pstmntObj.executeUpdate();
+                    for (var obstacle : world.getObstacles()) {
+                        pstmntObj.setInt(1, obstacle.getX());
+                        pstmntObj.setInt(2, obstacle.getY());
+                        pstmntObj.setInt(3, obstacle.getWidth());
+                        pstmntObj.setInt(4, obstacle.getHeight());
+                        pstmntObj.addBatch();
+                    }
                     }
 
 
@@ -54,7 +57,20 @@ public class SaveCommand implements Command{
                         System.out.println("ID: " + id + ", Name: " + name + ", Height: " + height + ", Width: " + width);
                     }
 
-                }
+                    String selectQuery1 = "SELECT * FROM world";
+                    try (Statement retrieveStmnt1 = conn.createStatement()){
+                        ResultSet rs1 = retrieveStmnt1.executeQuery(selectQuery);
+                        while(rs.next()){
+                            int id = rs1.getInt("id");
+                            int x = rs1.getInt("x");
+                            int y = rs1.getInt("y");
+                            int height = rs1.getInt("height");
+                            int width = rs1.getInt("width");
+                            System.out.println("ID: " + id + " Height: " + height + ", Width: " + width);
+                        }
+
+
+                    }
             return "World Data Successfully Saved";
             }  catch (SQLException e) {
                 throw new RuntimeException(e);
