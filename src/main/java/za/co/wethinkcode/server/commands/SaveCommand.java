@@ -41,8 +41,10 @@ public class SaveCommand implements Command{
                         pstmntObj.setInt(2, obstacle.getY());
                         pstmntObj.setInt(3, obstacle.getWidth());
                         pstmntObj.setInt(4, obstacle.getHeight());
+                        pstmntObj.setString(5, world.getName());
                         pstmntObj.addBatch();
                     }
+                    pstmntObj.executeBatch();
                     }
 
 

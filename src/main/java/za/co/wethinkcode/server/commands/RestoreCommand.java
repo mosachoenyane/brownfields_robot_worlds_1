@@ -11,7 +11,7 @@ public class RestoreCommand implements Command {
     private final World world;
     private final String worldName;
 
-    public RestoreCommand(World world, String worldName) {
+    public RestoreCommand (World world, String worldName) {
         this.world = world;
         this.worldName = worldName;
     }
@@ -32,7 +32,6 @@ public class RestoreCommand implements Command {
                 int width = worldRs.getInt("width");
 
                 /* Set world properties*/
-                world.getName();
                 world.setHeight(height);
                 world.setWidth(width);
 
