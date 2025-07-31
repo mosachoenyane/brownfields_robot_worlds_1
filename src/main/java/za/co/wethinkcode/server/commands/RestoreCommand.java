@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Properties;
 
 public class RestoreCommand implements Command {
-    private final World world;
+
     public Properties properties;
     //private final String worldName;
 
-    public RestoreCommand (World world) {
-        this.world = world;
+    public RestoreCommand () {
+
 
     }
 
@@ -36,33 +36,38 @@ public class RestoreCommand implements Command {
                 int ObjectY = worldRs.getInt("y");
                 System.out.println(height + " " + width);
 
+                // Rewrite WorldRs data to config.properties
+                properties = new Properties();
+                properties.setProperty("world.name", worldName);
+                properties.setProperty("world.height", String.valueOf(height));
+                properties.setProperty("world.width", String.valueOf(width));
+                properties.setProperty("obstacle.x", String.valueOf(ObjectX));
+                properties.setProperty("obstacle.y", String.valueOf(ObjectY));
 
-                // Rewrite data to config.properties
-
-                /* Load obstacles */
-                List<Obstacle> obstacles = new ArrayList<>();
-                String selectObstaclesQuery = "SELECT * FROM world JOIN obstacles ON world.id = obstacles.world_id WHERE world.name = ?";
-                try (Statement obsStmnt = conn.createStatement()) {
-                    ResultSet obsRs = obsStmnt.executeQuery(selectObstaclesQuery);
-                    while (obsRs.next()) {
-                        int x = obsRs.getInt("x");
-                        int y = obsRs.getInt("y");
-                        System.out.println("x: " + x + ", y: " + y);
-                        int oWidth = obsRs.getInt("width");
-                        int oHeight = obsRs.getInt("height");
-                        obstacles.add(new Obstacle(x, y, oWidth, oHeight) {
-                            @Override
-                            public boolean blocksVisibility() {
-                                return false;
-                            }
-                            @Override
-                            public String getType() {
-                                return "";
-                            }
-                        });
-                    }
-                }
-                world.setObstacles(obstacles);
+//                /* Load obstacles */
+//                List<Obstacle> obstacles = new ArrayList<>();
+//                String selectObstaclesQuery = "SELECT * FROM world JOIN obstacles ON world.id = obstacles.world_id WHERE world.name = ?";
+//                try (Statement obsStmnt = conn.createStatement()) {
+//                    ResultSet obsRs = obsStmnt.executeQuery(selectObstaclesQuery);
+//                    while (obsRs.next()) {
+//                        int x = obsRs.getInt("x");
+//                        int y = obsRs.getInt("y");
+//                        System.out.println("x: " + x + ", y: " + y);
+//                        int oWidth = obsRs.getInt("width");
+//                        int oHeight = obsRs.getInt("height");
+//                        obstacles.add(new Obstacle(x, y, oWidth, oHeight) {
+//                            @Override
+//                            public boolean blocksVisibility() {
+//                                return false;
+//                            }
+//                            @Override
+//                            public String getType() {
+//                                return "";
+//                            }
+//                        });
+//                    }
+//                }
+//                world.setObstacles(obstacles);
 
                 return "World " +" successfully restored!";
             }
