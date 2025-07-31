@@ -60,11 +60,10 @@ public class SaveWorldTests {
 
                 // verify with the  schema check name
                 String worldName = result.getString("Name");
-                int height = result.getInt("Height");
-                int width = result.getInt("Width");
-                System.out.println("World Name: " + worldName);
-                System.out.println(height);
-                System.out.println(width);
+                //System.out.println("World Name: " + worldName);
+                //assertTrue("SUCCESSFUL CONNECTION !"));
+                assertEquals(10,result.getInt("Height"));
+                assertEquals(10,result.getInt("Height"));
                 // Assert the world name
                 assertEquals(worldName, worldName);
             }
