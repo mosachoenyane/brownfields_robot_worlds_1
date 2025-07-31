@@ -59,7 +59,6 @@ public class SaveCommand implements Command{
                         }
                         pstmntObj.executeUpdate();
                     }
-                    pstmntObj.executeBatch();
                     }
 
 
