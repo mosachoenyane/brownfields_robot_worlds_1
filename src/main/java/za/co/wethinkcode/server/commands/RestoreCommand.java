@@ -6,14 +6,16 @@ import za.co.wethinkcode.server.world.obstacles.Obstacle;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class RestoreCommand implements Command {
     private final World world;
-    private final String worldName;
+    public Properties properties;
+    //private final String worldName;
 
-    public RestoreCommand (World world, String worldName) {
+    public RestoreCommand (World world) {
         this.world = world;
-        this.worldName = worldName;
+
     }
 
     @Override
@@ -21,28 +23,31 @@ public class RestoreCommand implements Command {
         String url = "jdbc:sqlite:robot_world.db";
         try (Connection conn = DriverManager.getConnection(url)) {
             /*Find the world record*/
-            String selectWorldQuery = "SELECT height, width FROM world WHERE name = ?";
+            String selectWorldQuery = "SELECT world.name, world.height, world.width, obstacles.x, obstacles.y FROM world JOIN obstacles ON world.id = obstacles.world_id WHERE world.name = ?";
             try (PreparedStatement worldStmnt = conn.prepareStatement(selectWorldQuery)) {
-                worldStmnt.setString(1, worldName);
                 ResultSet worldRs = worldStmnt.executeQuery();
                 if (!worldRs.next()) {
-                    return "ERROR: World named " + worldName.toUpperCase() + " does not exist.";
+                    return "ERROR: World named " + " does not exist.";
                 }
+                String worldName = worldRs.getString("name");
                 int height = worldRs.getInt("height");
                 int width = worldRs.getInt("width");
+                int ObjectX = worldRs.getInt("x");
+                int ObjectY = worldRs.getInt("y");
+                System.out.println(height + " " + width);
 
-                /* Set world properties*/
-                world.setHeight(height);
-                world.setWidth(width);
+
+                // Rewrite data to config.properties
 
                 /* Load obstacles */
                 List<Obstacle> obstacles = new ArrayList<>();
-                String selectObstaclesQuery = "SELECT x, y, width, height FROM obstacles";
+                String selectObstaclesQuery = "SELECT * FROM world JOIN obstacles ON world.id = obstacles.world_id WHERE world.name = ?";
                 try (Statement obsStmnt = conn.createStatement()) {
                     ResultSet obsRs = obsStmnt.executeQuery(selectObstaclesQuery);
                     while (obsRs.next()) {
                         int x = obsRs.getInt("x");
                         int y = obsRs.getInt("y");
+                        System.out.println("x: " + x + ", y: " + y);
                         int oWidth = obsRs.getInt("width");
                         int oHeight = obsRs.getInt("height");
                         obstacles.add(new Obstacle(x, y, oWidth, oHeight) {
@@ -59,7 +64,7 @@ public class RestoreCommand implements Command {
                 }
                 world.setObstacles(obstacles);
 
-                return "World " + worldName.toUpperCase() + " successfully restored!";
+                return "World " +" successfully restored!";
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -113,4 +113,7 @@ public record CommandFactory(World world) {
     public Command createSaveCommand() {
         return new SaveCommand(world);
     }
+    public Command RestoreWorldCommand() {
+        return new RestoreCommand(world);
+    }
 }
