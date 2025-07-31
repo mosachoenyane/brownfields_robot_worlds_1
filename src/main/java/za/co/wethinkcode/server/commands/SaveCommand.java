@@ -11,12 +11,12 @@ public class SaveCommand implements Command{
     }
     @Override
     public String execute() {
-        String url = "jdbc:sqlite:group.db";
+        String url = "jdbc:sqlite:robot_world.db";
         try (Connection conn = DriverManager.getConnection(url)) {
             System.out.println("SUCCESSFUL CONNECTION !");
             Statement stmnt = conn.createStatement();
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
-            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, width INTEGER, height INTEGER)");
+            stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, width INTEGER, height INTEGER, world_id INTEGER, FOREIGN KEY (world_id) REFERENCES world(id))");
 
             // Check if the world NAME already exists in the WORLD TABLE
             String checkQuery = "SELECT COUNT(*) FROM world WHERE name = ?";
@@ -34,15 +34,15 @@ public class SaveCommand implements Command{
                 pstmntWorld.setInt(3, world.getWidth());
                 pstmntWorld.executeUpdate();
                     }
-                String insertObjQuery = "INSERT INTO obstacles (x, y, width, height) VALUES (?, ?, ?, ?)";
+                String insertObjQuery = "INSERT INTO obstacles (x, y, width, height, world_id) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement pstmntObj = conn.prepareStatement(insertObjQuery)) {
                     for (var obstacle : world.getObstacles()) {
                         pstmntObj.setInt(1, obstacle.getX());
                         pstmntObj.setInt(2, obstacle.getY());
                         pstmntObj.setInt(3, obstacle.getWidth());
                         pstmntObj.setInt(4, obstacle.getHeight());
-                        pstmntObj.setString(5, world.getName());
-                        pstmntObj.addBatch();
+                        //pstmntObj.setInt(5, world.getId())
+                        pstmntObj.executeUpdate();
                     }
                     pstmntObj.executeBatch();
                     }
@@ -61,7 +61,7 @@ public class SaveCommand implements Command{
 
                     String selectQuery1 = "SELECT * FROM obstacles";
                     try (Statement retrieveStmnt1 = conn.createStatement()){
-                        ResultSet rs1 = retrieveStmnt1.executeQuery(selectQuery);
+                        ResultSet rs1 = retrieveStmnt1.executeQuery(selectQuery1);
                         while(rs.next()){
                             int id = rs1.getInt("id");
                             int x = rs1.getInt("x");
