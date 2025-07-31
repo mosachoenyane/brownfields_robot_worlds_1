@@ -18,14 +18,14 @@ public class SaveWorldTests {
 
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar","-s","10");
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar","-s","10","-o","1,1");
 //        pb.inheritIO(); // Inherit standard input/output/error streams
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);
         pb.redirectInput(ProcessBuilder.Redirect.PIPE);
         process = pb.start();
         Thread.sleep(2000);
-        Files.deleteIfExists(Paths.get("group.db"));
+        //Files.deleteIfExists(Paths.get("robot_world.db"));
 
     }
 
@@ -45,10 +45,10 @@ public class SaveWorldTests {
         }
 
         // check if the database file exists
-        assertTrue(Files.exists(Paths.get("group.db")));
+        assertTrue(Files.exists(Paths.get("robot_world.db")));
 
         // Connect to the database
-        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:group.db")) {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:robot_world.db")) {
             // check if connection is open
             assertFalse(connection.isClosed());
 
@@ -63,11 +63,22 @@ public class SaveWorldTests {
                 //System.out.println("World Name: " + worldName);
                 //assertTrue("SUCCESSFUL CONNECTION !"));
                 assertEquals(10,result.getInt("Height"));
-                assertEquals(10,result.getInt("Height"));
+                assertEquals(10,result.getInt("Width"));
                 // Assert the world name
                 assertEquals(worldName, worldName);
             }
-        }
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM obstacles");
+                 ResultSet result = stmt.executeQuery()) {
+                assertTrue(result.next(), "Obstacle should be saved in the obstacles table");
+                assertEquals(1, result.getInt("x"));
+                assertEquals(1, result.getInt("y"));
+                assertEquals(1, result.getInt("width"));
+                assertEquals(1, result.getInt("height"));
+                assertFalse(result.next(), "Only one obstacle record should exist");
+            }
 
+        }
     }
+
 }
+

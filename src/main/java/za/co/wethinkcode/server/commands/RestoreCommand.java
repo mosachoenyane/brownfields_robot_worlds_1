@@ -18,7 +18,7 @@ public class RestoreCommand implements Command {
 
     @Override
     public String execute() {
-        String url = "jdbc:sqlite:group.db";
+        String url = "jdbc:sqlite:robot_world.db";
         try (Connection conn = DriverManager.getConnection(url)) {
             /*Find the world record*/
             String selectWorldQuery = "SELECT height, width FROM world WHERE name = ?";
