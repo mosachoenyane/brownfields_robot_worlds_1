@@ -50,7 +50,6 @@ public class ServerCommandProcessor {
             return switch (command) {
                 case "dump" -> commandFactory.createDumpCommand().execute();
                 case "robots" -> commandFactory.createRobotsCommand().execute();
-                case "restore" -> commandFactory.RestoreWorldCommand().execute();
 
                 default ->
 

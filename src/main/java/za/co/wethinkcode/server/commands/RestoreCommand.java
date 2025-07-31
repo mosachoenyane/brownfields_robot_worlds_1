@@ -11,11 +11,11 @@ import java.util.Properties;
 public class RestoreCommand implements Command {
 
     public Properties properties;
-    //private final String worldName;
+    private final String worldName;
 
-    public RestoreCommand () {
+    public RestoreCommand (String name, String uh) {
 
-
+        worldName = name;
     }
 
     @Override
@@ -23,26 +23,34 @@ public class RestoreCommand implements Command {
         String url = "jdbc:sqlite:robot_world.db";
         try (Connection conn = DriverManager.getConnection(url)) {
             /*Find the world record*/
-            String selectWorldQuery = "SELECT world.name, world.height, world.width, obstacles.x, obstacles.y FROM world JOIN obstacles ON world.id = obstacles.world_id WHERE world.name = ?";
+            String selectWorldQuery = "SELECT * FROM world";
             try (PreparedStatement worldStmnt = conn.prepareStatement(selectWorldQuery)) {
                 ResultSet worldRs = worldStmnt.executeQuery();
-                if (!worldRs.next()) {
+                if (worldRs.next()) {
+                    String worldName = worldRs.getString("name");
+                    int height = worldRs.getInt("height");
+                    int width = worldRs.getInt("width");
+                    System.out.println(height+ " "+ width);
+//                    int ObjectX = worldRs.getInt("x");
+//                    int ObjectY = worldRs.getInt("y");
+                    System.out.println("Data successfully print out");
+
+                    // Rewrite WorldRs data to config.properties
+                    properties = new Properties();
+
+                    properties.setProperty("world.name", worldName);
+                    properties.setProperty("world.height", String.valueOf(height));
+                    properties.setProperty("world.width", String.valueOf(width));
+//                    properties.setProperty("obstacle.x", String.valueOf(ObjectX));
+//                    properties.setProperty("obstacle.y", String.valueOf(ObjectY));
+
+                }else {
                     return "ERROR: World named " + " does not exist.";
                 }
-                String worldName = worldRs.getString("name");
-                int height = worldRs.getInt("height");
-                int width = worldRs.getInt("width");
-                int ObjectX = worldRs.getInt("x");
-                int ObjectY = worldRs.getInt("y");
-                System.out.println(height + " " + width);
 
-                // Rewrite WorldRs data to config.properties
-                properties = new Properties();
-                properties.setProperty("world.name", worldName);
-                properties.setProperty("world.height", String.valueOf(height));
-                properties.setProperty("world.width", String.valueOf(width));
-                properties.setProperty("obstacle.x", String.valueOf(ObjectX));
-                properties.setProperty("obstacle.y", String.valueOf(ObjectY));
+
+
+
 
 //                /* Load obstacles */
 //                List<Obstacle> obstacles = new ArrayList<>();
