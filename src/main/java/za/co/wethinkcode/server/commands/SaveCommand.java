@@ -41,7 +41,18 @@ public class SaveCommand implements Command{
                         pstmntObj.setInt(2, obstacle.getY());
                         pstmntObj.setInt(3, obstacle.getWidth());
                         pstmntObj.setInt(4, obstacle.getHeight());
-                        //pstmntObj.setInt(5, world.getId())
+                        // Retrieve the last inserted world ID
+                        String lastWorldIdQuery = "SELECT id FROM world WHERE name = ?";
+                        try (PreparedStatement lastWorldIdStmnt = conn.prepareStatement(lastWorldIdQuery)) {
+                            lastWorldIdStmnt.setString(1, world.getName());
+                            ResultSet rs = lastWorldIdStmnt.executeQuery();
+                            if (rs.next()) {
+                                int worldId = rs.getInt("id");
+                                pstmntObj.setInt(5, worldId); // Set the world_id for each obstacle
+                            } else {
+                                throw new SQLException("Failed to retrieve the last inserted world ID.");
+                            }
+                        }
                         pstmntObj.executeUpdate();
                     }
                     pstmntObj.executeBatch();
