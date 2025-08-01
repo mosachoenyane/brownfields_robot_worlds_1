@@ -321,4 +321,12 @@ public class World {
         return repairTime;
     }
 
+    public void setHeight(int height) {
+    }
+
+    public void setWidth(int width) {
+    }
+
+    public void setObstacles(List<Obstacle> obstacles) {
+    }
 }

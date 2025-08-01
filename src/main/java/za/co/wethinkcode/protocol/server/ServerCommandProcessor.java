@@ -52,6 +52,7 @@ public class ServerCommandProcessor {
             return switch (command) {
                 case "dump" -> commandFactory.createDumpCommand().execute();
                 case "robots" -> commandFactory.createRobotsCommand().execute();
+
                 default ->
 
                     // Robot operation commands
