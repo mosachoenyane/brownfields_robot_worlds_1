@@ -294,6 +294,11 @@ public class World {
 
     }
 
+    public void addObstacle(Obstacle obstacle) {
+        obstacles.add(obstacle);
+    }
+
+
     /**
      * Returns the reload time for robot weapons.
      *
@@ -322,11 +327,14 @@ public class World {
     }
 
     public void setHeight(int height) {
+        this.height = height;
     }
 
     public void setWidth(int width) {
+        this.width = width;
     }
 
     public void setObstacles(List<Obstacle> obstacles) {
+        this.obstacles = obstacles;
     }
 }

@@ -1,6 +1,7 @@
 package za.co.wethinkcode.server.commands;
 
 import za.co.wethinkcode.server.world.World;
+import za.co.wethinkcode.server.world.obstacles.Mountain;
 import za.co.wethinkcode.server.world.obstacles.Obstacle;
 
 import java.io.FileInputStream;
@@ -14,11 +15,13 @@ import java.util.Properties;
 public class RestoreCommand implements Command {
     World world;
     public Properties properties;
+    private String worldName;
 
 
-    public RestoreCommand(World world, String restore) {
+    public RestoreCommand(World world, String worldName) {
         this.world = world;
-
+        this.worldName = worldName;
+        this.execute();
 
     }
 
@@ -27,7 +30,8 @@ public class RestoreCommand implements Command {
         String url = "jdbc:sqlite:robot_world.db";
         try (Connection conn = DriverManager.getConnection(url)) {
             /*Find the world record*/
-            String selectWorldQuery = "SELECT * FROM world JOIN obstacles ON world.id = obstacles.world_id";
+            String selectWorldQuery = "SELECT * FROM world WHERE world.name LIKE " + worldName + " JOIN obstacles ON world.id = obstacles.world_id";
+            System.out.println(selectWorldQuery);
             try (PreparedStatement worldStmnt = conn.prepareStatement(selectWorldQuery)) {
                 ResultSet worldRs = worldStmnt.executeQuery();
                 if (worldRs.next()) {
@@ -35,9 +39,17 @@ public class RestoreCommand implements Command {
                     int height = worldRs.getInt("height");
                     int width = worldRs.getInt("width");
                     System.out.println(height + " " + width);
-                    int ObjectX = worldRs.getInt("x");
-                    int ObjectY = worldRs.getInt("y");
+                    int objectX = worldRs.getInt("x");
+                    int objectY = worldRs.getInt("y");
+                    int objectWidth = worldRs.getInt("width");
+                    int objectHeight = worldRs.getInt("height");
                     System.out.println("Data successfully print out");
+
+                    world.setHeight(height);
+                    world.setWidth(width);
+                    world.getObstacles().clear();
+                    world.addObstacle(new Mountain(objectX, objectY, objectWidth, objectHeight));
+
 
 
 //                    // Rewrite WorldRs data to config.properties
