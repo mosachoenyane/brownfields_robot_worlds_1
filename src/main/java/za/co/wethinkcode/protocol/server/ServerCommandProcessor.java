@@ -12,6 +12,8 @@ import za.co.wethinkcode.server.world.World;
 
 import java.sql.*;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The ServerCommandProcessor class handles all incoming commands on the server side.
@@ -93,20 +95,33 @@ public class ServerCommandProcessor {
         return request.get("robot").getAsString();
     }
 
-    private String handleCommand(String command, String robotName, JsonObject request) {
-        return switch (command.toLowerCase()) {
-            case "launch"   -> processLaunchCommand(robotName, request);
-            case "look"     -> processLookCommand(robotName);
-            case "state"    -> processStateCommand(robotName);
-            case "forward"  -> processForwardCommand(robotName, request);
-            case "back"     -> processBackCommand(robotName, request);
-            case "turn"     -> processTurnCommand(robotName, request);
-            case "fire"     -> processFireCommand(robotName);
-            case "reload"   -> processReloadCommand(robotName);
-            case "repair"   -> processRepairCommand(robotName);
-            default         -> createErrorResponse("Unsupported command: " + command);
-        };
+    // Define interface for command handler
+    @FunctionalInterface
+    interface CommandHandler {
+        String handle(String robotName, JsonObject request);
     }
+
+    // Initialize command map
+    private final Map<String, CommandHandler> commandMap = Map.of(
+            "launch", this::processLaunchCommand,
+            "forward", this::processForwardCommand,
+            "back", this::processBackCommand,
+            "turn", this::processTurnCommand,
+            "look", (name, req) -> processLookCommand(name),
+            "state", (name, req) -> processStateCommand(name),
+            "fire", (name, req) -> processFireCommand(name),
+            "reload", (name, req) -> processReloadCommand(name),
+            "repair", (name, req) -> processRepairCommand(name)
+    );
+
+    // Reworked handleCommand method
+    private String handleCommand(String command, String robotName, JsonObject request) {
+        CommandHandler handler = commandMap.get(command);
+        return (handler != null)
+                ? handler.handle(robotName, request)
+                : createErrorResponse("Unsupported command: " + command);
+    }
+
 
 
     private String processLaunchCommand(String robotName, JsonObject request) {
