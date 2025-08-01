@@ -17,14 +17,14 @@ import za.co.wethinkcode.server.world.obstacles.Pit;
  */
 public class World {
     private final String name;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     private final int visibilityRange;
     private final int maxShieldStrength;
     private final int reloadTime;
     private final int repairTime;
     private final int maxShots;
-    private final List<Obstacle> obstacles;
+    private List<Obstacle> obstacles;
     private final List<Robot> robots;
     private final Random random = new Random();
 

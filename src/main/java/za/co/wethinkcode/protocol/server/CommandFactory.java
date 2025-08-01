@@ -113,7 +113,7 @@ public record CommandFactory(World world) {
     public Command createSaveCommand() {
         return new SaveCommand(world);
     }
-    public Command RestoreWorldCommand(String worldName, String uh) {
-        return new RestoreCommand(worldName,uh);
+    public Command createRestoreWorldCommand(String worldName) {
+        return new RestoreCommand(world,worldName);
     }
 }
