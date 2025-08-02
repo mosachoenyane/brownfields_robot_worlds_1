@@ -62,19 +62,16 @@ public class VisionFinder {
     private void checkDirection(JsonArray objects, Set<String> reportedDirections,
                                 Position robotPos, Direction direction, String directionName) {
         Position current = new Position(robotPos.getX(), robotPos.getY());
-        int distance = 0;
 
-        while (distance <= world.getVisibilityRange()) {
+        for (int distance = 1; distance <= world.getVisibilityRange(); distance++) {
             current = getNextPosition(current, direction);
-            distance++;
 
             if (isDirectionBlocked(objects, reportedDirections, directionName, current, distance)) {
                 break;
             }
         }
     }
-
-    private boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
+    boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
                                        Position current, int distance) {
         if (!world.isPositionValid(current)) {
             // Invalid position — handle it and treat a direction as blocked
