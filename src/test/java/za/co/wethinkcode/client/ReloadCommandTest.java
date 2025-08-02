@@ -94,12 +94,15 @@ class ReloadCommandTest {
         String response = reloadCommand.createSuccessResponse(2);
         JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
 
+        // Check top-level result field
         assertEquals("OK", jsonResponse.get("result").getAsString());
 
+        // Check contents of the data object
         JsonObject data = jsonResponse.getAsJsonObject("data");
         assertEquals("Reloading weapons", data.get("message").getAsString());
         assertEquals(2, data.get("reloadTime").getAsInt());
     }
+
 
     @Test
     void createErrorResponseShouldContainCorrectMessage() {
