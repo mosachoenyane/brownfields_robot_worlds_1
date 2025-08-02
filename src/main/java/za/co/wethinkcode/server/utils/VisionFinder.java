@@ -134,24 +134,17 @@ public class VisionFinder {
         }
         return true;
     }
-
     private void checkImmediateEdges(JsonArray objects, Set<String> reportedDirections, Position robotPos) {
-        // Check if robot is at world edges
-        if (robotPos.getY() == 0 && !reportedDirections.contains("NORTH")) {
-            addObject(objects, "NORTH", "EDGE", 1);
-            reportedDirections.add("NORTH");
-        }
-        if (robotPos.getY() == world.getHeight() - 1 && !reportedDirections.contains("SOUTH")) {
-            addObject(objects, "SOUTH", "EDGE", 1);
-            reportedDirections.add("SOUTH");
-        }
-        if (robotPos.getX() == world.getWidth() - 1 && !reportedDirections.contains("EAST")) {
-            addObject(objects, "EAST", "EDGE", 1);
-            reportedDirections.add("EAST");
-        }
-        if (robotPos.getX() == 0 && !reportedDirections.contains("WEST")) {
-            addObject(objects, "WEST", "EDGE", 1);
-            reportedDirections.add("WEST");
+        checkAndAddEdge(objects, reportedDirections, robotPos.getY() == 0, "NORTH");
+        checkAndAddEdge(objects, reportedDirections, robotPos.getY() == world.getHeight() - 1, "SOUTH");
+        checkAndAddEdge(objects, reportedDirections, robotPos.getX() == world.getWidth() - 1, "EAST");
+        checkAndAddEdge(objects, reportedDirections, robotPos.getX() == 0, "WEST");
+    }
+
+    private void checkAndAddEdge(JsonArray objects, Set<String> reportedDirections, boolean isAtEdge, String direction) {
+        if (isAtEdge && !reportedDirections.contains(direction)) {
+            addObject(objects, direction, "EDGE", 1);
+            reportedDirections.add(direction);
         }
     }
 
