@@ -113,11 +113,14 @@ public class VisionFinder {
         return true;
     }
 
-    private boolean handleObstacle(JsonArray objects, Set<String> reportedDirections, String directionName, Obstacle obstacle, int distance) {
-        if (!reportedDirections.contains(directionName)) {
-            addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
-            reportedDirections.add(directionName);
+    private boolean handleObstacle(JsonArray objects, Set<String> reportedDirections, String directionName,
+                                   Obstacle obstacle, int distance) {
+        if (reportedDirections.contains(directionName)) {
+            return true;
         }
+
+        addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
+        reportedDirections.add(directionName);
         return true;
     }
 
