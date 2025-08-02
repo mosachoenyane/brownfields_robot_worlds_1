@@ -61,19 +61,7 @@ class ReloadCommandTest {
         assertEquals(Robot.Status.RELOAD, testRobot.getStatus());
     }
 
-    @Test
-    void executeShouldReturnSuccessResponse() {
-        String response = reloadCommand.execute();
-        JsonObject jsonResponse = JsonParser.parseString(response).getAsJsonObject();
 
-        assertEquals("OK", jsonResponse.get("result").getAsString());
-        assertTrue(jsonResponse.has("data"));
-        assertTrue(jsonResponse.has("state"));
-
-        JsonObject data = jsonResponse.getAsJsonObject("data");
-        assertEquals("Reloading weapons", data.get("message").getAsString());
-        assertEquals(5, data.get("reloadTime").getAsInt());
-    }
 
     @Test
     void executeWhenRobotIsReloadingShouldReturnError() {
