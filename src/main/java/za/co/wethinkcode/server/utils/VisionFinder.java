@@ -123,6 +123,7 @@ public class VisionFinder {
     }
 
 
+
     private boolean handleOtherRobot(JsonArray objects, Set<String> reportedDirections, String directionName, int distance) {
         if (!reportedDirections.contains(directionName)) {
             addObject(objects, directionName, "ROBOT", distance);
