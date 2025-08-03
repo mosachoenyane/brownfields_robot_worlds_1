@@ -111,17 +111,22 @@ public class VisionFinder {
         }
         return true;
     }
-
     private boolean handleObstacle(JsonArray objects, Set<String> reportedDirections, String directionName,
                                    Obstacle obstacle, int distance) {
         if (reportedDirections.contains(directionName)) {
+            // Direction already reported as blocked
             return true;
         }
 
+        // Add the obstacle object info to the objects list (you must have this implemented)
         addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
+
+        // Mark this direction as reported to avoid duplicate reporting
         reportedDirections.add(directionName);
+
         return true;
     }
+
 
     private boolean handleOtherRobot(JsonArray objects, Set<String> reportedDirections, String directionName, int distance) {
         if (!reportedDirections.contains(directionName)) {
