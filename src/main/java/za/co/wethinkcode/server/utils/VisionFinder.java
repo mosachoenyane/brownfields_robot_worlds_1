@@ -98,10 +98,11 @@ public class VisionFinder {
     private boolean isBlockedByOtherRobot(JsonArray objects, Set<String> reportedDirections, String directionName,
                                           Position current, int distance) {
         return world.getRobots().stream()
-                .filter(other -> !other.equals(robot))
+                .filter(other -> !other.equals(robot))  // Exclude this robot itself
                 .anyMatch(other -> other.getPosition().equals(current) &&
                         handleOtherRobot(objects, reportedDirections, directionName, distance));
     }
+
 
 
     private boolean handleInvalidPosition(JsonArray objects, Set<String> reportedDirections, String directionName, int distance) {
