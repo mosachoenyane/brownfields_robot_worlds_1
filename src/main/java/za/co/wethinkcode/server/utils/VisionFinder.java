@@ -2,6 +2,7 @@ package za.co.wethinkcode.server.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import za.co.wethinkcode.robotworld.DirectionContext;
 import za.co.wethinkcode.server.model.Direction;
 import za.co.wethinkcode.server.model.Position;
 import za.co.wethinkcode.server.model.Robot;
@@ -75,17 +76,15 @@ public class VisionFinder {
     }
 
 
-    private boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
-                                       Position current, int distance) {
-        if (!world.isPositionValid(current)) {
-            // Invalid position — mark direction as blocked and handle appropriately
-            handleInvalidPosition(objects, reportedDirections, directionName, distance);
+    boolean isDirectionBlocked(DirectionContext ctx) {
+        if (!world.isPositionValid(ctx.getCurrent())) {
+            handleInvalidPosition(ctx.getObjects(), ctx.getReportedDirections(), ctx.getDirectionName(), ctx.getDistance());
             return true;
         }
 
-        return isBlockedByObstacle(objects, reportedDirections, directionName, current, distance)
-                || isBlockedByOtherRobot(objects, reportedDirections, directionName, current, distance);
+        return isBlockedByObstacle(ctx) || isBlockedByOtherRobot(ctx);
     }
+
 
 
 
