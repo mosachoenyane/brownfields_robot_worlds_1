@@ -72,10 +72,10 @@ public class VisionFinder {
         }
     }
 
-    boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
+    private boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
                                        Position current, int distance) {
         if (!world.isPositionValid(current)) {
-            // Invalid position — handle it and treat a direction as blocked
+            // Invalid position — mark direction as blocked and handle appropriately
             handleInvalidPosition(objects, reportedDirections, directionName, distance);
             return true;
         }
@@ -83,6 +83,7 @@ public class VisionFinder {
         return isBlockedByObstacle(objects, reportedDirections, directionName, current, distance)
                 || isBlockedByOtherRobot(objects, reportedDirections, directionName, current, distance);
     }
+
 
 
     private boolean isBlockedByObstacle(JsonArray objects, Set<String> reportedDirections, String directionName,
