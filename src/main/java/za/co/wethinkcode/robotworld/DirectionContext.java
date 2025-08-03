@@ -1,6 +1,8 @@
 package za.co.wethinkcode.robotworld;  // adjust to your package
 
 import com.google.gson.JsonArray;
+import za.co.wethinkcode.server.model.Position;
+
 import java.util.Set;
 
 public class DirectionContext {
