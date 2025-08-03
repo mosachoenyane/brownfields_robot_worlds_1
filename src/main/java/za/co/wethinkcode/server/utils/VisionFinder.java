@@ -112,14 +112,13 @@ public class VisionFinder {
         }
         return true;
     }
-    private boolean handleObstacle(JsonArray objects, Set<String> reportedDirections, String directionName,
-                                   Obstacle obstacle, int distance) {
-        if (reportedDirections.contains(directionName)) {
+    private boolean handleObstacle(DirectionContext ctx, Obstacle obstacle) {
+        if (ctx.getReportedDirections().contains(ctx.getDirectionName())) {
             return true;
         }
 
-        addObject(objects, directionName, obstacle.getType().toUpperCase(), distance);
-        reportedDirections.add(directionName);
+        addObject(ctx.getObjects(), ctx.getDirectionName(), obstacle.getType().toUpperCase(), ctx.getDistance());
+        ctx.getReportedDirections().add(ctx.getDirectionName());
         return true;
     }
 
