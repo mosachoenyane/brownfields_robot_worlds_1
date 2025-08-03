@@ -66,11 +66,14 @@ public class VisionFinder {
         for (int distance = 1; distance <= world.getVisibilityRange(); distance++) {
             current = getNextPosition(current, direction);
 
-            if (isDirectionBlocked(objects, reportedDirections, directionName, current, distance)) {
+            DirectionContext ctx = new DirectionContext(objects, reportedDirections, directionName, current, distance);
+
+            if (isDirectionBlocked(ctx)) {
                 break;
             }
         }
     }
+
 
     private boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
                                        Position current, int distance) {
