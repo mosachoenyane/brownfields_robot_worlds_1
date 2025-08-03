@@ -71,6 +71,7 @@ public class VisionFinder {
             }
         }
     }
+
     boolean isDirectionBlocked(JsonArray objects, Set<String> reportedDirections, String directionName,
                                        Position current, int distance) {
         if (!world.isPositionValid(current)) {
