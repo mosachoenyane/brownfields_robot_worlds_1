@@ -51,8 +51,7 @@ public class RestoreCommand implements Command {
                                 boolean hasRows = false;
                                 while (dumpRs.next()) {
                                     hasRows = true;
-//                                    System.out.println("ID: " + dumpRs.getInt("id") + ", Name: '" + dumpRs.getString("name") +
-//                                            "', Height: " + dumpRs.getInt("height") + ", Width: " + dumpRs.getInt("width"));
+
                                 }
                                 if (!hasRows) {
                                     System.out.println("World table is empty.");
@@ -119,7 +118,7 @@ public class RestoreCommand implements Command {
 
                     // Restart server
                     System.out.println("Restarting server for world: " + retrievedWorldName);
-                    restartServer();
+//                    restartServer();
 
                     return "World " + retrievedWorldName + " successfully restored!";
                 }
@@ -139,7 +138,7 @@ public class RestoreCommand implements Command {
     public String display() {
         return "World to be loaded";
     }
-    public String restartServer() {
+    public String restartServer() throws IOException {
         StringBuilder response = new StringBuilder("Disconnecting all robots:\n");
 
         // Disconnect robots one by one with a brief pause
@@ -159,6 +158,9 @@ public class RestoreCommand implements Command {
 
         // Close the current server
         RobotWorldServer.close();
+        RobotWorldServer app = new RobotWorldServer();
+        app.startServer(world);
+
 
         // Restart the server in a new thread
         Thread newServerThread = new Thread(() -> {
