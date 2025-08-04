@@ -21,15 +21,19 @@ test-iteration-2:
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
+	$(MVN) test -Dtest=za/co/wethinkcode.Acceptance2.state.StateRobotTest.java
 test-our-server:
 	@echo "target/robot-world-0.0.2.jar">"src/main/resources/OurserverName"
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Movement.MoveForwardTest.java
-	$(MVN) test -Dtest=za/co/wethinkcode/Acceptance2/state/StateRobotTest.java
-all-test: test-iteration-2 test-our-server
+	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.state.StateRobotTest.java
+
+test-iteration-3:
+	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveExistingWorldTests.java
+	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveWorldTests.java
+all-test: test-iteration-2 test-our-server test-iteration-3
 
 
 build:
