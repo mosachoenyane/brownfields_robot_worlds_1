@@ -76,7 +76,7 @@ public class ServerConsole {
                 System.out.println(commandFactory.createSaveCommand().display());
                 break;
             case "restore":
-                System.out.println(commandFactory.createRestoreWorldCommand(argument).display());
+                System.out.println(commandFactory.createRestoreWorldCommand(argument).execute());
                 break;
             default:
                 System.out.println(RED + " ❌ Unknown command. Type 'help' for available commands." + RESET);

@@ -96,10 +96,11 @@ public class VisionFinder {
 
 
     private boolean isBlockedByOtherRobot(DirectionContext ctx) {
-        return world.getRobots().stream()
-                .filter(other -> !other.equals(robot))
-                .anyMatch(other -> other.getPosition().equals(ctx.getCurrent()) &&
-                        handleOtherRobot(ctx, ctx.getDirectionName(), ctx.getDistance()));
+        return false;
+//        return world.getRobots().stream()
+//                .filter(other -> !other.equals(robot))
+//                .anyMatch(other -> other.getPosition().equals(ctx.getCurrent()) &&
+//                        handleOtherRobot(ctx, ctx.getDirectionName(), ctx.getDistance()));
     }
 
 

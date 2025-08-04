@@ -41,6 +41,8 @@ public class RobotWorldServer {
             names = {"-o", "--obstacle"}, split = ",",
             description = "Obstacle coordinates")
     private static String[] OBSTACLE;
+    private static ServerSocket serverSocket;
+
 
     /**
      * Entry point of the server application.
@@ -108,6 +110,18 @@ public class RobotWorldServer {
             }
         }
     }
+    public static void close() {
+        try {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+               serverSocket.close();
+                System.out.println("Server socket closed.");
+            }
+        } catch (IOException e) {
+            System.err.println("Error closing server socket: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     // The following initialization is REQUIRED for flow monitoring.
     // DO NOT REMOVE OR MODIFY THIS CODE.
 //    static {
