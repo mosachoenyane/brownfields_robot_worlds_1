@@ -55,10 +55,10 @@ public class ServerConsole {
 
     private void processCommand(String command) {
         String argument = null;
-        if (command.contains("restore")){
+        if (command.contains(" ")) {
             String[] commands = command.split(" ");
             command = commands[0];
-            argument = commands[1];
+            argument = commands.length > 1 ? commands[1] : null;
         }
         switch (command.toLowerCase()) {
             case "quit":
@@ -73,10 +73,18 @@ public class ServerConsole {
             case "robots":
                 System.out.println(commandFactory.createRobotsCommand().display());
             case "save":
-                System.out.println(commandFactory.createSaveCommand().display());
+                if (argument == null) {
+                    System.out.println(commandFactory.createSaveCommand().display());
+                } else {
+                    String worldName = (argument != null) ? argument : "default";
+                }
                 break;
             case "restore":
-                System.out.println(commandFactory.createRestoreWorldCommand(argument).execute());
+                if (argument == null) {
+                    System.out.println("Restored the current world");
+                } else {
+                    System.out.println(commandFactory.createRestoreWorldCommand(argument).execute());
+                }
                 break;
             default:
                 System.out.println(RED + " ❌ Unknown command. Type 'help' for available commands." + RESET);
