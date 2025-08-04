@@ -98,10 +98,15 @@ public class RestoreCommand implements Command {
                             }
                         }
                     }
-
+                    Properties properties = new Properties();
+                    try (FileInputStream input = new FileInputStream("src/main/resources/config.properties")) {
+                        properties.load(input); // Load existing properties
+                    } catch (IOException e) {
+                        System.err.println("Failed to load config.properties: " + e.getMessage());
+                        return "ERROR: Failed to load configuration for " + worldName + ": " + e.getMessage();
+                    }
                     // Update config.properties
-                    try (FileOutputStream output = new FileOutputStream("config.properties")) {
-                        Properties properties = new Properties();
+                    try (FileOutputStream output = new FileOutputStream("src/main/resources/config.properties")) {
                         properties.setProperty("WORLD_NAME", retrievedWorldName);
                         properties.setProperty("WORLD_HEIGHT", String.valueOf(height));
                         properties.setProperty("WORLD_WIDTH", String.valueOf(width));
@@ -149,8 +154,8 @@ public class RestoreCommand implements Command {
             }
         });
 
-//        response.append("Server shutting down...");
-//        System.out.println("Server shutting down...");
+        response.append("Server shutting down...");
+        System.out.println("Server shutting down...");
 
         // Close the current server
         RobotWorldServer.close();
@@ -158,6 +163,7 @@ public class RestoreCommand implements Command {
         // Restart the server in a new thread
         Thread newServerThread = new Thread(() -> {
             try {
+                Thread.sleep(5000);
                 String[] args = {};
                 RobotWorldServer.main(args);
             } catch (Exception e) {
