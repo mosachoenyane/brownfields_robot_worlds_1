@@ -61,7 +61,7 @@ public class DumpCommand implements Command {
 
         // World Header
         sb.append(BOLD).append("\n🌍 WORLD DUMP").append(RESET).append("\n");
-        sb.append(world.getName().toUpperCase());
+        System.out.println(world.getName());
         sb.append("  Size: ")
                 .append(world.getWidth())
                 .append(" x ")

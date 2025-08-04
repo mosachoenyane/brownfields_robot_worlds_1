@@ -64,6 +64,7 @@ public class RestoreCommand implements Command {
 
                     // Process world data
                     int worldId = worldRs.getInt("id");
+                    System.out.println(world.getName());
                     String retrievedWorldName = worldRs.getString("name"); // TRIMmed name
                     System.out.println(retrievedWorldName);
                     int height = worldRs.getInt("height");
@@ -106,7 +107,9 @@ public class RestoreCommand implements Command {
                     }
                     // Update config.properties
                     try (FileOutputStream output = new FileOutputStream("src/main/resources/config.properties")) {
+                        System.out.println(properties.getProperty("WORLD_NAME"));
                         properties.setProperty("WORLD_NAME", retrievedWorldName);
+                        System.out.println(properties.getProperty("WORLD_NAME"));
                         properties.setProperty("WORLD_HEIGHT", String.valueOf(height));
                         properties.setProperty("WORLD_WIDTH", String.valueOf(width));
                         properties.store(output, "Updated world configuration for " + retrievedWorldName);
