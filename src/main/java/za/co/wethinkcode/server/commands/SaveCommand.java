@@ -18,8 +18,8 @@ public class SaveCommand implements Command{
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS world (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, height INTEGER, width INTEGER)");
             stmnt.executeUpdate("CREATE TABLE IF NOT EXISTS obstacles (id INTEGER PRIMARY KEY AUTOINCREMENT, x INTEGER, y INTEGER, width INTEGER, height INTEGER, world_id INTEGER, FOREIGN KEY (world_id) REFERENCES world(id))");
 
-            //stmnt.executeUpdate("DROP TABLE IF EXISTS world");
-            //stmnt.executeUpdate("DROP TABLE IF EXISTS obstacles");
+//            stmnt.executeUpdate("DROP TABLE IF EXISTS world");
+//            stmnt.executeUpdate("DROP TABLE IF EXISTS obstacles");
 
 
             // Check if the world NAME already exists in the WORLD TABLE

@@ -17,6 +17,7 @@ test-iteration-1:
 	$(MVN) test -Dtest=za.co.wethinkcode.acceptance.state.StateRobotTests.java
 test-iteration-2:
 	@echo ".libs/reference-server-0.2.3.jar">"src/main/resources/serverName"
+
 	$(MVN) compile
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Launch.LaunchRobotTests.java
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.Look.LookCommandTest.java
