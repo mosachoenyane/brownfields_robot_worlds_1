@@ -70,15 +70,24 @@ public class SaveWorldTests {
                 // Assert the world name
                 assertEquals(worldName, worldName);
             }
-//            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM obstacles");
-//                 ResultSet result = stmt.executeQuery()) {
-//                assertTrue(result.next(), "Obstacle should be saved in the obstacles table");
-//                assertEquals(Integer.class, result.getInt("x"));
-//                assertEquals(Integer.class, result.getInt("y"));
-//                assertEquals(Integer.class, result.getInt("width"));
-//                assertEquals(Integer.class, result.getInt("height"));
-//                //assertFalse(result.next(), "Only one obstacle record should exist");
-//            }
+
+        @Test
+        void obstaclesAreSaved() throws SQLException, IOException, InterruptedException {
+            try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM obstacles");
+                 ResultSet result = stmt.executeQuery()) {
+                assertTrue(result.next(), "Obstacle should be saved in the obstacles table");
+                Object x = result.getObject("x");
+                Object y = result.getObject("y");
+                Object width = result.getObject("width");
+                Object height = result.getObject("height");
+                assertTrue(x instanceof Integer);
+                assertTrue(y instanceof Integer);
+                assertTrue(width instanceof Integer);
+                assertTrue(height instanceof Integer);
+
+                }
+
+            }
 
         }
     }
