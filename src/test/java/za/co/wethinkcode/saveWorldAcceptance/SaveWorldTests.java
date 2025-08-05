@@ -18,7 +18,7 @@ public class SaveWorldTests {
 
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar","-s","10","-o","1,1");
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar", "-s", "10", "-o", "1,1");
 //        pb.inheritIO(); // Inherit standard input/output/error streams
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -34,6 +34,7 @@ public class SaveWorldTests {
         process.destroy();
         Thread.sleep(1000);
     }
+
     @Test
     void worldIsSaved() throws IOException, InterruptedException, SQLException {
         // Send the save command
@@ -71,8 +72,13 @@ public class SaveWorldTests {
                 assertEquals(worldName, worldName);
             }
 
-        @Test
-        void obstaclesAreSaved() throws SQLException, IOException, InterruptedException {
+        }
+    }
+    @Test
+    void obstaclesAreSaved () throws SQLException, IOException, InterruptedException {
+        try (Connection connection = DriverManager.getConnection("jdbc:sqlite:robot_world.db")) {
+            // check if connection is open
+            assertFalse(connection.isClosed());
             try (PreparedStatement stmt = connection.prepareStatement("SELECT * FROM obstacles");
                  ResultSet result = stmt.executeQuery()) {
                 assertTrue(result.next(), "Obstacle should be saved in the obstacles table");
@@ -85,12 +91,10 @@ public class SaveWorldTests {
                 assertTrue(width instanceof Integer);
                 assertTrue(height instanceof Integer);
 
-                }
-
             }
-
         }
     }
-
 }
+
+
 
