@@ -1,6 +1,8 @@
 package za.co.wethinkcode.saveWorldAcceptance;
 
 import org.junit.jupiter.api.*;
+import za.co.wethinkcode.client.RobotWorldClient;
+import za.co.wethinkcode.client.RobotWorldJsonClient;
 import za.co.wethinkcode.server.commands.Command;
 import za.co.wethinkcode.server.world.World;
 
@@ -14,23 +16,31 @@ import java.net.ServerSocket;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SaveExistingWorldTests {
+    private final static int DEFAULT_PORT = 5000;
+    private final static String DEFAULT_IP = "localhost";
+    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
     Process process;
 
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar","-s","10","-o","1,1");
+        try {
+            ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar", "-s", "10", "-o", "1,1");
 //        pb.inheritIO(); // Inherit standard input/output/error streams
-        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-        pb.redirectInput(ProcessBuilder.Redirect.PIPE);
-        process = pb.start();
-        Thread.sleep(2000);
-        //Files.deleteIfExists(Paths.get("robot_world.db"));
-
+            pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+            pb.redirectInput(ProcessBuilder.Redirect.PIPE);
+            process = pb.start();
+            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+            Thread.sleep(2000);
+            //Files.deleteIfExists(Paths.get("robot_world.db"));
+        } catch (Exception e){
+            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+        }
     }
 
     @AfterEach
     void disconnectFromServer() throws InterruptedException {
+        serverClient.disconnect();
         process.destroy();
         Thread.sleep(1000);
     }
