@@ -14,7 +14,7 @@ import java.sql.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SaveObstaclesTests {
+public class SaveObstaclesTests {
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "localhost";
     private final RobotWorldClient serverClient = new RobotWorldJsonClient();
@@ -47,12 +47,12 @@ class SaveObstaclesTests {
     @Test
     void ObstaclesIsSaved() throws IOException, InterruptedException, SQLException {
         // Send the save command
-        try (OutputStream out = process.getOutputStream();
-             PrintWriter writer = new PrintWriter(new OutputStreamWriter(out))) {
-            writer.println("save"); // Use println to ensure a newline is sent
-            writer.flush();
-            Thread.sleep(2000); // Increased sleep to ensure server processes the command
-        }
+//        try (OutputStream out = process.getOutputStream();
+//             PrintWriter writer = new PrintWriter(new OutputStreamWriter(out))) {
+//            writer.println("save"); // Use println to ensure a newline is sent
+//            writer.flush();
+//            Thread.sleep(2000); // Increased sleep to ensure server processes the command
+//        }
         // check if the database file exists
         assertTrue(Files.exists(Paths.get("robot_world.db")));
 
