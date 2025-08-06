@@ -1,4 +1,4 @@
-package za.co.wethinkcode.saveWorldAcceptance;
+package za.co.wethinkcode.Acceptance3.Save;
 
 import org.junit.jupiter.api.*;
 
@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 

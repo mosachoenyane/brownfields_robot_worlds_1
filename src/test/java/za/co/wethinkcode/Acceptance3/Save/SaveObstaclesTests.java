@@ -1,13 +1,10 @@
-package za.co.wethinkcode.saveWorldAcceptance;
+package za.co.wethinkcode.Acceptance3.Save;
 
 import org.junit.jupiter.api.*;
 import za.co.wethinkcode.client.RobotWorldClient;
 import za.co.wethinkcode.client.RobotWorldJsonClient;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;

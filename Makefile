@@ -32,10 +32,10 @@ test-our-server:
 	$(MVN) test -Dtest=za.co.wethinkcode.Acceptance2.state.StateRobotTest.java
 
 test-iteration-3:
-	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveExistingWorldTests.java
-	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveWorldTests.java
-	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveObstaclesTests.java
-	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.RestoreCommandTest.java
+	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveExistingWorldTests.java
+	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveWorldTests.java
+	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveObstaclesTests.java
+	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Restore.RestoreCommandTest.java
 all-test: test-iteration-2 test-our-server test-iteration-3
 
 
