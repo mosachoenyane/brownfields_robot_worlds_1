@@ -65,13 +65,14 @@ public class RestoreCommand implements Command {
                     // Process world data
                     int worldId = worldRs.getInt("id");
                     System.out.println(world.getName());
-                    String retrievedWorldName = worldRs.getString("name"); // TRIMmed name
+                    String retrievedWorldName = worldRs.getString("name");
                     System.out.println(retrievedWorldName);
                     int height = worldRs.getInt("height");
                     System.out.println(height);
                     int width = worldRs.getInt("width");
 
                     // Update world object
+                    world.setName(retrievedWorldName);
                     world.setHeight(height);
                     world.setWidth(width);
                     world.getObstacles().clear();
