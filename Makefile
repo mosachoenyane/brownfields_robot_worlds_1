@@ -34,6 +34,7 @@ test-our-server:
 test-iteration-3:
 	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveExistingWorldTests.java
 	$(MVN)	test -Dtest=za.co.wethinkcode.saveWorldAcceptance.SaveWorldTests.java
+	$(MVN)	test -Dtest=za/co/wethinkcode/saveWorldAcceptance/RestoreCommandTest.java
 all-test: test-iteration-2 test-our-server test-iteration-3
 
 
