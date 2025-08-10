@@ -18,9 +18,6 @@ WORKDIR /app
 
 # Copy the built jar from the builder stage
 COPY --from=build /app/target/robot-world-0.0.2.jar ./app.jar
-#COPY .git/ ./.git/
-#RUN git config --global user.name "Reitumetse Marline Mosehla"
-#RUN git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
 
 # Expose the port the server runs on
 EXPOSE 5050
