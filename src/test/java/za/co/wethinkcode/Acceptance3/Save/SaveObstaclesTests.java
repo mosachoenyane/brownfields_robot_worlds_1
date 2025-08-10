@@ -19,24 +19,24 @@ public class SaveObstaclesTests {
 
     @BeforeEach
     void connectToServer() throws IOException, InterruptedException {
-        try {
+//        try {
             ProcessBuilder pb = new ProcessBuilder("java", "-jar", "target/robot-world-0.0.2.jar", "-s", "10", "-o", "1,1");
 //      pb.inheritIO(); // Inherit standard input/output/error streams
             pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
             pb.redirectError(ProcessBuilder.Redirect.INHERIT);
             pb.redirectInput(ProcessBuilder.Redirect.PIPE);
             process = pb.start();
-            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+//            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
             Thread.sleep(2000);
             //Files.deleteIfExists(Paths.get("robot_world.db"));
-        }catch (Exception e){
-            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
-        }
+//        }catch (Exception e){
+//            serverClient.connect(DEFAULT_IP, DEFAULT_PORT);
+//        }
     }
 
     @AfterEach
     void disconnectFromServer() throws InterruptedException {
-        serverClient.disconnect();
+//        serverClient.disconnect();
         process.destroy();
         Thread.sleep(1000);
     }
