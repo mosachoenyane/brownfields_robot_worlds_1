@@ -79,7 +79,7 @@ public class RobotWorldServer {
             try {
                 za.co.wethinkcode.api.WebApiServer api = new za.co.wethinkcode.api.WebApiServer();
                 api.start(7000);
-                System.out.println("Web API running on http://localhost:7000 (health at /health)");
+                System.out.println("\nWeb API running on http://localhost:7000");
             } catch (Exception apiEx) {
                 System.err.println("Failed to start Web API: " + apiEx.getMessage());
             }
