@@ -1,5 +1,5 @@
 // Java
-package za.co.wethinkcode.application;
+package za.co.wethinkcode.api;
 
 import com.google.gson.JsonObject;
 

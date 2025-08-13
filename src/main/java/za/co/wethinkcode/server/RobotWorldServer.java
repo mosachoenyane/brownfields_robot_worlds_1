@@ -5,7 +5,7 @@ import za.co.wethinkcode.server.handler.ClientHandler;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldConfig;
 import za.co.wethinkcode.application.DefaultWorldApplication;
-import za.co.wethinkcode.application.WorldApplication;
+import za.co.wethinkcode.api.WorldApplication;
 
 
 import picocli.CommandLine;
@@ -80,16 +80,16 @@ public class RobotWorldServer {
 
             // Start WEB API (on port 7000) TO VERIFY ITS RUNNING
             try {
-                za.co.wethinkcode.api.ApiConfig cfg = za.co.wethinkcode.api.ApiConfig.localDefault();
-                WorldApplication worldApp = new DefaultWorldApplication(world); // wire the existing World
-                za.co.wethinkcode.api.WebApiServer api = new za.co.wethinkcode.api.WebApiServer(cfg, worldApp);
+                String jdbcUrl = "jdbc:sqlite:robot_world.db"; // consider externalizing to config
+                var cfg = za.co.wethinkcode.api.ApiConfig.localDefault();
+                var repo = new za.co.wethinkcode.application.SQLiteWorldRepository(jdbcUrl);
+                var worldApp = new za.co.wethinkcode.application.DefaultWorldApplication(world, repo);
+                var api = new za.co.wethinkcode.api.WebApiServer(cfg, worldApp);
                 api.start();
                 System.out.println("\nWeb API running on " + cfg.baseUrl());
             } catch (Exception apiEx) {
                 System.err.println("Failed to start Web API: " + apiEx.getMessage());
             }
-
-
 
             // Start server thread
             Thread serverThread = new Thread(() -> {
