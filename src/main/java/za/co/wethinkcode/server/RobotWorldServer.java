@@ -1,6 +1,8 @@
 package za.co.wethinkcode.server;
 
 //import za.co.wethinkcode.flow.Recorder;
+import za.co.wethinkcode.api.ApiConfig;
+import za.co.wethinkcode.api.WebApiServer;
 import za.co.wethinkcode.server.handler.ClientHandler;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldConfig;
@@ -77,12 +79,14 @@ public class RobotWorldServer {
 
             // Start WEB API (on port 7000) TO VERIFY ITS RUNNING
             try {
-                za.co.wethinkcode.api.WebApiServer api = new za.co.wethinkcode.api.WebApiServer();
-                api.start(7000);
-                System.out.println("\nWeb API running on http://localhost:7000");
+                ApiConfig cfg = ApiConfig.localDefault(); // or new ApiConfig("localhost", 7000, true)
+                WebApiServer api = new WebApiServer(cfg);
+                api.start();
+                System.out.println("\nWeb API running on " + cfg.baseUrl());
             } catch (Exception apiEx) {
                 System.err.println("Failed to start Web API: " + apiEx.getMessage());
             }
+
 
             // Start server thread
             Thread serverThread = new Thread(() -> {
