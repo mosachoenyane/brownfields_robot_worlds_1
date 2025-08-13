@@ -1,7 +1,6 @@
 package za.co.wethinkcode.application;
 
 import com.google.gson.JsonObject;
-import za.co.wethinkcode.api.WorldApplication;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldDumper;
 

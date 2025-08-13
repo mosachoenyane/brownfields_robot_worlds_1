@@ -6,7 +6,7 @@ import io.javalin.Javalin;
 import io.javalin.http.HttpCode;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import za.co.wethinkcode.api.WorldApplication;
+import za.co.wethinkcode.application.WorldApplication;
 
 public class WebApiServer {
     private final Javalin app;
