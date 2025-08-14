@@ -47,6 +47,8 @@ java -jar RobotWorldServer.jar
 # Run a client
 java -jar RobotWorldClient.jar
 ```
+## Install eodsql
+mvn install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
 
 ## 📜 Fun Fact
 

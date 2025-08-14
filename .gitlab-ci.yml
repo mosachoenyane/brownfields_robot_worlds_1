@@ -16,6 +16,7 @@ build-job:
   image: maven:3.9.6-eclipse-temurin-17
   script:
     - echo "Compiling the code..."
+    - mvn install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
     - mvn package -DskipTests
     - echo "Compile complete."
 
