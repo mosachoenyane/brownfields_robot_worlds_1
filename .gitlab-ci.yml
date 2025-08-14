@@ -12,6 +12,14 @@ stages:
   - deploy
 image: maven:3.9.6-eclipse-temurin-17
 
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+
 build-job:
   stage: build
   script:
