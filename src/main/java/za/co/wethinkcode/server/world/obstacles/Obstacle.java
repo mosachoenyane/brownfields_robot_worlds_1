@@ -1,5 +1,7 @@
 package za.co.wethinkcode.server.world.obstacles;
 
+import za.co.wethinkcode.server.model.Position;
+
 /**
  * Abstract representation of an obstacle in the world.
  * Each obstacle has a position and dimensions defined by its coordinates, width, and height.
@@ -12,6 +14,8 @@ public abstract class Obstacle {
     private final int y;
     private final int width;
     private final int height;
+
+
 
     /**
      * Indicates if this obstacle blocks visibility.

@@ -6,10 +6,7 @@ import za.co.wethinkcode.server.model.Robot;
 
 import java.util.*;
 
-import za.co.wethinkcode.server.world.obstacles.Lake;
-import za.co.wethinkcode.server.world.obstacles.Mountain;
-import za.co.wethinkcode.server.world.obstacles.Obstacle;
-import za.co.wethinkcode.server.world.obstacles.Pit;
+import za.co.wethinkcode.server.world.obstacles.*;
 
 /**
  * Represents the game world with a fixed size, obstacles, and robots.
@@ -341,4 +338,17 @@ public class World {
     public void setName(String name) {
         this.name = name;
     }
+
+    /* placing a mine*/
+    public boolean placeMine(Position position){
+        Mine mine = new Mine(position);
+
+        /* Cannot place a mine in an existing square or block*/
+        if (isPositionBlocked(position)){
+            return false;
+        }
+        this.obstacles.add(mine);
+        return true;
+    }
+
 }
