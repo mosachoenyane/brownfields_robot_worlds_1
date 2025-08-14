@@ -40,9 +40,9 @@ public class MountainObstacleTest {
         String output = dumpCommand.display();
 
         // Match the type returned by Mountain.getType()
-        assertFalse(output.contains("- Mountain"), "Should mention obstacle type");
-        assertFalse(output.contains("(  2,  3)"), "Should mention obstacle's coordinates");
-        assertTrue(output.contains("No obstacles in world"), "Should not show empty-obstacles message");
+        assertTrue(output.contains("Mountain"), "Should mention obstacle type");
+        assertTrue(output.contains("(  2,  3)"), "The output should contain the obstacle's coordinates.");
+        assertFalse(output.contains("No obstacles in world"), "The output should not show the empty-obstacles message.");
     }
 
 

@@ -10,10 +10,18 @@ stages:
   - build
   - test
   - deploy
+image: maven:3.9.6-eclipse-temurin-17
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 build-job:
   stage: build
-  image: maven:3.9.6-eclipse-temurin-17
   script:
     - echo "Compiling the code..."
     - mvn install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
@@ -22,7 +30,7 @@ build-job:
 
 test-iretation2-job:
   stage: test
-  image: maven:3.9.6-eclipse-temurin-17
+#  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
@@ -34,7 +42,7 @@ test-iretation2-job:
 
 test-our-server-job:
   stage: test
-  image: maven:3.9.6-eclipse-temurin-17
+#  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
@@ -46,7 +54,7 @@ test-our-server-job:
 
 test-saveWorld-job:
   stage: test
-  image: maven:3.9.6-eclipse-temurin-17
+#  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"

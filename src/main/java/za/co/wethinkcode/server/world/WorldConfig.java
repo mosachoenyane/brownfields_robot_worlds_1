@@ -110,6 +110,10 @@ public class WorldConfig {
     {
         return Integer.parseInt(properties.getProperty("NUM_MOUNTAINS"));
     }
+    public int getNumMines(){
+        return Integer.parseInt(properties.getProperty("NUM_MINE"));
+    }
+
 
     public boolean isUsingDefaults() {
         return usingDefaults;

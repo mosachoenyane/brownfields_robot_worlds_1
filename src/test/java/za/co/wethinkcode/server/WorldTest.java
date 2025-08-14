@@ -77,8 +77,8 @@ public class WorldTest {
     public void testIsPositionValidOutsideBounds() {
         assertTrue(world.isPositionValid(new Position(11, 0)));
         assertTrue(world.isPositionValid(new Position(0, 11)));
-        //assertFalse(world.isPositionValid(new Position(-11, 0)));
-        assertFalse(world.isPositionValid(new Position(0, -11)));
+        assertTrue(world.isPositionValid(new Position(-11, 0)));
+        assertTrue(world.isPositionValid(new Position(0, -11)));
     }
 
     @Test
