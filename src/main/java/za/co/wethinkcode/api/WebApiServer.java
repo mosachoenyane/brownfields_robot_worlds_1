@@ -33,7 +33,12 @@ public class WebApiServer {
             ctx.result("{\"status\":\"UP\"}");
         });
 
-        mountWorldRoutesIfAvailable();
+    }
+
+        private void mountRobotRoutes() {
+            LaunchHandlerWeb launchHandler = new LaunchHandlerWeb();
+            app.post("/robot/{robot}/launch", launchHandler::LaunchRobot);
+
     }
 
     private void mountWorldRoutesIfAvailable() {
