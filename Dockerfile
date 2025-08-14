@@ -7,7 +7,9 @@ WORKDIR /app
 # Copy the project files
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn clean
+RUN mvn install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
+RUN package -DskipTests
 
 # Create the runtime image
 FROM eclipse-temurin:17-jre-jammy
