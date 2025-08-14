@@ -61,13 +61,15 @@ public class ObstacleGenerator {
     }
 
     private Obstacle createRandomObstacle(int x, int y, int width, int height) {
-        // 0 = Mountain, 1 = Lake, 2 = Pit
-        int type = random.nextInt(3);
+        // 0 = Mountain, 1 = Lake, 2 = Pit, MIne = 3
+        int type = random.nextInt(4);
 
         return switch (type) {
             case 0 -> new Mountain(x, y, width, height);
             case 1 -> new Lake(x, y, width, height);
             case 2 -> new Pit(x, y, width, height);
+            case 3 -> new Mine(x, y);
+
             default -> throw new IllegalStateException("Unexpected obstacle type: " + type);
         };
     }

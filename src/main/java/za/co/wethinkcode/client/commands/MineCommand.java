@@ -1,37 +1,40 @@
 package za.co.wethinkcode.client.commands;
 
-import org.json.JSONObject;
-import za.co.wethinkcode.server.commands.Command;
-import za.co.wethinkcode.server.world.World;
-import za.co.wethinkcode.server.model.Robot;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import za.co.wethinkcode.client.RobotWorldClient;
 
-/**
- * Command for planting a mine in the robot world.
- * This is sent from the client to the server, and the server
- * will handle placing the mine in the world.
- */
+public class MineCommand {
+    private final RobotWorldClient client;
+    private final String robotName;
 
-public class MineCommand implements Command {
-    private final Robot robot;
-    private final World world;
-
-    public MineCommand(World world, Robot robot){
-        this.world = world;
-        this.robot = robot;
+    public MineCommand(RobotWorldClient client, String robotName) {
+        this.client = client;
+        this.robotName = robotName;
     }
-    @Override
-    public String execute(Robot target){
-        /* Json */
-        JSONObject requesr = new JSONObject();
-        requesr.put("robot", target.getName());
-        requesr.put("command", "mine");
 
-        JSONObject response = world.handleCommand(requesr);
+    public String execute() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
 
-        if (response.has("result") && "OK".equalsIgnoreCase(response.getString("result"))){
-            return "Mine placed at " + target.getPosition();
-        } else{
-            return "Failed to plant mine... you might be empty: ";
+            // Build JSON request
+            JsonNode request = mapper.createObjectNode()
+                    .put("robot", robotName)
+                    .put("command", "mine");
+
+            // Send request to server
+            JsonNode response = client.sendRequest(request.toString());
+
+            // Check result
+            String result = response.path("result").asText();
+            if ("OK".equalsIgnoreCase(result)) {
+                return "Mine successfully placed!";
+            } else {
+                return "Failed to place mine: " + response.path("data").path("message").asText();
+            }
+
+        } catch (Exception e) {
+            return "Error sending mine command: " + e.getMessage();
         }
     }
 }

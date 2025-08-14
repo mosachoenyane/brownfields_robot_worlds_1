@@ -79,13 +79,13 @@ public class World {
                 case "mountain" -> new Mountain(x, y, sizeX, sizeY);
                 case "lake" -> new Lake(x, y, sizeX, sizeY);
                 case "pit" -> new Pit(x, y, sizeX, sizeY);
-                default -> null ;
+                default -> null;
             };
         }
         return null;
     }
 
-    private boolean withinBounds(int x, int y, int sizeX, int sizeY){
+    private boolean withinBounds(int x, int y, int sizeX, int sizeY) {
         return x + sizeX <= width && y + sizeY <= height;
     }
 
@@ -160,26 +160,32 @@ public class World {
 
     private boolean isInFieldOfView(int dx, int dy, Direction facing) {
         switch (facing) {
-            case NORTH: return isFacingTheNorth(dx, dy);
-            case EAST:  return isFacingTheEast(dx, dy);
-            case SOUTH: return isFacingSouth(dx, dy);
-            case WEST:  return isFacingWest(dx, dy);
-            default:    return false;
+            case NORTH:
+                return isFacingTheNorth(dx, dy);
+            case EAST:
+                return isFacingTheEast(dx, dy);
+            case SOUTH:
+                return isFacingSouth(dx, dy);
+            case WEST:
+                return isFacingWest(dx, dy);
+            default:
+                return false;
         }
     }
-    private boolean isFacingTheNorth(int dx, int dy){
+
+    private boolean isFacingTheNorth(int dx, int dy) {
         return dy >= 0 && Math.abs(dx) <= dy;
     }
 
-    private  boolean isFacingTheEast(int dx, int dy){
+    private boolean isFacingTheEast(int dx, int dy) {
         return dx >= 0 && Math.abs(dy) <= dx;
     }
 
-    private boolean isFacingSouth(int dx,int dy){
+    private boolean isFacingSouth(int dx, int dy) {
         return dy <= 0 && Math.abs(dx) <= -dx;
     }
 
-    private boolean isFacingWest(int dx, int dy){
+    private boolean isFacingWest(int dx, int dy) {
         return dx <= 0 && Math.abs(dy) <= -dx;
     }
 
@@ -280,7 +286,6 @@ public class World {
     }
 
 
-
     public void addObstacle(Pit Pit) {
     }
 
@@ -291,11 +296,6 @@ public class World {
         obstacles.add(mountain);
 
     }
-
-    public void addObstacle(Obstacle obstacle) {
-        obstacles.add(obstacle);
-    }
-
 
     /**
      * Returns the reload time for robot weapons.
@@ -336,22 +336,13 @@ public class World {
         this.obstacles = obstacles;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
 
-    /* placing a mine*/
-    public boolean placeMine(Position position){
-        Mine mine = new Mine(position);
-
-        /* Cannot place a mine in an existing square or block*/
-        if (isPositionBlocked(position)){
-            return false;
-        }
-        this.obstacles.add(mine);
-        return true;
-    }
-
-    public JSONObject handleCommand(JSONObject requesr) {
+    public void addObstacle(Mine mine) {
     }
 }
+
+

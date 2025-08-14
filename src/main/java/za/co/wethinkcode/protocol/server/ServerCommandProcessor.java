@@ -9,6 +9,7 @@ import za.co.wethinkcode.server.model.Robot;
 import za.co.wethinkcode.server.utils.PositionFinder;
 import za.co.wethinkcode.server.utils.VisionFinder;
 import za.co.wethinkcode.server.world.World;
+import za.co.wethinkcode.server.world.obstacles.Mine;
 
 import java.sql.*;
 import java.sql.ResultSet;
@@ -112,7 +113,8 @@ public class ServerCommandProcessor {
             "state", (name, req) -> processStateCommand(name),
             "fire", (name, req) -> processFireCommand(name),
             "reload", (name, req) -> processReloadCommand(name),
-            "repair", (name, req) -> processRepairCommand(name)
+            "repair", (name, req) -> processRepairCommand(name),
+            "mine", (name, req) -> processMineCommand(name, req)
     );
 
     // Reworked handleCommand method
@@ -307,6 +309,21 @@ public class ServerCommandProcessor {
         response.addProperty("result", "ERROR");
         data.addProperty("message",message);
         response.add("data",data);
+        return gson.toJson(response);
+    }
+    private String processMineCommand(String robotName, JsonObject request) {
+        Robot robot = world.getRobotByName(robotName);
+        if (robot == null) return createErrorResponse("Robot not found");
+
+        Mine mine = new Mine(robot.getPosition());
+        world.addObstacle(mine);
+
+        JsonObject response = new JsonObject();
+        response.addProperty("result", "OK");
+        JsonObject data = new JsonObject();
+        data.addProperty("message", "Mine placed successfully");
+        response.add("data", data);
+        response.add("state", new StateCommand(robot).toJson());
         return gson.toJson(response);
     }
 }

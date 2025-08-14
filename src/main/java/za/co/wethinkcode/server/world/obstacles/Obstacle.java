@@ -15,7 +15,9 @@ public abstract class Obstacle {
     private final int width;
     private final int height;
 
-
+    public Obstacle(Position position, int width, int height) {
+        this(position.getX(), position.getY(), width, height);
+    }
 
     /**
      * Indicates if this obstacle blocks visibility.
