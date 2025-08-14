@@ -1,5 +1,6 @@
 package za.co.wethinkcode.server.world;
 
+import org.json.JSONObject;
 import za.co.wethinkcode.server.model.Direction;
 import za.co.wethinkcode.server.model.Position;
 import za.co.wethinkcode.server.model.Robot;
@@ -351,4 +352,6 @@ public class World {
         return true;
     }
 
+    public JSONObject handleCommand(JSONObject requesr) {
+    }
 }
