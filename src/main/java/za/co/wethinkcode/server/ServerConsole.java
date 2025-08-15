@@ -86,6 +86,13 @@ public class ServerConsole {
                     System.out.println(commandFactory.createRestoreWorldCommand(argument).execute());
                 }
                 break;
+            case "purge":
+                if (argument == null) {
+                    System.out.println(RED + " ❌ The 'purge' command requires a robot name." + RESET);
+                } else {
+                    System.out.println(commandFactory.createPurgeCommand(argument).execute());
+                }
+                break;
             default:
                 System.out.println(RED + " ❌ Unknown command. Type 'help' for available commands." + RESET);
         }

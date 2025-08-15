@@ -185,4 +185,10 @@ public class Robot {
                 ", position=" + (position != null ? position : "(not set)") +
                 ", direction=" + direction + "]";
     }
+    /**
+     * Kills the robot by setting its status to DEAD.
+     */
+    public void kill() {
+        this.status = Status.DEAD;
+    }
 }

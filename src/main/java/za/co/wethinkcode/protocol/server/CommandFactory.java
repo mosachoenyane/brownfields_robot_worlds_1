@@ -116,4 +116,8 @@ public record CommandFactory(World world) {
     public Command createRestoreWorldCommand(String worldName) {
         return new RestoreCommand(world,worldName);
     }
+
+    public Command createPurgeCommand(String robotName) {
+        return new PurgeCommand(world,robotName);
+    }
 }
