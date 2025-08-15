@@ -87,12 +87,15 @@ public class CommandProcessor {
     }
 
     private String processCommand(String[] parts){
-        String name = parts[1];
-        String commandType = parts[0];
 
-        if (parts.length < 2) {
-            return createErrorResponse(commandType + "requires robot name");
+        String commandType = parts[0];
+        if ("launch".equalsIgnoreCase(commandType) && parts.length < 3) {
+            return createErrorResponse(commandType + " requires robot make and name");
+        } else if (parts.length < 2) {
+            // This handles commands like 'state', 'look', etc., when no robot name is given.
+            return createErrorResponse(commandType + " requires a robot name");
         }
+        String name = parts[1];
         if (!name.equalsIgnoreCase(robotName)) {
             return createErrorResponse("Invalid robot name. You must use: " + robotName);
         }
