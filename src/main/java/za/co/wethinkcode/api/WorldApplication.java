@@ -8,4 +8,7 @@ public interface WorldApplication {
 
     // Returns data on all the worlds saved on the database.
     JsonObject listSavedWorlds();
+
+    // Returns data for a specific world by name (from current world or DB).
+    JsonObject getWorldByName(String name);
 }

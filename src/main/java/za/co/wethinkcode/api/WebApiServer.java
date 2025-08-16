@@ -70,6 +70,25 @@ public class WebApiServer {
                 ctx.status(HttpCode.INTERNAL_SERVER_ERROR).result(gson.toJson(error("Failed to list worlds: " + e.getMessage())));
             }
         });
+
+        // New: GET /world/{name} -> fetch a specific world by name
+        app.get("/world/{name}", ctx -> {
+            if (worldApp == null) {
+                ctx.status(HttpCode.NOT_IMPLEMENTED).result(gson.toJson(error("WorldApplication not configured")));
+                return;
+            }
+            try {
+                String name = ctx.pathParam("name");
+                JsonObject data = worldApp.getWorldByName(name);
+                if (data.has("error")) {
+                    ctx.status(HttpCode.NOT_FOUND).result(gson.toJson(error("World not found: " + name)));
+                } else {
+                    ctx.status(HttpCode.OK).result(gson.toJson(ok(data)));
+                }
+            } catch (Exception e) {
+                ctx.status(HttpCode.INTERNAL_SERVER_ERROR).result(gson.toJson(error("Failed to fetch world by name: " + e.getMessage())));
+            }
+        });
     }
 
     private JsonObject ok(JsonObject data) {
