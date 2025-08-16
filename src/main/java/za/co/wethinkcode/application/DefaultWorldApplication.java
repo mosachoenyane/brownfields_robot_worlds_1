@@ -7,6 +7,8 @@ import za.co.wethinkcode.api.WorldApplication;
 import za.co.wethinkcode.server.world.World;
 import za.co.wethinkcode.server.world.WorldDumper;
 
+import java.util.Optional;
+
 public class DefaultWorldApplication implements WorldApplication {
     private final World world;
     private final WorldRepository worldRepo;
@@ -43,8 +45,7 @@ public class DefaultWorldApplication implements WorldApplication {
     /**
      * Returns JSON data for a world by name.
      * - If name matches the current in-memory world, returns the full dump (including obstacles and robots).
-     * - Otherwise searches the repository summaries and returns width/height from the DB with an empty obstacles array.
-     *   (If obstacle lookup is available in the repository, it can be easily added here.)
+     * - Otherwise fetches from DB, including obstacles.
      */
     public JsonObject getWorldByName(String name) {
         if (name != null && name.equalsIgnoreCase(world.getName())) {
@@ -56,17 +57,26 @@ public class DefaultWorldApplication implements WorldApplication {
             }
         }
 
-        for (WorldRepository.WorldSummary ws : worldRepo.findAll()) {
-            if (ws.name().equalsIgnoreCase(name)) {
-                JsonObject data = new JsonObject();
-                data.addProperty("name", ws.name());
-                data.addProperty("width", ws.width());
-                data.addProperty("height", ws.height());
-                // Placeholder: obstacles for saved worlds can be populated if repository supports it.
-                data.add("obstacles", new JsonArray());
-                data.addProperty("source", "db");
-                return data;
+        Optional<WorldRepository.WorldDetails> maybe = worldRepo.findByName(name);
+        if (maybe.isPresent()) {
+            WorldRepository.WorldDetails details = maybe.get();
+            JsonObject data = new JsonObject();
+            data.addProperty("name", details.name());
+            data.addProperty("width", details.width());
+            data.addProperty("height", details.height());
+
+            JsonArray obstacles = new JsonArray();
+            for (WorldRepository.ObstacleRow ob : details.obstacles()) {
+                JsonObject o = new JsonObject();
+                o.addProperty("x", ob.x());
+                o.addProperty("y", ob.y());
+                o.addProperty("width", ob.width());
+                o.addProperty("height", ob.height());
+                obstacles.add(o);
             }
+            data.add("obstacles", obstacles);
+            data.addProperty("source", "db");
+            return data;
         }
 
         JsonObject notFound = new JsonObject();

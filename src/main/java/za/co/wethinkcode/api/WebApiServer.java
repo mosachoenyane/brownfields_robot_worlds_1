@@ -57,8 +57,8 @@ public class WebApiServer {
             }
         });
 
-        // New: GET /worlds -> list all saved worlds from DB
-        app.get("/worlds", ctx -> {
+            // Rename: GET /world/all -> list all saved worlds from DB (same handler as before)
+            app.get("/world/all", ctx -> {
             if (worldApp == null) {
                 ctx.status(HttpCode.NOT_IMPLEMENTED).result(gson.toJson(error("WorldApplication not configured")));
                 return;
