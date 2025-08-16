@@ -44,6 +44,9 @@ public class WorldDumper {
             JsonObject obstacleJson = new JsonObject();
             obstacleJson.addProperty("type", obstacle.getType());
             obstacleJson.add("position", new Gson().toJsonTree(new int[]{obstacle.getX(), obstacle.getY()}));
+            // Add scalar coordinates for easier client consumption
+            obstacleJson.addProperty("x", obstacle.getX());
+            obstacleJson.addProperty("y", obstacle.getY());
             obstaclesArray.add(obstacleJson);
         }
         return obstaclesArray;

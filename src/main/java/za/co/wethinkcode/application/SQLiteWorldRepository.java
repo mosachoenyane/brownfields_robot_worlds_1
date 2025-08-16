@@ -15,7 +15,7 @@ public class SQLiteWorldRepository implements WorldRepository {
     @Override
     public List<WorldSummary> findAll() {
         List<WorldSummary> worlds = new ArrayList<>();
-        String sql = "SELECT name, height, width FROM world ORDER BY name COLLATE NOCASE";
+        String sql = "SELECT world.name, world.height, world.width, obstacles.x, obstacles.y, obstacles.width, obstacles.height  FROM world JOIN obstacles ON world.id = obstacles.world_id ORDER BY name COLLATE NOCASE";
         try (Connection conn = DriverManager.getConnection(jdbcUrl);
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
