@@ -18,4 +18,7 @@ public interface WorldRepository {
 
     // Find a world by name including its obstacles (if found)
     Optional<WorldDetails> findByName(String name);
+
+    // Find all worlds with their obstacles
+    List<WorldDetails> findAllDetails();
 }

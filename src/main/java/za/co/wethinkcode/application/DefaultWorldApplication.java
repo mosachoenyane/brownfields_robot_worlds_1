@@ -30,11 +30,23 @@ public class DefaultWorldApplication implements WorldApplication {
     @Override
     public JsonObject listSavedWorlds() {
         JsonArray arr = new JsonArray();
-        for (WorldRepository.WorldSummary ws : worldRepo.findAll()) {
+        for (WorldRepository.WorldDetails wd : worldRepo.findAllDetails()) {
             JsonObject jo = new JsonObject();
-            jo.addProperty("name", ws.name());
-            jo.addProperty("width", ws.width());
-            jo.addProperty("height", ws.height());
+            jo.addProperty("name", wd.name());
+            jo.addProperty("width", wd.width());
+            jo.addProperty("height", wd.height());
+
+            JsonArray obstacles = new JsonArray();
+            for (WorldRepository.ObstacleRow ob : wd.obstacles()) {
+                JsonObject o = new JsonObject();
+                o.addProperty("x", ob.x());
+                o.addProperty("y", ob.y());
+                o.addProperty("width", ob.width());
+                o.addProperty("height", ob.height());
+                obstacles.add(o);
+            }
+            jo.add("obstacles", obstacles);
+
             arr.add(jo);
         }
         JsonObject data = new JsonObject();
