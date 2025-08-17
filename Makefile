@@ -45,7 +45,7 @@ test-iteration-4:
 #	$(MVN)	test -Dtest=apiTests.GetCurrentWorldTests
 #	$(MVN)	test -Dtest=apiTests.GetSpecifiedWorldTests
 #	$(MVN)	test -Dtest=apiTests.WebApiSmokeTest
-all-test: test-iteration-2 test-our-server test-iteration-3
+all-test: test-iteration-2 test-our-server test-iteration-3 test-iteration-4
 
 
 build:

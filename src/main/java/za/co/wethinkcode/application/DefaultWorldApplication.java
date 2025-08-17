@@ -39,4 +39,28 @@ public class DefaultWorldApplication implements WorldApplication {
         data.add("worlds", arr);
         return data;
     }
+    @Override
+    public JsonObject getWorldByName(String name) {
+        // If the requested name is the current world, return the full dump
+        if (name != null && name.equalsIgnoreCase(world.getName())) {
+            return getCurrentWorld();
+        }
+
+        // Otherwise, look it up from saved worlds (summary info)
+        for (WorldRepository.WorldSummary ws : worldRepo.findAll()) {
+            if (ws.name().equalsIgnoreCase(name)) {
+                JsonObject jo = new JsonObject();
+                jo.addProperty("name", ws.name());
+                jo.addProperty("width", ws.width());
+                jo.addProperty("height", ws.height());
+                return jo;
+            }
+        }
+
+        // Not found
+        JsonObject err = new JsonObject();
+        err.addProperty("error", "World not found");
+        err.addProperty("name", name);
+        return err;
+    }
 }
