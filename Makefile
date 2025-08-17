@@ -5,6 +5,15 @@ GIT = git
 
 .PHONY: all clean test build release package tag test-iteration-2 test-iteration-1 test-our-server
 
+.PHONY: ensure-git-identity
+ensure-git-identity:
+	@if ! git config --get user.email >/dev/null 2>&1; then \
+	  echo "Configuring git user identity for tests..."; \
+	  git config --global user.email "simntamjhb024@student.wethinkcode.co.za"; \
+	  git config --global user.name "simntamjhb024"; \
+	fi
+
+
 all: clean build test
 clean:
 	$(MVN) clean
@@ -51,7 +60,7 @@ test-iteration-4:
 #	$(MVN)	test -Dtest=apiTests.GetCurrentWorldTests
 #	$(MVN)	test -Dtest=apiTests.GetSpecifiedWorldTests
 #	$(MVN)	test -Dtest=apiTests.WebApiSmokeTest
-all-test: test-iteration-2 test-our-server test-iteration-3 test-iteration-4 test-unit-packages
+all-test: ensure-git-identity test-iteration-2 test-our-server test-iteration-3 test-iteration-4 test-unit-packages
 
 
 build:
