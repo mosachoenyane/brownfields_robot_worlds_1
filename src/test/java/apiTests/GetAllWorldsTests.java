@@ -93,5 +93,60 @@ public class GetAllWorldsTests {
 
         }
     }
+    /**
+     * Test double that returns a non-empty list for /world/all.
+     */
+    private static class WorldsListingApp implements WorldApplication {
+        @Override
+        public com.google.gson.JsonObject getCurrentWorld() {
+            com.google.gson.JsonObject data = new com.google.gson.JsonObject();
+            data.addProperty("name", "current-world");
+            data.addProperty("width", 15);
+            data.addProperty("height", 15);
+            data.add("obstacles", new com.google.gson.JsonArray());
+            data.add("robots", new com.google.gson.JsonArray());
+            return data;
+        }
+
+        @Override
+        public com.google.gson.JsonObject listSavedWorlds() {
+            com.google.gson.JsonArray worlds = new com.google.gson.JsonArray();
+
+            com.google.gson.JsonObject w1 = new com.google.gson.JsonObject();
+            w1.addProperty("name", "alpha");
+            w1.addProperty("width", 10);
+            w1.addProperty("height", 8);
+            com.google.gson.JsonArray o1 = new com.google.gson.JsonArray();
+            com.google.gson.JsonObject o1a = new com.google.gson.JsonObject();
+            o1a.addProperty("x", 1);
+            o1a.addProperty("y", 2);
+            o1a.addProperty("width", 1);
+            o1a.addProperty("height", 2);
+            o1.add(o1a);
+            w1.add("obstacles", o1);
+
+            com.google.gson.JsonObject w2 = new com.google.gson.JsonObject();
+            w2.addProperty("name", "beta");
+            w2.addProperty("width", 20);
+            w2.addProperty("height", 20);
+            w2.add("obstacles", new com.google.gson.JsonArray());
+
+            worlds.add(w1);
+            worlds.add(w2);
+
+            com.google.gson.JsonObject wrapper = new com.google.gson.JsonObject();
+            wrapper.add("worlds", worlds);
+            return wrapper;
+        }
+
+        @Override
+        public com.google.gson.JsonObject getWorldByName(String name) {
+            com.google.gson.JsonObject notFound = new com.google.gson.JsonObject();
+            notFound.addProperty("error", "World not found");
+            notFound.addProperty("name", name);
+            return notFound;
+        }
+    }
 }
+
 
