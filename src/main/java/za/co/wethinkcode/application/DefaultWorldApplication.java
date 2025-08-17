@@ -39,14 +39,43 @@ public class DefaultWorldApplication implements WorldApplication {
         data.add("worlds", arr);
         return data;
     }
+
     @Override
     public JsonObject getWorldByName(String name) {
-        // If the requested name is the current world, return the full dump
+        // If it's the current world, return full dump (with obstacles)
         if (name != null && name.equalsIgnoreCase(world.getName())) {
             return getCurrentWorld();
         }
 
-        // Otherwise, look it up from saved worlds (summary info)
+        // If the repo supports details, use it to include obstacles for saved worlds.
+        if (worldRepo instanceof SQLiteWorldRepository repo) {
+            return repo.findByName(name)
+                    .map(details -> {
+                        JsonObject jo = new JsonObject();
+                        jo.addProperty("name", details.name);
+                        jo.addProperty("width", details.width);
+                        jo.addProperty("height", details.height);
+                        JsonArray obs = new JsonArray();
+                        for (SQLiteWorldRepository.ObstacleRow o : details.obstacles) {
+                            JsonObject oo = new JsonObject();
+                            oo.addProperty("x", o.x);
+                            oo.addProperty("y", o.y);
+                            oo.addProperty("width", o.width);
+                            oo.addProperty("height", o.height);
+                            obs.add(oo);
+                        }
+                        jo.add("obstacles", obs);
+                        return jo;
+                    })
+                    .orElseGet(() -> {
+                        JsonObject err = new JsonObject();
+                        err.addProperty("error", "World not found");
+                        err.addProperty("name", name);
+                        return err;
+                    });
+        }
+
+        // Fallback: summary-only search
         for (WorldRepository.WorldSummary ws : worldRepo.findAll()) {
             if (ws.name().equalsIgnoreCase(name)) {
                 JsonObject jo = new JsonObject();
@@ -56,8 +85,6 @@ public class DefaultWorldApplication implements WorldApplication {
                 return jo;
             }
         }
-
-        // Not found
         JsonObject err = new JsonObject();
         err.addProperty("error", "World not found");
         err.addProperty("name", name);

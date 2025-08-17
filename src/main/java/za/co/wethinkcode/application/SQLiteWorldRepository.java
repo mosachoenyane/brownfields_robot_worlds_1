@@ -58,7 +58,6 @@ public class SQLiteWorldRepository implements WorldRepository {
         return worlds;
     }
 
-    @Override
     public Optional<WorldDetails> findByName(String name) {
         String sql = """
             SELECT w.name, w.width, w.height,
@@ -107,7 +106,6 @@ public class SQLiteWorldRepository implements WorldRepository {
         }
     }
 
-    @Override
     public List<WorldDetails> findAllDetails() {
         String sql = """
             SELECT w.name, w.width, w.height,
@@ -160,6 +158,33 @@ public class SQLiteWorldRepository implements WorldRepository {
         Agg(int width, int height) {
             this.width = width;
             this.height = height;
+        }
+    }
+
+    // Added DTOs to fix missing symbols and preserve functionality.
+    public static class ObstacleRow {
+        public final int x;
+        public final int y;
+        public final int width;
+        public final int height;
+        public ObstacleRow(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+    }
+
+    public static class WorldDetails {
+        public final String name;
+        public final int width;
+        public final int height;
+        public final List<ObstacleRow> obstacles;
+        public WorldDetails(String name, int width, int height, List<ObstacleRow> obstacles) {
+            this.name = name;
+            this.width = width;
+            this.height = height;
+            this.obstacles = List.copyOf(obstacles);
         }
     }
 }

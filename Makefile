@@ -37,6 +37,12 @@ test-iteration-3:
 	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveObstaclesTests.java
 	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Restore.RestoreCommandTest.java
 
+test-unit-packages:
+	$(MVN) test -Dtest="za.co.wethinkcode.client.**.*Test,za.co.wethinkcode.client.**.*Tests"
+	$(MVN) test -Dtest="za.co.wethinkcode.protocol.**.*Test,za.co.wethinkcode.protocol.**.*Tests"
+	$(MVN) test -Dtest="za.co.wethinkcode.server.**.*Test,za.co.wethinkcode.server.**.*Tests"
+
+
 test-iteration-4:
 	$(MVN) test -Dtest=apiTests.GetAllWorldsTests,apiTests.GetCurrentWorldTests,apiTests.GetSpecifiedWorldTests,apiTests.WebApiSmokeTest
 
@@ -45,7 +51,7 @@ test-iteration-4:
 #	$(MVN)	test -Dtest=apiTests.GetCurrentWorldTests
 #	$(MVN)	test -Dtest=apiTests.GetSpecifiedWorldTests
 #	$(MVN)	test -Dtest=apiTests.WebApiSmokeTest
-all-test: test-iteration-2 test-our-server test-iteration-3 test-iteration-4
+all-test: test-iteration-2 test-our-server test-iteration-3 test-iteration-4 test-unit-packages
 
 
 build:
