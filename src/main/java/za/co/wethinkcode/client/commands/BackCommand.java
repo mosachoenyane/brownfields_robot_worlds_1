@@ -20,6 +20,13 @@ public class BackCommand implements Command {
     private final Robot robot;
     private final int steps;
 
+    /**
+     * Constructs a new {@code BackCommand} for a given robot and world.
+     *
+     * @param world the {@link World} in which the robot operates
+     * @param robot the {@link Robot} to move backward
+     * @param steps the number of steps to move backward
+     */
     public BackCommand(World world, Robot robot, int steps) {
         this.world = world;
         this.robot = robot;
@@ -66,20 +73,32 @@ public class BackCommand implements Command {
         }
     }
 
-
+    /**
+     * Calculates the next position when moving backward from a given position
+     * based on the robot's current facing direction.
+     *
+     * @param position  the current position of the robot
+     * @param direction the current {@link Direction} the robot is facing
+     * @return the new {@link Position} one step backward
+     */
     private Position getNextBackwardPosition(Position position, Direction direction) {
         int x = position.getX();
         int y = position.getY();
 
         return switch (direction) {
-            case NORTH -> new Position(x, y + 1);
+            case NORTH -> new Position(x, y - 1);
             case EAST -> new Position(x - 1, y);
-            case SOUTH -> new Position(x, y - 1);
+            case SOUTH -> new Position(x, y + 1);
             case WEST -> new Position(x + 1, y);
             default -> throw new IllegalStateException("Invalid direction");
         };
     }
 
+    /**
+     * Creates a JSON response indicating the robot successfully moved all steps.
+     *
+     * @return a JSON string with result "OK", message "Done", and updated robot state
+     */
     private String createSuccessResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -92,6 +111,12 @@ public class BackCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response indicating the robot was partially obstructed
+     * and could not move all requested steps.
+     *
+     * @return a JSON string with result "OK", message "Obstructed", and updated robot state
+     */
     private String createPartialMoveResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -104,6 +129,12 @@ public class BackCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response indicating the robot was obstructed
+     * and could not move at all.
+     *
+     * @return a JSON string with result "OK", message "Obstructed", and updated robot state
+     */
     private String createObstructedResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -116,6 +147,12 @@ public class BackCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response indicating the robot was destroyed during movement.
+     *
+     * @param message the destruction message
+     * @return a JSON string with result "OK" and message describing destruction
+     */
     private String createRobotDestroyedResponse(String message) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");

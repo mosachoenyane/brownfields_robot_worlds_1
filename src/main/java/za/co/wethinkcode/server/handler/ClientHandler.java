@@ -55,6 +55,16 @@ public class ClientHandler extends Thread {
         }
     }
 
+    /**
+     * Processes commands received from the client.
+     * <p>
+     * Tracks all robots launched by this client and removes them from the world
+     * once the client disconnects.
+     *
+     * @param in  the input stream from the client
+     * @param out the output stream to the client
+     * @throws IOException if an I/O error occurs
+     */
     private void processClientCommands(BufferedReader in, PrintWriter out) throws IOException {
         String inputLine;
         String robotName = null;
@@ -73,6 +83,9 @@ public class ClientHandler extends Thread {
 
     }
 
+    /**
+     * Closes the client socket safely and logs the disconnection.
+     */
     private void closeClientSocket() {
         try {
             clientSocket.close();

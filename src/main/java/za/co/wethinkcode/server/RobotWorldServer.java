@@ -126,6 +126,9 @@ public class RobotWorldServer {
             }
         }
     }
+    /**
+     * Closes the server socket safely.
+     */
     public static void close() {
         try {
             if (serverSocket != null && !serverSocket.isClosed()) {

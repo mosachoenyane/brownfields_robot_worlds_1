@@ -74,7 +74,14 @@ public class ForwardCommand implements Command {
         }
     }
 
-
+    /**
+     * Calculates the next position one step forward from the given position,
+     * based on the robot's facing direction.
+     *
+     * @param position  the current position
+     * @param direction the robot's facing direction
+     * @return the next position in the forward direction
+     */
     private Position getNextForwardPosition(Position position, Direction direction) {
         int x = position.getX();
         int y = position.getY();
@@ -87,7 +94,11 @@ public class ForwardCommand implements Command {
             default -> throw new IllegalStateException("Invalid direction");
         };
     }
-
+    /**
+     * Creates a JSON response when the robot successfully moves all requested steps.
+     *
+     * @return a JSON string with result status and updated robot state
+     */
     private String createSuccessResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -100,6 +111,12 @@ public class ForwardCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response when the robot moves partially but is obstructed
+     * before completing all requested steps.
+     *
+     * @return a JSON string with result status and updated robot state
+     */
     private String createPartialMoveResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -112,6 +129,12 @@ public class ForwardCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response when the robot is immediately obstructed
+     * and cannot move at all.
+     *
+     * @return a JSON string with result status and updated robot state
+     */
     private String createObstructedResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -124,6 +147,12 @@ public class ForwardCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Creates a JSON response when the robot is destroyed during execution.
+     *
+     * @param message the destruction message
+     * @return a JSON string with result status and destruction message
+     */
     private String createRobotDestroyedResponse(String message) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");

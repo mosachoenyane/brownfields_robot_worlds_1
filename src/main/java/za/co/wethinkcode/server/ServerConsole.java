@@ -53,6 +53,11 @@ public class ServerConsole {
         }
     }
 
+    /**
+     * Parses and executes a single console command.
+     *
+     * @param command the raw command input from the user
+     */
     private void processCommand(String command) {
         String argument = null;
         if (command.contains(" ")) {
@@ -98,12 +103,18 @@ public class ServerConsole {
         }
     }
 
+    /**
+     * Handles the 'quit' command by disconnecting all robots and stopping the console loop.
+     */
     private void handleQuitCommand() {
         System.out.println(YELLOW + "\n👋 Disconnecting all robots and shutting down..." + RESET);
         commandFactory.createQuitCommand().execute();
         isRunning = false;
     }
 
+    /**
+     * Displays a help message listing all available console commands.
+     */
     private void showHelp() {
         System.out.println(BOLD + "\n📚 Server Commands:" + RESET);
         System.out.println(WHITE + "────────────────────────────────" + RESET);

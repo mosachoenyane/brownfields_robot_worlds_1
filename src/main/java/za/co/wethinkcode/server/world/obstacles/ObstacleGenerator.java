@@ -60,6 +60,15 @@ public class ObstacleGenerator {
         return obstacles;
     }
 
+    /**
+     * Creates a random obstacle of one of four types at the specified location.
+     *
+     * @param x      the X-coordinate of the obstacle
+     * @param y      the Y-coordinate of the obstacle
+     * @param width  the width of the obstacle
+     * @param height the height of the obstacle
+     * @return a new Obstacle instance
+     */
     private Obstacle createRandomObstacle(int x, int y, int width, int height) {
         // 0 = Mountain, 1 = Lake, 2 = Pit, MIne = 3
         int type = random.nextInt(4);
@@ -74,6 +83,13 @@ public class ObstacleGenerator {
         };
     }
 
+    /**
+     * Determines if two obstacles overlap.
+     *
+     * @param a the first obstacle
+     * @param b the second obstacle
+     * @return true if obstacles overlap, false otherwise
+     */
     private boolean overlaps(Obstacle a, Obstacle b) {
         return a.getX() < b.getX() + b.getWidth() &&
                 a.getX() + a.getWidth() > b.getX() &&

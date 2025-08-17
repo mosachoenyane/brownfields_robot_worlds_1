@@ -60,6 +60,15 @@ public class VisionFinder {
         return visionData;
     }
 
+    /**
+     * Checks a given direction from the robot's position for obstacles, robots, or edges.
+     *
+     * @param objects             JsonArray to store detected objects.
+     * @param reportedDirections  Set of directions already reported.
+     * @param robotPos            Robot's current position.
+     * @param direction           Cardinal direction to check.
+     * @param directionName       Name of the direction.
+     */
     private void checkDirection(JsonArray objects, Set<String> reportedDirections,
                                 Position robotPos, Direction direction, String directionName) {
         Position current = new Position(robotPos.getX(), robotPos.getY());
@@ -75,7 +84,12 @@ public class VisionFinder {
         }
     }
 
-
+    /**
+     * Determines if a given direction is blocked by the edge of the world, an obstacle, or another robot.
+     *
+     * @param ctx Context object containing current position and direction data.
+     * @return true if blocked, false otherwise.
+     */
     boolean isDirectionBlocked(DirectionContext ctx) {
         if (!world.isPositionValid(ctx.getCurrent())) {
             handleInvalidPosition(ctx.getObjects(), ctx.getReportedDirections(), ctx.getDirectionName(), ctx.getDistance());

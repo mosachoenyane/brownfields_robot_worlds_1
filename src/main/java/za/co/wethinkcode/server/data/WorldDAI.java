@@ -5,6 +5,11 @@ import net.lemnik.eodsql.Select;
 import net.lemnik.eodsql.Update;
 import java.util.List;
 
+/**
+ * Data Access Interface (DAI) for interacting with the World and Obstacle tables.
+ *
+ * Uses EODSQL annotations to define SQL queries for saving and retrieving world data.
+ */
 public interface WorldDAI extends BaseQuery {
 
  // Saves a new world record and returns the number of rows updated.

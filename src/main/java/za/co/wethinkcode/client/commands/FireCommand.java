@@ -55,6 +55,11 @@ public class FireCommand implements Command {
         return hitRobot != null ? createHitResponse(hitRobot) : createMissResponse();
     }
 
+    /**
+     * Checks whether firing the gun hits another robot within the firing range.
+     *
+     * @return the {@link Robot} that was hit, or {@code null} if no robot was hit
+     */
     protected Robot checkForHit() {
         Position currentPos = robot.getPosition();
         Direction direction = robot.getDirection();
@@ -76,7 +81,14 @@ public class FireCommand implements Command {
         return null;
     }
 
-
+    /**
+     * Calculates the position a number of steps away in a given direction.
+     *
+     * @param start     starting {@link Position}
+     * @param direction {@link Direction} to move
+     * @param steps     number of steps to move
+     * @return the calculated {@link Position}
+     */
     private Position calculatePositionInDirection(Position start, Direction direction, int steps) {
         int newX = start.getX();
         int newY = start.getY();
@@ -91,6 +103,12 @@ public class FireCommand implements Command {
         return new Position(newX, newY);
     }
 
+    /**
+     * Creates a JSON response for a successful hit.
+     *
+     * @param hitRobot the {@link Robot} that was hit
+     * @return JSON string describing the hit and updated robot states
+     */
     private String createHitResponse(Robot hitRobot) {
         hitRobot.takeHit();
 
@@ -111,6 +129,12 @@ public class FireCommand implements Command {
         return response.toString();
     }
 
+    /**
+     * Creates a JSON representation of a robot's current state.
+     *
+     * @param robot the {@link Robot} to serialize
+     * @return {@link JsonObject} representing the robot's state
+     */
     private JsonObject createStateJson(Robot robot) {
         JsonObject state = new JsonObject();
         state.add("position", new Gson().toJsonTree(
@@ -122,6 +146,11 @@ public class FireCommand implements Command {
         return state;
     }
 
+    /**
+     * Creates a JSON response for a missed shot.
+     *
+     * @return JSON string indicating the shot missed
+     */
     private String createMissResponse() {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -137,10 +166,23 @@ public class FireCommand implements Command {
         return response.toString();
     }
 
+    /**
+     * Calculates Manhattan distance between two positions.
+     *
+     * @param pos1 first {@link Position}
+     * @param pos2 second {@link Position}
+     * @return distance as an integer
+     */
     private int calculateDistance(Position pos1, Position pos2) {
         return Math.abs(pos1.getX() - pos2.getX()) + Math.abs(pos1.getY() - pos2.getY());
     }
 
+    /**
+     * Creates a JSON response for an error condition.
+     *
+     * @param message error message
+     * @return JSON string with result "ERROR" and the message
+     */
     private String createErrorResponse(String message) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "ERROR");
@@ -148,6 +190,12 @@ public class FireCommand implements Command {
         return response.toString();
     }
 
+    /**
+     * Determines the effective firing distance based on remaining shots.
+     *
+     * @param shots the number of shots the robot has
+     * @return maximum firing distance in steps
+     */
     private int calculateShotDistance(int shots) {
         if (shots <= 0) return 0;
         if (shots >= 5) return 1;

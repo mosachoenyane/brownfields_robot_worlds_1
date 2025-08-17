@@ -30,5 +30,11 @@ public interface RobotWorldClient {
      */
     JsonNode sendRequest(String requestJsonString);
 
+    /**
+     * Sends a JSON request string to the server and returns the raw response as a string.
+     *
+     * @param requestString a JSON-formatted string representing the request
+     * @return the server response as a raw JSON string
+     */
     String sendRequestAsString(String requestString);
 }

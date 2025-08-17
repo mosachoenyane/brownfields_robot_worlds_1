@@ -8,13 +8,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * SQLite-backed implementation of the {@link WorldRepository}.
+ * <p>
+ * Provides persistence for worlds and their related data (obstacles, dimensions, etc.)
+ * using JDBC and a given SQLite connection string.
+ */
 public class SQLiteWorldRepository implements WorldRepository {
     private final String jdbcUrl;
 
+    /**
+     * Creates a new repository that connects to the given SQLite database.
+     *
+     * @param jdbcUrl JDBC connection string (e.g. {@code jdbc:sqlite:worlds.db})
+     */
     public SQLiteWorldRepository(String jdbcUrl) {
         this.jdbcUrl = jdbcUrl;
     }
 
+    /**
+     * Retrieves a list of all saved worlds from the database.
+     * <p>
+     * Executes a query joining the {@code world} and {@code obstacles} tables
+     * and builds a list of {@link WorldSummary} objects.
+     * <p>
+     * Currently, this implementation ignores obstacle details and only
+     * returns the name, width, and height of each world.
+     *
+     * @return a list of {@link WorldSummary} objects
+     * @throws RuntimeException if the query fails or the database cannot be accessed
+     */
     @Override
     public List<WorldSummary> findAll() {
         List<WorldSummary> worlds = new ArrayList<>();

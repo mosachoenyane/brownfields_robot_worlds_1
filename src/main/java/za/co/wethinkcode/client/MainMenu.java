@@ -21,7 +21,13 @@ public class MainMenu {
     private final Scanner scanner;
     private final World world;
 
-
+    /**
+     * Constructs a {@code MainMenu} with the provided {@link Scanner} for user input.
+     * Attempts to load world configuration from {@code config.properties}.
+     * If unavailable, falls back to default settings.
+     *
+     * @param scanner input source for capturing user commands
+     */
     public MainMenu(Scanner scanner) {
         this.scanner = scanner;
         World cofiguredWorld;
@@ -55,6 +61,11 @@ public class MainMenu {
         handleChoice(choice);
     }
 
+    /**
+     * Reads and validates the user’s menu choice.
+     *
+     * @return an integer between 1 and 4 representing the selected menu option
+     */
     private int getMenuChoice() {
         while (true) {
             try {
@@ -65,6 +76,11 @@ public class MainMenu {
         }
     }
 
+    /**
+     * Executes the action corresponding to the selected menu option.
+     *
+     * @param choice the user’s selected option (1–4)
+     */
     private void handleChoice(int choice) {
         switch (choice) {
             case 1:
@@ -86,7 +102,10 @@ public class MainMenu {
         }
     }
 
-
+    /**
+     * Starts the server in a background thread and launches a console
+     * for interacting with the world.
+     */
     private void startServer() {
         System.out.println("Starting server...");
         // Start the server with our world instance
@@ -102,6 +121,11 @@ public class MainMenu {
         new ServerConsole(scanner, world).start();
     }
 
+    /**
+     * Displays IntelliJ IDEA setup instructions for running
+     * both client and server in separate configurations.
+     * Returns to the main menu after user presses Enter.
+     */
     private void startBoth() {
         System.out.println("╔══════════════════════════════════════════════════╗");
         System.out.println("║      HOW TO RUN SERVER AND CLIENT IN INTELLIJ    ║");
@@ -134,6 +158,13 @@ public class MainMenu {
         scanner.nextLine();
     }
 
+    /**
+     * Runs the server loop, accepting client connections and
+     * spawning a new {@link ClientHandler} for each.
+     *
+     * @param world the shared world instance to serve
+     * @throws IOException if the server socket fails to bind or accept connections
+     */
     private static void startServerThread(World world) throws IOException {
         try (ServerSocket serverSocket = new ServerSocket(5000)) {
             System.out.println("Robot World Server running on port 5000");

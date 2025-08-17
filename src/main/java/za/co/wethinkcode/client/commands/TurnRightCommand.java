@@ -45,7 +45,12 @@ public class TurnRightCommand implements Command {
         return createResponse(newDirection);
     }
 
-
+    /**
+     * Calculates the new direction when turning right (clockwise).
+     *
+     * @param currentDirection the robot's current direction
+     * @return the new direction after turning right
+     */
     private Direction calculateNewDirection(Direction currentDirection) {
         return switch (currentDirection) {
             case NORTH -> Direction.EAST;
@@ -55,6 +60,13 @@ public class TurnRightCommand implements Command {
         };
     }
 
+    /**
+     * Builds a JSON response containing the result, message,
+     * and the robot's updated state after the turn.
+     *
+     * @param newDirection the robot's updated direction
+     * @return JSON string representing the response
+     */
     private String createResponse(Direction newDirection) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");

@@ -38,6 +38,12 @@ public class WorldDumper {
         return worldDump;
     }
 
+    /**
+     * Converts all obstacles in the world to a JsonArray representation.
+     * Each obstacle includes type, position, and dimensions.
+     *
+     * @return JsonArray of obstacles.
+     */
     private JsonArray getObstaclesJson() {
         JsonArray obstaclesArray = new JsonArray();
         for (Obstacle obstacle : world.getObstacles()) {
@@ -51,7 +57,12 @@ public class WorldDumper {
         }
         return obstaclesArray;
     }
-
+    /**
+     * Converts all robots in the world to a JsonArray representation.
+     * Each robot includes name, make, position, direction, shields, and shots.
+     *
+     * @return JsonArray of robots.
+     */
     private JsonArray getRobotsJson() {
         JsonArray robotsArray = new JsonArray();
         for (Robot robot : world.getRobots()) {

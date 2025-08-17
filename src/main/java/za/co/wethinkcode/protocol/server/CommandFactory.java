@@ -110,13 +110,31 @@ public record CommandFactory(World world) {
         return new RepairCommand(world, robot);
     }
 
+    /**
+     * Creates a command that saves the current state of the world.
+     *
+     * @return a {@link SaveCommand} instance
+     */
     public Command createSaveCommand() {
         return new SaveCommand(world);
     }
+
+    /**
+     * Creates a command that restores a saved world state by name.
+     *
+     * @param worldName the name of the saved world to restore
+     * @return a {@link RestoreCommand} instance
+     */
     public Command createRestoreWorldCommand(String worldName) {
         return new RestoreCommand(world,worldName);
     }
 
+    /**
+     * Creates a command that removes a robot from the world by name.
+     *
+     * @param robotName the name of the robot to remove
+     * @return a {@link PurgeCommand} instance
+     */
     public Command createPurgeCommand(String robotName) {
         return new PurgeCommand(world,robotName);
     }

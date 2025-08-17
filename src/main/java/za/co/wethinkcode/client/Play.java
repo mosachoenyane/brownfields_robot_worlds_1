@@ -62,12 +62,19 @@ public class Play {
         shutdown();
     }
 
+    /**
+     * Prints a welcome banner message to the console.
+     */
     private void welcomeMessage() {
         System.out.println(BOLD + "\n════════════════════════════════════════════════════");
         System.out.println("      🚀 Welcome to the Robot Simulation Console");
         System.out.println("════════════════════════════════════════════════════" + RESET);
     }
 
+    /**
+     * Prompts the user for server details and attempts to establish a connection.
+     * Prints connection status to the console.
+     */
     private void connectToServer() {
         System.out.println(BOLD + "\n🔌 Connect to Server" + RESET);
         String ip = prompt(" IP [localhost]: ", "localhost");
@@ -80,12 +87,27 @@ public class Play {
         }
     }
 
+    /**
+     * Prompts user for input with a default value fallback.
+     *
+     * @param label      Prompt message
+     * @param defaultVal Default value if user input is empty
+     * @return User input or default if blank
+     */
     private String prompt(String label, String defaultVal) {
         System.out.print(label);
         String input = scanner.nextLine().trim();
         return input.isEmpty() ? defaultVal : input;
     }
 
+    /**
+     * Prompts user for a valid server port number.
+     * Keeps retrying until a valid integer is entered.
+     *
+     * @param label       Prompt message
+     * @param defaultPort Default port if input is empty
+     * @return Valid port number
+     */
     private int promptPort(String label, int defaultPort) {
         while (true) {
             System.out.print(label);
@@ -99,6 +121,9 @@ public class Play {
         }
     }
 
+    /**
+     * Handles robot deployment setup:
+     */
     private void deployRobot() {
         System.out.println(BOLD + "\n🤖 Deploy Your Robot" + RESET);
         Robot robot = createRobot();
@@ -109,12 +134,23 @@ public class Play {
         printCommandList();
     }
 
+    /**
+     * Creates a new robot instance by prompting user for name and make.
+     *
+     * @return A newly created {@link Robot}
+     */
     private Robot createRobot() {
         String name = promptRobotName();
         String make = promptRobotMake();
         return robotMaker.createRobot(name, make);
     }
 
+    /**
+     * Prompts the user for a valid robot name.
+     * A valid name must be non-empty and contain no spaces.
+     *
+     * @return Valid robot name
+     */
     private String promptRobotName() {
         while (true) {
             System.out.print(" Robot name (no spaces): ");
@@ -129,6 +165,11 @@ public class Play {
         }
     }
 
+    /**
+     * Prompts the user to select a robot model from available makes.
+     *
+     * @return Selected robot make
+     */
     private String promptRobotMake() {
         String[] makes = robotMaker.getStandardMakes();
         System.out.println(" Available Models:");
@@ -149,6 +190,9 @@ public class Play {
         }
     }
 
+    /**
+     * Prints the list of supported commands for the simulation.
+     */
     private void printCommandList() {
         System.out.println(BOLD + "\n📜 Available Commands:" + RESET);
         System.out.println(GRAY + " ─────────────────────────────" + RESET);
@@ -165,6 +209,11 @@ public class Play {
         System.out.println(GRAY + " ─────────────────────────────" + RESET);
     }
 
+    /**
+     * Main game loop.
+     * Continuously reads user commands until "exit" is entered,
+     * then forwards them for processing.
+     */
     private void runGameLoop() {
         while (true) {
             System.out.print("\n" + BOLD + "Enter Command: " + RESET);
@@ -179,6 +228,10 @@ public class Play {
         }
     }
 
+    /**
+     * Displays a formatted server response.
+     * @param jsonResponse JSON response string from server
+     */
     private void processCommand(String input) {
         String json = commandProcessor.convertToJsonCommand(input);
         System.out.println(json.toString());
@@ -197,7 +250,11 @@ public class Play {
         }
     }
 
-
+    /**
+     * Pretty-prints robot state information (position, direction, shields, shots, status).
+     *
+     * @param state JSON object representing the robot state
+     */
     private void displayJsonResponse(String jsonResponse) {
         try {
             JsonObject response = JsonParser.parseString(jsonResponse).getAsJsonObject();
@@ -251,6 +308,11 @@ public class Play {
         }
     }
 
+    /**
+     * Pretty-prints robot state information (position, direction, shields, shots, status).
+     *
+     * @param state JSON object representing the robot state
+     */
     private void prettyPrintState(JsonObject state) {
         if (state.has("position")) {
             JsonArray pos = state.getAsJsonArray("position");
@@ -281,6 +343,10 @@ public class Play {
         }
     }
 
+    /**
+     * Disconnects from the server and closes the input scanner.
+     * Called at the end of the session.
+     */
     private void shutdown() {
         clientConnection.disconnect();
         scanner.close();

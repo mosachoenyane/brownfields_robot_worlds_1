@@ -67,6 +67,9 @@ public class WorldConfig {
     usingDefaults = true;
     }
 
+    /**
+     * Sets default values for the world configuration.
+     */
     private void setDefaults() {
         properties.setProperty("WORLD_NAME", "Default World");
         properties.setProperty("WORLD_WIDTH","1");
@@ -88,13 +91,27 @@ public class WorldConfig {
      */
     public String getName() {return properties.getProperty("WORLD_NAME");
     };
+    /**
+     * Returns the configured world width.
+     *
+     * @return The world width as an integer.
+     */
     public int getWidth() {
         return Integer.parseInt(properties.getProperty("WORLD_WIDTH"));
     }
-
+    /**
+     * Returns the configured world height.
+     *
+     * @return The world height as an integer.
+     */
     public int getHeight() {
         return Integer.parseInt(properties.getProperty("WORLD_HEIGHT"));
     }
+    /**
+     * Returns the visibility range for robots in the world.
+     *
+     * @return Visibility range as an integer.
+     */
     public int getVisibilityRange() {
         return Integer.parseInt(properties.getProperty("VISIBILITY_RANGE"));
     }
@@ -118,7 +135,11 @@ public class WorldConfig {
     public boolean isUsingDefaults() {
         return usingDefaults;
     }
-
+    /**
+     * Returns whether this configuration is using default values.
+     *
+     * @return true if defaults are being used, false otherwise.
+     */
     public int getMaxShieldStrength() {
         return Integer.parseInt(properties.getProperty("MAX_SHIELD_STRENGTH"));
     }

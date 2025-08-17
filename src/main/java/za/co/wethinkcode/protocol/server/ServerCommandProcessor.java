@@ -68,6 +68,12 @@ public class ServerCommandProcessor {
         }
     }
 
+    /**
+     * Processes robot-specific commands such as movement, launching, or combat actions.
+     *
+     * @param request the JSON request containing robot details and command
+     * @return the JSON response string with the outcome
+     */
     private String processRobotCommand(JsonObject request) {
         Robot robot = getRobotFromRequest(request);
 
@@ -81,25 +87,58 @@ public class ServerCommandProcessor {
         return handleCommand(command, robotName, request);
     }
 
+    /**
+     * Retrieves the {@link Robot} instance from the request.
+     *
+     * @param request the client request containing robot name
+     * @return the corresponding {@link Robot}, or {@code null} if not found
+     */
     private Robot getRobotFromRequest(JsonObject request) {
         return world.getRobotByName(request.get("robot").getAsString());
     }
 
+    /**
+     * Checks whether a robot is dead.
+     *
+     * @param robot the robot instance
+     * @return {@code true} if robot exists and is dead, {@code false} otherwise
+     */
     private boolean isRobotDead(Robot robot) {
         return robot != null && robot.getStatus() == Robot.Status.DEAD;
     }
 
+    /**
+     * Extracts the command name from the request.
+     *
+     * @param request the client request JSON
+     * @return the command string
+     */
     private String getCommandFromRequest(JsonObject request) {
         return request.get("command").getAsString();
     }
 
+    /**
+     * Extracts the robot name from the request.
+     *
+     * @param request the client request JSON
+     * @return the robot name
+     */
     private String getRobotNameFromRequest(JsonObject request) {
         return request.get("robot").getAsString();
     }
 
-    // Define interface for command handler
+    /**
+     * Functional interface representing a handler for robot commands.
+     */
     @FunctionalInterface
     interface CommandHandler {
+        /**
+         * Executes a command for a given robot.
+         *
+         * @param robotName the name of the robot
+         * @param request   the request JSON object
+         * @return a JSON response string
+         */
         String handle(String robotName, JsonObject request);
     }
 
@@ -117,7 +156,14 @@ public class ServerCommandProcessor {
             "mine", (name, req) -> processMineCommand(name, req)
     );
 
-    // Reworked handleCommand method
+    /**
+     * Routes a command to the appropriate handler.
+     *
+     * @param command   the command string
+     * @param robotName the robot name
+     * @param request   the request JSON
+     * @return the JSON response string
+     */
     private String handleCommand(String command, String robotName, JsonObject request) {
         CommandHandler handler = commandMap.get(command);
         return (handler != null)
@@ -125,8 +171,13 @@ public class ServerCommandProcessor {
                 : createErrorResponse("Unsupported command: " + command);
     }
 
-
-
+    /**
+     * Handles the "launch" command to create and place a robot in the world.
+     *
+     * @param robotName the name of the robot
+     * @param request   the request JSON containing arguments
+     * @return the JSON response string
+     */
     private String processLaunchCommand(String robotName, JsonObject request) {
         try {
             if (!request.has("arguments")) {
@@ -166,6 +217,12 @@ public class ServerCommandProcessor {
         }
     }
 
+    /**
+     * Handles the "look" command for a robot.
+     *
+     * @param robotName the robot name
+     * @return the JSON response string containing visible objects
+     */
     private String processLookCommand(String robotName) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -182,6 +239,12 @@ public class ServerCommandProcessor {
         return gson.toJson(response);
     }
 
+    /**
+     * Handles the "state" command for a robot.
+     *
+     * @param robotName the robot name
+     * @return the JSON response string containing the robot’s state
+     */
     private String processStateCommand(String robotName) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -193,6 +256,14 @@ public class ServerCommandProcessor {
         response.add("state", new StateCommand(robot).toJson());
         return gson.toJson(response);
     }
+
+    /**
+     * Validates movement command arguments.
+     *
+     * @param robot   the robot
+     * @param request the JSON request
+     * @return the step count, or 0 if invalid
+     */
     private int checkArguments(Robot robot,JsonObject request){
 
         if (robot == null) {
@@ -209,6 +280,9 @@ public class ServerCommandProcessor {
         return  steps;
     }
 
+    /**
+     * Handles the "forward" command.
+     */
     private String processForwardCommand(String robotName, JsonObject request) {
         Robot robot = world.getRobotByName(robotName);
         int steps = checkArguments(robot,request);
@@ -217,6 +291,9 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Handles the "back" command.
+     */
     private String processBackCommand(String robotName, JsonObject request) {
         Robot robot = world.getRobotByName(robotName);
         int steps = checkArguments(robot,request);
@@ -225,6 +302,9 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Handles the "turn" command (left or right).
+     */
     private String processTurnCommand(String robotName, JsonObject request) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -257,6 +337,9 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Handles the "fire" command.
+     */
     private String processFireCommand(String robotName) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -267,6 +350,9 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Handles the "reload" command.
+     */
     private String processReloadCommand(String robotName) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -277,6 +363,9 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Handles the "repair" command.
+     */
     private String processRepairCommand(String robotName) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) {
@@ -287,6 +376,12 @@ public class ServerCommandProcessor {
         return command.execute();
     }
 
+    /**
+     * Creates a standard success JSON response for robot actions.
+     *
+     * @param robot the robot
+     * @return JSON response string
+     */
     private String createSuccessResponse(Robot robot) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");
@@ -303,6 +398,12 @@ public class ServerCommandProcessor {
         return gson.toJson(response);
     }
 
+    /**
+     * Creates a standard error JSON response.
+     *
+     * @param message the error message
+     * @return JSON response string
+     */
     private String createErrorResponse(String message) {
         JsonObject response = new JsonObject();
         JsonObject data = new JsonObject();
@@ -311,6 +412,10 @@ public class ServerCommandProcessor {
         response.add("data",data);
         return gson.toJson(response);
     }
+
+    /**
+     * Handles the "mine" command to place a mine at the robot’s position.
+     */
     private String processMineCommand(String robotName, JsonObject request) {
         Robot robot = world.getRobotByName(robotName);
         if (robot == null) return createErrorResponse("Robot not found");

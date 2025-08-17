@@ -11,13 +11,32 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * The {@code SaveCommand} persists the current {@link World} configuration to the database.
+ *
+ * The command uses SQLite as the persistence layer and interacts with the
+ * database via {@link WorldDAI}.
+ */
 public class SaveCommand implements Command {
     private World world;
 
+    /**
+     * Constructs a new {@code SaveCommand}.
+     *
+     * @param world the {@link World} instance to be persisted.
+     */
     public SaveCommand(World world) {
         this.world = world;
     }
 
+    /**
+     * Executes the command to save the world and its obstacles to the database.
+     * If the world name already exists, the save is skipped and a warning is returned.
+     * Otherwise, a new world entry is created and all obstacles are persisted.
+     *
+     * @return a confirmation message indicating whether the save was successful or skipped.
+     * @throws RuntimeException if a database error occurs.
+     */
     @Override
     public String execute() {
         String url = "jdbc:sqlite:robot_world.db";
@@ -56,11 +75,22 @@ public class SaveCommand implements Command {
         }
     }
 
+    /**
+     * Returns the name of this command.
+     *
+     * @return the string {@code "save"}.
+     */
     @Override
     public String getName() {
         return "save";
     }
 
+    /**
+     * Returns a human-readable description of the command's action.
+     * In this case, it executes the save and returns the resulting message.
+     *
+     * @return the result of the {@link #execute()} method.
+     */
     @Override
     public String display() {
         return execute();

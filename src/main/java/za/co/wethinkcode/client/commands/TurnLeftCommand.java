@@ -45,6 +45,12 @@ public class TurnLeftCommand implements Command {
         return createResponse(newDirection);
     }
 
+    /**
+     * Determines the new facing direction of the robot after turning left.
+     *
+     * @param currentDirection the robot's current facing direction
+     * @return the new direction after a left turn
+     */
     private Direction calculateNewDirection(Direction currentDirection) {
         return switch (currentDirection) {
             case NORTH -> Direction.WEST;
@@ -54,6 +60,13 @@ public class TurnLeftCommand implements Command {
         };
     }
 
+    /**
+     * Builds a JSON response containing the result of the turn-left command,
+     * including an "OK" result, a confirmation message, and the robot's updated state.
+     *
+     * @param newDirection the new direction the robot is facing
+     * @return JSON string response with the command result
+     */
     private String createResponse(Direction newDirection) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "OK");

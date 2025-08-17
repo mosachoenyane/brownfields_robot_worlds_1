@@ -66,6 +66,12 @@ public class RepairCommand implements Command {
         return createSuccessResponse(repairTime);
     }
 
+    /**
+     * Builds a success JSON response after the repair has been initiated.
+     *
+     * @param repairTime the duration of the repair in seconds
+     * @return a JSON string indicating success and the robot's updated state
+     */
     private String createSuccessResponse(int repairTime) {
         this.repairTime = repairTime;
         JsonObject response = new JsonObject();
@@ -79,6 +85,12 @@ public class RepairCommand implements Command {
         return new Gson().toJson(response);
     }
 
+    /**
+     * Builds an error JSON response when the repair cannot be executed.
+     *
+     * @param message the error message to include
+     * @return a JSON string indicating failure with an explanation
+     */
     private String createErrorResponse(String message) {
         JsonObject response = new JsonObject();
         response.addProperty("result", "ERROR");

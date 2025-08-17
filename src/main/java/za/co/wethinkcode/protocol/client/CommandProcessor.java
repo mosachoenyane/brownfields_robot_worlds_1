@@ -59,6 +59,14 @@ public class CommandProcessor {
 
     }
 
+    /**
+     * Processes a "launch" command, validating that the make and name
+     * match the expected robot details. If valid, generates the JSON
+     * launch command for the server.
+     *
+     * @param parts tokenized command input split by spaces
+     * @return JSON-formatted launch command string, or error JSON if invalid
+     */
     private String processLaunchCommand(String[] parts) {
         if (parts.length != 3) {
             return createErrorResponse("Launch requires make and name");
@@ -86,6 +94,14 @@ public class CommandProcessor {
         return gson.toJson(command);
     }
 
+    /**
+     * Processes general robot commands (e.g., move, state, look).
+     * Ensures the robot name matches the current context, and adds
+     * any arguments if provided.
+     *
+     * @param parts tokenized command input split by spaces
+     * @return JSON-formatted command string, or error JSON if invalid
+     */
     private String processCommand(String[] parts){
 
         String commandType = parts[0];
@@ -111,6 +127,12 @@ public class CommandProcessor {
         return gson.toJson(jsonObject);
     }
 
+    /**
+     * Builds a standardized error JSON response with a given message.
+     *
+     * @param message the error message to include
+     * @return JSON string representing the error response
+     */
     private String createErrorResponse(String message) {
         System.out.println("here");
         JsonObject response = new JsonObject();
