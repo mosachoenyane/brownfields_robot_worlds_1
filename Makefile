@@ -36,6 +36,15 @@ test-iteration-3:
 	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveWorldTests.java
 	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Save.SaveObstaclesTests.java
 	$(MVN)	test -Dtest=za.co.wethinkcode.Acceptance3.Restore.RestoreCommandTest.java
+
+test-iteration-4:
+	$(MVN) test -Dtest=apiTests.GetAllWorldsTests,apiTests.GetCurrentWorldTests,apiTests.GetSpecifiedWorldTests,apiTests.WebApiSmokeTest
+
+#test-iteration-4:
+#	$(MVN)	test -Dtest=apiTests.GetAllWorldsTests
+#	$(MVN)	test -Dtest=apiTests.GetCurrentWorldTests
+#	$(MVN)	test -Dtest=apiTests.GetSpecifiedWorldTests
+#	$(MVN)	test -Dtest=apiTests.WebApiSmokeTest
 all-test: test-iteration-2 test-our-server test-iteration-3
 
 
