@@ -89,6 +89,7 @@ public class GetSpecifiedWorldTests {
             assertTrue(ob.get("height").getAsJsonPrimitive().isNumber());
         }
     }
+
     @Test
     @DisplayName("GET /world/{name} returns 404 when the specified world does not exist")
     void getWorldByName_notFound() throws Exception {
@@ -110,9 +111,48 @@ public class GetSpecifiedWorldTests {
         assertTrue(root.get("error").getAsString().toLowerCase().contains("not found"));
     }
 
+    /**
+     * Test double for WorldApplication that:
+     * - Returns a valid world dump for name "test-world"
+     * - Returns an error object for any other name
+     */
+    private static class ByNameCapableWorldApp implements WorldApplication {
+        @Override
+        public com.google.gson.JsonObject getCurrentWorld() {
+            com.google.gson.JsonObject data = new com.google.gson.JsonObject();
+            data.addProperty("name", "test-world");
+            data.addProperty("width", 10);
+            data.addProperty("height", 10);
+            data.add("obstacles", new com.google.gson.JsonArray());
+            data.add("robots", new com.google.gson.JsonArray());
+            return data;
+        }
 
+        @Override
+        public com.google.gson.JsonObject listSavedWorlds() {
+            com.google.gson.JsonObject outer = new com.google.gson.JsonObject();
+            outer.add("worlds", new com.google.gson.JsonArray());
+            return outer;
+        }
 
-
-
+        @Override
+        public com.google.gson.JsonObject getWorldByName(String name) {
+            if ("test-world".equalsIgnoreCase(name)) {
+                // Return the same structure as getCurrentWorld for a successful lookup
+                return getCurrentWorld();
+            }
+            com.google.gson.JsonObject notFound = new com.google.gson.JsonObject();
+            notFound.addProperty("error", "World not found");
+            notFound.addProperty("name", name);
+            return notFound;
+        }
+    }
 }
-}
+
+
+
+
+
+
+
+
