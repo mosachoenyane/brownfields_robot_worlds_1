@@ -76,6 +76,21 @@ public class GetAllWorldsTests {
             assertTrue(w.has("obstacles"));
             assertTrue(w.get("obstacles").isJsonArray());
 
+            JsonArray obstacles = w.getAsJsonArray("obstacles");
+            if (obstacles.size() > 0) {
+                JsonElement first = obstacles.get(0);
+                assertTrue(first.isJsonObject());
+                JsonObject ob = first.getAsJsonObject();
+                assertTrue(ob.has("x"));
+                assertTrue(ob.has("y"));
+                assertTrue(ob.has("width"));
+                assertTrue(ob.has("height"));
+                assertTrue(ob.get("x").getAsJsonPrimitive().isNumber());
+                assertTrue(ob.get("y").getAsJsonPrimitive().isNumber());
+                assertTrue(ob.get("width").getAsJsonPrimitive().isNumber());
+                assertTrue(ob.get("height").getAsJsonPrimitive().isNumber());
+            }
+
         }
     }
 }
