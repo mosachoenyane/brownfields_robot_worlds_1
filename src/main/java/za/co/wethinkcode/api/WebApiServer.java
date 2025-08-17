@@ -40,6 +40,8 @@ public class WebApiServer {
     private void mountRobotRoutes() {
         LaunchHandlerWeb launchHandler = new LaunchHandlerWeb();
         app.post("/robot/{robot}/launch", launchHandler::LaunchRobot);
+        app.post("/robot/{robot}/look", launchHandler::LookRobot);
+
 
     }
 
@@ -57,7 +59,7 @@ public class WebApiServer {
             }
         });
 
-            // Rename: GET /world/all -> list all saved worlds from DB (same handler as before)
+
             app.get("/world/all", ctx -> {
             if (worldApp == null) {
                 ctx.status(HttpCode.NOT_IMPLEMENTED).result(gson.toJson(error("WorldApplication not configured")));
@@ -71,7 +73,7 @@ public class WebApiServer {
             }
         });
 
-        // New: GET /world/{name} -> fetch a specific world by name
+        // GET /world/{name} -> fetch a specific world by name
         app.get("/world/{name}", ctx -> {
             if (worldApp == null) {
                 ctx.status(HttpCode.NOT_IMPLEMENTED).result(gson.toJson(error("WorldApplication not configured")));
