@@ -39,4 +39,17 @@ public class WebApiSmokeTest {
         assertEquals(200, res.statusCode());
         assertTrue(res.body().contains("\"UP\""));
     }
+    @Test
+    @DisplayName("GET /heath returns 404 Error because of misspelling on health(heath) ")
+    void healthError() throws Exception {
+        HttpRequest req = HttpRequest.newBuilder()
+                .uri(URI.create(api.baseUrl() + "/heath"))
+                .GET()
+                .build();
+
+        HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+        assertEquals(404, res.statusCode());
+        assertTrue(res.body().contains("\"Not found\""));
+    }
 }
