@@ -1,0 +1,57 @@
+Run and test Robot World with Docker (with DB mounted by default)
+
+Prerequisites
+- Docker installed and running
+- A SQLite DB file named robot_world.db in the project root (this will be mounted into the container)
+
+1) Build the image
+docker build -t robot-world:dev .
+
+2) Start a clean container (mount DB, TCP on 5000; Web API inside on localhost:7000)
+# -v maps your host DB to /app/robot_world.db in the container
+# -p 5000:5000 publishes the TCP server
+docker rm -f robot-world 2>/dev/null || true
+docker run -d --name robot-world \
+  -v "$(pwd)/robot_world.db:/app/robot_world.db" \
+  -p 5000:5000 \
+  robot-world:dev -p 5000 -s 10 -o 1,1
+
+3) Check it’s running
+docker ps --filter name=robot-world
+docker logs --tail=200 robot-world
+
+4) Install curl inside the container (first time only)
+docker exec -it robot-world sh -lc 'apt-get update >/dev/null && apt-get install -y curl >/dev/null'
+
+5) Probe the Web API (inside the container)
+# Health
+docker exec -it robot-world sh -lc 'curl -i http://localhost:7000/health'
+
+# Current world (in-memory)
+docker exec -it robot-world sh -lc 'curl -i http://localhost:7000/world'
+
+# DB-backed endpoints (use your actual world names, e.g., "pluto")
+docker exec -it robot-world sh -lc 'curl -i http://localhost:7000/world/all'
+docker exec -it robot-world sh -lc 'curl -i http://localhost:7000/world/pluto'
+
+6) Issue robot commands (HTTP -> forwards to TCP on 5000)
+# Launch robot "alpha"
+docker exec -it robot-world sh -lc 'curl -i -X POST http://localhost:7000/robot/alpha/launch'
+
+# Look
+docker exec -it robot-world sh -lc 'curl -i -X POST http://localhost:7000/robot/alpha/look'
+
+7) Issue robot commands via TCP directly (from host)
+# Launch
+printf '%s\n' '{"robot":"alpha","command":"launch","arguments":["shooter","5","5"]}' | nc localhost 5000
+
+# Look
+printf '%s\n' '{"robot":"alpha","command":"look"}' | nc localhost 5000
+
+8) Interactive admin console (to type commands like "dump")
+docker rm -f robot-world 2>/dev/null || true
+docker run --rm -it \
+  -v "$(pwd)/robot_world.db:/app/robot_world.db" \
+  -p 5000:5000 \
+  robot-world:dev -p 5000 -s 10 -o 1,1
+# Now type: dump, robots, quit (Ctrl+C to stop)

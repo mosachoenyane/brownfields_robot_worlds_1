@@ -1,0 +1,14 @@
+# build output
+target/
+# VCS and CI config
+.git/
+.gitignore
+.gitlab-ci.yml
+# IDE files
+.idea/
+.vscode/
+# logs and temp
+*.log
+*.tmp
+# docs and misc
+README*

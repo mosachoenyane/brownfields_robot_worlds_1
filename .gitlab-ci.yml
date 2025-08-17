@@ -30,7 +30,7 @@ build-job:
 
 test-iretation2-job:
   stage: test
-#  image: maven:3.9.6-eclipse-temurin-17
+  #  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
@@ -42,7 +42,7 @@ test-iretation2-job:
 
 test-our-server-job:
   stage: test
-#  image: maven:3.9.6-eclipse-temurin-17
+  #  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
@@ -54,7 +54,7 @@ test-our-server-job:
 
 test-saveWorld-job:
   stage: test
-#  image: maven:3.9.6-eclipse-temurin-17
+  #  image: maven:3.9.6-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y make
     - git config --global user.email "remosehjhb024@student.wethinkcode.co.za"
@@ -64,10 +64,48 @@ test-saveWorld-job:
     - make test-iteration-3
     - echo "Unit tests complete."
 
+# NEW: Docker smoke test (build image, run container, probe endpoints)
+docker-smoke-test:
+  stage: test
+  image: docker:25.0.3
+  services:
+    - name: docker:25.0.3-dind
+      command: ["--tls=false"]
+  variables:
+    DOCKER_HOST: "tcp://docker:2375"
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker version
+    - docker info
+
+    - docker build -t robot-world:dev .
+
+    # Ensure DB file exists in repo root (required for /world endpoints)
+    - test -f robot_world.db || (echo "robot_world.db missing" && exit 1)
+
+    # Start the app: mount DB, run TCP on 5000 (matches the Web API's internal client)
+    - |
+      docker run -d --name robot-world \
+        -v "$CI_PROJECT_DIR/robot_world.db:/app/robot_world.db" \
+        -p 5000:5000 \
+        robot-world:dev -p 5000 -s 10 -o 1,1
+
+    # Probe the Web API from inside the container
+    - docker exec robot-world sh -lc 'apt-get update >/dev/null && apt-get install -y curl >/dev/null'
+    - docker exec robot-world sh -lc 'curl -sf http://localhost:7000/health'
+    - docker exec robot-world sh -lc 'curl -sf http://localhost:7000/world'
+    - docker exec robot-world sh -lc 'curl -sf http://localhost:7000/world/all'
+    - docker exec robot-world sh -lc 'curl -sf http://localhost:7000/world/pluto'
+    - docker exec robot-world sh -lc 'curl -sf -X POST http://localhost:7000/robot/alpha/launch'
+    - docker exec robot-world sh -lc 'curl -sf -X POST http://localhost:7000/robot/alpha/look'
+  after_script:
+    - docker logs --tail=200 robot-world || true
+    - docker rm -f robot-world || true
+
 docker-build:
   stage: deploy
   image: docker:stable
-
   services:
     - docker:dind
   variables:
