@@ -35,4 +35,20 @@ public class LaunchHandlerWeb {
         context.json(response);
         context.status(201);
     }
+
+    // POST/robot/{name}/look
+    public void LookRobot(Context context){
+        String name = context.pathParam("robot");
+        RobotWorldJsonClient client = new RobotWorldJsonClient();
+        client.connect("0.0.0.0",5000);
+
+        String request = "{" +
+                "  \"robot\": \""+name+"\"," +
+                "  \"command\": \"look\"" +
+                "}";
+
+        JsonNode response = client.sendRequest(request);
+        context.json(response);
+        context.status(200); // OK for a read/scan action
+    }
 }
