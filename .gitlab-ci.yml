@@ -4,13 +4,26 @@ stages:
   - test
   - deploy
 
+# 1) Build artifacts (no tests here)
+build:
+  stage: build
+  image: maven:3.9-eclipse-temurin-17
+  script:
+    - mvn -B -DskipTests clean package
+  artifacts:
+    when: always
+    paths:
+      - target/
+    expire_in: 1 week
+
+# 2) Run tests (Makefile all-test)
 test:
   stage: test
   image: maven:3.9-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y --no-install-recommends make && rm -rf /var/lib/apt/lists/*
     - git config --global user.email "simntamjhb024@student.wethinkcode.co.za"
-    - git config --global user.name "simntamjhb024"
+    - git config --global user.name "simntamjhb024@student.wethinkcode.co.za"
     - mvn -B -q install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
     - mvn -B -q -DskipTests dependency:go-offline
     - rm -rf target/surefire-reports || true
@@ -22,15 +35,15 @@ test:
       - target/surefire-reports/
     expire_in: 1 week
 
-docker-build:
-  stage: build
+# 3) Build and push Docker image (after tests pass)
+docker-build-and-push:
+  stage: deploy
   image: docker:26
-  needs: ["test"]             # ensure docker build runs after tests
   services:
     - name: docker:26-dind
-      command: ["--tls=false"]  # disable TLS in DinD
+      command: ["--tls=false"]  # simplest on shared runners
   variables:
-    DOCKER_TLS_CERTDIR: ""       # disable TLS on the client side
+    DOCKER_TLS_CERTDIR: ""       # disable TLS on client
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
@@ -50,3 +63,8 @@ docker-build:
         docker push "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
         docker push "${CI_REGISTRY_IMAGE}:latest"
       fi
+  rules:
+    - if: '$CI_COMMIT_BRANCH'
+      when: on_success
+    - if: '$CI_COMMIT_TAG'
+      when: on_success
