@@ -4,10 +4,15 @@ stages:
   - test
   - deploy
 
-# 1) Build artifacts (no tests here)
 build:
   stage: build
   image: maven:3.9-eclipse-temurin-17
+  before_script:
+    # Ensure the local dependency is available to Maven in this job
+    - test -f .libs/eodsql.jar || (echo "Missing .libs/eodsql.jar" && exit 1)
+    - mvn -B -q install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
+    # Optional: warm deps to speed up the package
+    - mvn -B -q -DskipTests dependency:go-offline
   script:
     - mvn -B -DskipTests clean package
   artifacts:
@@ -16,14 +21,13 @@ build:
       - target/
     expire_in: 1 week
 
-# 2) Run tests (Makefile all-test)
 test:
   stage: test
   image: maven:3.9-eclipse-temurin-17
   before_script:
     - apt-get update && apt-get install -y --no-install-recommends make && rm -rf /var/lib/apt/lists/*
     - git config --global user.email "simntamjhb024@student.wethinkcode.co.za"
-    - git config --global user.name "simntamjhb024@student.wethinkcode.co.za"
+    - git config --global user.name "simntamjhb024"
     - mvn -B -q install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
     - mvn -B -q -DskipTests dependency:go-offline
     - rm -rf target/surefire-reports || true
@@ -35,15 +39,14 @@ test:
       - target/surefire-reports/
     expire_in: 1 week
 
-# 3) Build and push Docker image (after tests pass)
 docker-build-and-push:
   stage: deploy
   image: docker:26
   services:
     - name: docker:26-dind
-      command: ["--tls=false"]  # simplest on shared runners
+      command: ["--tls=false"]
   variables:
-    DOCKER_TLS_CERTDIR: ""       # disable TLS on client
+    DOCKER_TLS_CERTDIR: ""
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
@@ -63,8 +66,3 @@ docker-build-and-push:
         docker push "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}"
         docker push "${CI_REGISTRY_IMAGE}:latest"
       fi
-  rules:
-    - if: '$CI_COMMIT_BRANCH'
-      when: on_success
-    - if: '$CI_COMMIT_TAG'
-      when: on_success
