@@ -106,51 +106,6 @@ public class SQLiteWorldRepository implements WorldRepository {
         }
     }
 
-    public List<WorldDetails> findAllDetails() {
-        String sql = """
-            SELECT w.name, w.width, w.height,
-                   o.x AS ox, o.y AS oy, o.width AS ow, o.height AS oh
-            FROM world w
-            LEFT JOIN obstacles o ON w.id = o.world_id
-            ORDER BY w.name COLLATE NOCASE
-        """;
-        try (Connection conn = DriverManager.getConnection(jdbcUrl);
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            Map<String, Agg> aggMap = new LinkedHashMap<>();
-            while (rs.next()) {
-                String name = rs.getString("name");
-                Agg agg = aggMap.get(name);
-                if (agg == null) {
-                    agg = new Agg(rs.getInt("width"), rs.getInt("height"));
-                    aggMap.put(name, agg);
-                }
-                Object ox = rs.getObject("ox");
-                Object oy = rs.getObject("oy");
-                Object ow = rs.getObject("ow");
-                Object oh = rs.getObject("oh");
-                if (ox != null && oy != null && ow != null && oh != null) {
-                    agg.obstacles.add(new ObstacleRow(
-                            ((Number) ox).intValue(),
-                            ((Number) oy).intValue(),
-                            ((Number) ow).intValue(),
-                            ((Number) oh).intValue()
-                    ));
-                }
-            }
-
-            List<WorldDetails> result = new ArrayList<>();
-            for (Map.Entry<String, Agg> e : aggMap.entrySet()) {
-                Agg a = e.getValue();
-                result.add(new WorldDetails(e.getKey(), a.width, a.height, a.obstacles));
-            }
-            return result;
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch all worlds with obstacles", e);
-        }
-    }
-
     private static class Agg {
         final int width;
         final int height;
