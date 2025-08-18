@@ -1,18 +1,40 @@
 # YAML
+stages:
+  - build
+  - test
+  - deploy
+
+test:
+  stage: test
+  image: maven:3.9-eclipse-temurin-17
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends make && rm -rf /var/lib/apt/lists/*
+    - git config --global user.email "simntamjhb024@student.wethinkcode.co.za"
+    - git config --global user.name "simntamjhb024"
+    - mvn -B -q install:install-file -Dfile=.libs/eodsql.jar -DgroupId=net.lemnik -DartifactId=eodsql -Dversion=2.2 -Dpackaging=jar
+    - mvn -B -q -DskipTests dependency:go-offline
+    - rm -rf target/surefire-reports || true
+  script:
+    - make all-test
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/
+    expire_in: 1 week
+
 docker-build:
-  stage: docker
+  stage: build
   image: docker:26
+  needs: ["test"]             # ensure docker build runs after tests
   services:
     - name: docker:26-dind
-      command: ["--tls=false"]   # disable TLS in DinD
+      command: ["--tls=false"]  # disable TLS in DinD
   variables:
-    DOCKER_TLS_CERTDIR: ""       # disable TLS in client
+    DOCKER_TLS_CERTDIR: ""       # disable TLS on the client side
     DOCKER_HOST: tcp://docker:2375
     DOCKER_DRIVER: overlay2
   script:
-    # Optional: show versions to help debug if needed
     - docker version
-    # Wait for Docker daemon to be ready (DinD can take a few seconds)
     - |
       for i in $(seq 1 30); do
         if docker info >/dev/null 2>&1; then
@@ -21,7 +43,6 @@ docker-build:
         echo "Waiting for Docker daemon... ($i/30)"; sleep 1
       done
     - docker build --pull -t "${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHA}" .
-    # Optional push
     - |
       if [ -n "${CI_REGISTRY}" ]; then
         echo "${CI_REGISTRY_PASSWORD}" | docker login -u "${CI_REGISTRY_USER}" --password-stdin "${CI_REGISTRY}"
