@@ -45,6 +45,7 @@ public class RestoreCommand implements Command {
             // Find the world by name
             WorldDO worldDO = dao.findWorldByName(this.name);
 
+
             if (worldDO == null) {
                 return "ERROR: World named " + this.name + " does not exist.";
             }
